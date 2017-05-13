@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinwei.process.dao.ThreeleaderApplicationMapper" >
+  <resultMap id="BaseResultMap" type="com.xinwei.process.entity.ThreeleaderApplication" >
+    <id column="application_id" property="applicationId" jdbcType="BIGINT" />
+    <result column="category_id" property="categoryId" jdbcType="BIGINT" />
+    <result column="departleader_publish_id" property="departleaderPublishId" jdbcType="BIGINT" />
+    <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+    <result column="apply_person" property="applyPerson" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="current_state" property="currentState" jdbcType="VARCHAR" />
+    <result column="process_instance_id" property="processInstanceId" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="data1" property="data1" jdbcType="VARCHAR" />
+    <result column="data2" property="data2" jdbcType="VARCHAR" />
+    <result column="data3" property="data3" jdbcType="VARCHAR" />
+    <result column="data4" property="data4" jdbcType="VARCHAR" />
+    <result column="data5" property="data5" jdbcType="VARCHAR" />
+    <result column="data6" property="data6" jdbcType="VARCHAR" />
+    <result column="data7" property="data7" jdbcType="VARCHAR" />
+    <result column="data8" property="data8" jdbcType="VARCHAR" />
+    <result column="data9" property="data9" jdbcType="VARCHAR" />
+    <result column="data10" property="data10" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_threeleader_application
+    where application_id = #{applicationId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xinwei.process.entity.ThreeleaderApplication" >
+    insert into tb_threeleader_application (application_id, category_id, departleader_publish_id, 
+      apply_time, apply_person, update_time, 
+      current_state, process_instance_id, state, 
+      data1, data2, data3, 
+      data4, data5, data6, 
+      data7, data8, data9, 
+      data10)
+    values (#{applicationId,jdbcType=BIGINT}, #{categoryId,jdbcType=BIGINT}, #{departleaderPublishId,jdbcType=BIGINT}, 
+      #{applyTime,jdbcType=TIMESTAMP}, #{applyPerson,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{currentState,jdbcType=VARCHAR}, #{processInstanceId,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, 
+      #{data1,jdbcType=VARCHAR}, #{data2,jdbcType=VARCHAR}, #{data3,jdbcType=VARCHAR}, 
+      #{data4,jdbcType=VARCHAR}, #{data5,jdbcType=VARCHAR}, #{data6,jdbcType=VARCHAR}, 
+      #{data7,jdbcType=VARCHAR}, #{data8,jdbcType=VARCHAR}, #{data9,jdbcType=VARCHAR}, 
+      #{data10,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.xinwei.process.entity.ThreeleaderApplication" >
+    update tb_threeleader_application
+    set category_id = #{categoryId,jdbcType=BIGINT},
+      departleader_publish_id = #{departleaderPublishId,jdbcType=BIGINT},
+      apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      apply_person = #{applyPerson,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      current_state = #{currentState,jdbcType=VARCHAR},
+      process_instance_id = #{processInstanceId,jdbcType=VARCHAR},
+      state = #{state,jdbcType=VARCHAR},
+      data1 = #{data1,jdbcType=VARCHAR},
+      data2 = #{data2,jdbcType=VARCHAR},
+      data3 = #{data3,jdbcType=VARCHAR},
+      data4 = #{data4,jdbcType=VARCHAR},
+      data5 = #{data5,jdbcType=VARCHAR},
+      data6 = #{data6,jdbcType=VARCHAR},
+      data7 = #{data7,jdbcType=VARCHAR},
+      data8 = #{data8,jdbcType=VARCHAR},
+      data9 = #{data9,jdbcType=VARCHAR},
+      data10 = #{data10,jdbcType=VARCHAR}
+    where application_id = #{applicationId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select application_id, category_id, departleader_publish_id, apply_time, apply_person, 
+    update_time, current_state, process_instance_id, state, data1, data2, data3, data4, 
+    data5, data6, data7, data8, data9, data10
+    from tb_threeleader_application
+    where application_id = #{applicationId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select application_id, category_id, departleader_publish_id, apply_time, apply_person, 
+    update_time, current_state, process_instance_id, state, data1, data2, data3, data4, 
+    data5, data6, data7, data8, data9, data10
+    from tb_threeleader_application
+  </select>
+  <update id="updateCurrentStateByApplicationId" parameterType="com.xinwei.process.entity.ThreeleaderApplication" >
+    update tb_threeleader_application
+    set current_state = #{currentState,jdbcType=VARCHAR}
+    where application_id = #{applicationId,jdbcType=BIGINT}
+  </update>
+  <update id="updateProcessInstanceIdByApplicationId" parameterType="com.xinwei.process.entity.ThreeleaderApplication" >
+    update tb_threeleader_application
+    set process_instance_id = #{processInstanceId,jdbcType=VARCHAR}
+    where application_id = #{applicationId,jdbcType=BIGINT}
+  </update>
+  <update id="updateStateByApplicationId" parameterType="com.xinwei.process.entity.ThreeleaderApplication" >
+    update tb_threeleader_application
+    set state = #{state,jdbcType=VARCHAR}
+    where application_id = #{applicationId,jdbcType=BIGINT}
+  </update>
+  <select id="countByUserIdCategoryId" resultType="java.lang.Long" >
+    select count(1)
+    from tb_threeleader_application
+    where apply_person = #{userId,jdbcType=VARCHAR}
+    and category_id = #{categoryId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByUserIdCategoryId" resultMap="BaseResultMap" >
+    select application_id, category_id, departleader_publish_id, apply_time, apply_person, 
+    current_state, process_instance_id, state
+    from (
+    	select * from tb_threeleader_application
+    	where apply_person = #{userId,jdbcType=VARCHAR}
+    	and category_id = #{categoryId,jdbcType=BIGINT}
+    	order by application_id desc
+    ) t
+    limit #{startRow},#{pageSize}
+  </select>
+  <select id="countByCategoryId" resultType="java.lang.Long" >
+    select count(1)
+    from tb_threeleader_application
+    where category_id = #{categoryId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByCategoryId" resultMap="BaseResultMap" >
+    select application_id, category_id, departleader_publish_id, apply_time, apply_person, 
+    current_state, process_instance_id, state
+    from (
+    	select * from tb_threeleader_application
+    	where category_id = #{categoryId,jdbcType=BIGINT}
+    	order by application_id desc
+    ) t
+    limit #{startRow},#{pageSize}
+  </select>
+  
+  <select id="selectByUserIdAndPublishId" resultMap="BaseResultMap" >
+    select application_id, category_id, departleader_publish_id, apply_time, apply_person, 
+    current_state, process_instance_id, state, data1, data2, data3, data4, data5, data6, 
+    data7, data8, data9, data10
+    from tb_threeleader_application
+    where apply_person = #{applyPerson,jdbcType=VARCHAR}
+    and departleader_publish_id = #{departleaderPublishId,jdbcType=BIGINT}
+  </select>
+</mapper>

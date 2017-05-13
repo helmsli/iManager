@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinwei.security.dao.BusinessDao">
+	<!-- 开启本mapper的namespace下的二级缓存 -->
+
+  <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="Business">
+  	insert INTO business (
+  		no,type,department_id,dataId,dataGroupId,createTime,createUser,updateTime,updateUser,
+  		data1,data2,data3,remark,queryKey
+	)
+	VALUES(
+		#{no},#{type},#{department_id},#{dataId},#{dataGroupId},#{createTime},#{createUser},#{updateTime},#{updateUser},
+		#{data1},#{data2},#{data3} ,#{remark},#{queryKey}
+	)
+  </insert>
+  
+  
+  <update id="update" parameterType="Business" >
+  	update business 
+  	   set no=#{no},type = #{type},department_id=#{department_id},dataId=#{dataId},dataGroupId=#{dataGroupId},
+  	   	   createTime=#{createTime},createUser=#{createUser},updateTime=#{updateTime},updateUser=#{updateUser},
+  	   	   data1=#{data1},data2=#{data2},data3=#{data3},
+  	   	   remark=#{remark},queryKey=#{queryKey}
+  	  where id=#{id}
+  </update>
+  
+  <delete id="delete" parameterType="java.lang.Long">
+  	delete from business  where id = #{id}
+  </delete>
+  
+  
+  
+	<!-- 查询单条记录 -->
+	<select id="get" parameterType="java.lang.Long"   resultType="Business"  >
+		SELECT * FROM business WHERE id = #{id}
+	</select>
+	
+	
+
+	
+	
+	<select id="findByPageCount" resultType="java.lang.Long">
+		select count(1) from business where 1=1  <include refid="queryString" /> 
+	</select>
+	
+	<select id="findByPage"    resultType="Business">
+ 	 	select * from business  
+ 	 	 where 1= 1 <include refid="queryString" /> order by id
+ 	 	 limit #{startRow},#{pageSize}
+	</select>
+	
+	<sql id="queryString">
+		 <if test="id != null  and id !=0">
+			 	and id != #{id}
+	 	 </if>
+	 	 <if test="no != null and no !=''">
+			 	and no like CONCAT('%',#{no},'%')  
+	 	 </if> 
+   	     <if test="type != null and type !=''">
+   	     		and type = #{type}
+	 	 </if> 
+	 	 <if test="dataId != null and dataId !=''">
+   	     		and dataId = #{dataId}
+	 	 </if>
+	 	 <if test="deparment_id != null and deparment_id !=0">
+   	     		and deparment_id = #{deparment_id}
+	 	 </if>
+	 	 <if test="queryKey != null and queryKey !=''">
+	 	 		and queryKey like CONCAT('%',#{queryKey},'%')  
+	 	 </if> 
+  	</sql>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>
+
+
+
+
+

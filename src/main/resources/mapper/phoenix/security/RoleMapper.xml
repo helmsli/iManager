@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinwei.security.dao.RoleDao">
+
+	<!-- 开启本mapper的namespace下的二级缓存 -->
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache" />
+
+	<!-- 查询单条记录 -->
+	<select id="get" parameterType="java.lang.Long" resultType="Role" useCache="true">
+		SELECT * FROM stat.security_role WHERE id = #{id}
+	</select>
+
+	<select id="findAll" resultType="Role" useCache="true">
+		SELECT * FROM stat.security_role
+	</select>
+
+	<select id="findByPageCount" resultType="java.lang.Long">
+		select CASE WHEN count(1) is null THEN 0 else count(1) END 
+		  from stat.security_role
+	</select>
+
+	<select id="findByPage" resultType="Role">
+		SELECT * FROM stat.security_role  
+ 	 	 where id >= ( 
+	 	 	 		select CASE WHEN max(id) is null THEN 0 else max(id) END  
+		 	 	  	  from (
+		 	 	 			select id  from stat.security_role  order by id limit #{startRow}
+		 	 	 	  )
+		 	 	)
+ 	 	 order by id  limit #{pageSize}
+		
+	</select>
+
+
+
+	<select id="findByRolename" parameterType="java.lang.String"    resultType="Long">
+		SELECT count(1)
+		  FROM stat.security_role 
+		 WHERE name = #{name}
+		<if test="id != null  and id !=0">
+			 	and id != #{id}
+	 	 </if>
+	</select>
+
+	
+	
+	<insert id="save" parameterType="Role">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+	        SELECT NEXT VALUE FOR stat.security_role_sequence 
+	    </selectKey> 
+  		upsert into stat.security_role(id,name,description) values (#{id},#{name},#{description})
+    </insert>
+    
+
+
+	<update id="update" parameterType="Role">
+		upsert into stat.security_role(id,name,description)   values(#{id},#{name},#{description})
+	</update>
+
+	<delete id="delete" parameterType="java.lang.Long">
+		delete from stat.security_role where id=#{id}
+	</delete>
+
+
+</mapper>
+
+
+
+
+
+
+	

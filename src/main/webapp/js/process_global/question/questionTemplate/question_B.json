@@ -1,0 +1,75 @@
+var questionData={
+"data":{
+				"id": "257457",
+				"title": "用户问卷调查",
+				"lang": "zh",
+				"page_count": 1,
+				"topic_count": 9,
+				"pages":[
+						{
+							"id": "q-15-NQM7",
+							"type": "radio",
+							"title": "工作主动性和创造性表现如何？",
+							"required": true,
+							"options": [{
+											
+									"text": "相当满意",
+									"value":5
+								},{
+									"id": "o-101-EFGH",
+									"text": "满意",
+									"value":4
+								}, {
+													
+									"text": "一般",
+									"value":3
+								}, {
+									
+									"text": "不满意",
+									"value":2
+								}, {
+									
+									"text": "公众号",
+									"value":1
+								}
+								],
+							"answer":"",
+							"content":"",
+						},
+						{
+							"id": "q-15-NQM8",
+							"type": "checkbox",
+							"title": "工作完成情况您对其结果的满意度评价如何？",
+							"description": "",
+							"required": true,
+							"answer":"",
+							"content":"",
+							"options": [
+								{
+											
+									"text": "相当满意",
+									"value":5
+								}, {
+									"id": "o-101-EFGH",
+									"text": "满意",
+									"value":4
+								}, {
+													
+									"text": "一般",
+									"value":3
+								}, {
+									
+									"text": "不满意",
+									"value":2
+								}, {
+									
+									"text": "公众号",
+									"value":1
+								}
+							]
+							
+						}
+				
+				]
+			}
+		}

@@ -1,0 +1,91 @@
+<meta charset="UTF-8">
+<div id="leftMenu_navbar" class="sidebar navbar-collapse" role="navigation"  ng-controller="leftMenu">
+    <div class="sidebar-nav" ng-init="initLeft();">
+        <ul class="nav" id="side-menu"  >
+        	<li ng-repeat = "menu in menuList"   
+        	    ng-show="!headerTypeShow||(headerTypeShow&&menu.expand)">
+        	    <!-- 没有子菜单的情况 -->
+        	    <a  ng-if="menu.children.length==0" 
+        	        ng-href="{{server_url}}{{menu.action}}" 
+        	        ng-class="{true:'active'}[menu.action.indexOf(newPageAction)>=0]"
+        	        ng-init="menu.action.indexOf(pageAction)>=0?(menu.expand=true):(menu.expand=false)">
+        	        <i class="fa fa-fw" ng-class="menu.imgurl"></i>
+        	        <span >{{menu.name|translate }}</span>
+        	    </a>
+        	    <!-- 有子菜单的情况-->
+				<a ng-if="menu.children.length>0"
+				    data-toggle="collapse" data-target="#_{{menu.name}}">
+					<i class="fa  fa-fw" ng-class="menu.imgurl"></i>
+	           		<span >{{menu.name|translate}}</span>
+	           		<span class="fa fa-angle-down pull-right"></span>
+	            </a>
+	            <!-- 子菜单循环 -->
+        		<ul ng-if="menu.children.length>0" class="nav nav-second-level collapse " id="_{{menu.name}}"  >
+        			<li ng-repeat="sub in menu.children">
+        				<a ng-href="{{server_url}}{{sub.action}}"   
+        				   ng-init="parentcollapse(sub.action,menu.name,$parent.$index,sub.functions)" 
+        				   ng-class="{true:'active'}[sub.action.indexOf(newPageAction)>=0]"  >
+        				   {{sub.name|translate}}
+        				 </a>
+        			</li>
+                </ul>
+        	</li>
+			<!-- 测试用例,用完即删-- -->
+			<!--<li><a href="{{server_url}}/views/coomarts/committeeMonitor.html?projectName=coomarts">决策委员会月度监测</a></li>
+			<li><a href="{{server_url}}/views/coomarts/projectMonthProgress.html?projectName=coomarts">项目经理月度提交</a></li>
+			<li><a href="{{server_url}}/views/coomarts/myTaskAgent_question.html?projectName=coomarts" >尽职调查</a></li>
+			<li><a href="{{server_url}}/views/coomarts/examineIndices.html?projectName=coomarts">评审指标</a></li>
+			<li><a href="{{server_url}}/views/coomarts/examineTrial.html?projectName=coomarts">项目初审</a></li> -->
+        	<!-- <li><a href="{{server_url}}/views/coomarts/projectManager/project_detail_view.html?projectName=coomarts&projectId=1000010&taskId=1092530&state=002&from=myTaskAgent.html?projectName=coomarts" >我的项目</a></li> -->
+        	<!--<li><a href="{{server_url}}/views/coomarts/myApply_see01.html?projectName=coomarts" >项目详细</a></li>
+        	<li><a href="{{server_url}}/views/coomarts/myTaskAgent_report.html?projectName=coomarts">项目周期报告</a></li>
+        	<li><a href="{{server_url}}/views/coomarts/questionList.html?projectName=coomarts">尽职调查列表</a></li> -->
+        	<!--<li><a href="{{server_url}}/views/coomarts/examineTrial.html?projectName=coomarts">项目初审</a></li>
+			<li><a href="{{server_url}}/views/coomarts/examineIndices.html?projectName=coomarts">评审指标</a></li>-->
+        </ul>
+    </div>
+</div>
+
+<script>
+ $(function(){
+	sliderCountroller();
+});
+  $(window).resize(function() {
+	 setHead();
+}); 
+$("#side-menu").slimScroll({
+	height: '100%',
+	size: '4px',
+	opacity: .2
+});
+ /*设置属性*/
+  function setHead()
+	{        //通过controller来获取Angular应用
+		    var appElement = document.querySelector('[ng-controller=leftMenu]');
+		    //获取$scope变量
+	        var $scope = angular.element(appElement).scope();
+	        //调用headerTypeShow变量，并改变headerTypeShow的值
+	        $scope.menuShow();
+	        //上一行改变了headerTypeShow的值，如果想同步到Angular控制器中，则需要调用$apply()方法即可
+	        $scope.$apply();
+	}
+
+/**
+ * @sliderCountroller
+ * 
+ * **/
+
+function sliderCountroller()
+{
+	/* 绑定菜单事bootstrap折叠事件*/
+		$("body").delegate("#side-menu","show.bs.collapse", function (currentDom) {
+			$('#side-menu ul').each(function(){
+				var id=$(this).attr("id");
+				if(id!=currentDom.target.id)
+				{
+					$(this).removeClass("in");
+				}
+			});
+		});
+}
+</script>

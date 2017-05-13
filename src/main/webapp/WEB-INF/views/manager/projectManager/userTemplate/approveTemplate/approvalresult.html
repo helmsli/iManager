@@ -1,0 +1,18 @@
+<meta charset="UTF-8">
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+	<div class="row p-t-5 p-b-5 clearfix">
+			
+			<div class="row p-t-5 p-b-5 clearfix">
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left">{{projectApproval.title}}</div>
+				<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 p-l-5">
+					<span class="font-bold col-red" ng-bind="projectApproval.conclusion"></span>
+					<span class="p-l-10" ng-bind="projectApproval.comment"></span>
+					<span class="p-l-10" ng-show = "projectApproval.showAdvice" ng-bind="projectApproval.advice"></span>
+				    <span class="p-l-10" ng-show = "projectApproval.showFilepath" ng-bind="projectApproval.filepath"></span>
+				</div>
+			</div>
+		
+		</div>
+	</div>
+</div>
+<!-- / .col-12 -->

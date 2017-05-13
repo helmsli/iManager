@@ -1,0 +1,56 @@
+<meta charset="UTF-8">
+<div class="table-responsive" ng-init="initQuestionTable()">
+	<h2 class="panel-inside-title font-bold m-t-0" ng-bind="projectLable.projectBase"></h2>
+	<table class="table table-bordered m-b-0">
+		<tbody>
+			<tr>
+				<td width="15%" data-columnName="" ng-bind="projectLable.score"></td>
+				<td width="85%" class="pre-wrap" data-columnName="score" data-type="number" contentEditable="true" ng-bind="reportInfo.score"></td>
+			</tr>
+			<tr>
+				<td data-columnName="" ng-bind="projectLable.reviewNum"></td>
+				<td class="pre-wrap" data-columnName="reviewNum" data-type="number" contentEditable="true" ng-bind="reportInfo.reviewNum"></td>
+			</tr>
+			<tr>
+				<td data-columnName="" ng-bind="projectLable.fileNum"></td>
+				<td class="pre-wrap" data-columnName="fileNum" data-type="number" contentEditable="true" ng-bind="reportInfo.fileNum"></td>
+			</tr>
+			<tr>
+				<td data-columnName="" ng-bind="projectLable.codeNum"></td>
+				<td class="pre-wrap" data-columnName="codeNum" data-type="number" contentEditable="true" ng-bind="reportInfo.codeNum"></td>
+			</tr>
+		</tbody>
+	</table>
+	<!-- / .table -->
+	<h2 class="panel-inside-title font-bold m-t-0" ng-bind="projectLable.projectExecuted"></h2>
+	<table class="table table-bordered m-b-0">
+		<tbody>
+			<tr>
+				<td width="15%" data-columnName="" ng-bind="projectLable.whetherAdjust"></td>
+				<td width="85%" class="pre-wrap" data-columnName="whetherAdjust" contentEditable="true" ng-bind="reportInfo.whetherAdjust"></td>
+			</tr>
+			<tr>
+				<td data-columnName="" ng-bind="projectLable.adjustBefore"></td>
+				<td class="pre-wrap" data-columnName="adjustBefore" contentEditable="true" ng-bind="reportInfo.adjustBefore"></td>
+			</tr>
+			<tr>
+				<td data-columnName="" ng-bind="projectLable.adjustAfter"></td>
+				<td class="pre-wrap" data-columnName="adjustAfter" contentEditable="true" ng-bind="reportInfo.adjustAfter"></td>
+			</tr>
+			<tr>
+				<td data-columnName="" ng-bind="projectLable.adjustWhy"></td>
+				<td class="pre-wrap" data-columnName="adjustWhy" contentEditable="true" ng-bind="reportInfo.adjustWhy"></td>
+			</tr>
+			<tr>
+				<td data-columnName="" ng-bind="projectLable.opinion"></td>
+				<td class="pre-wrap" data-columnName="opinion" contentEditable="true" ng-bind="reportInfo.opinion"></td>
+			</tr>
+			<tr>
+				<td data-columnName="" ng-bind="projectLable.examine"></td>
+				<td class="pre-wrap" data-columnName="examine" contentEditable="true" ng-bind="reportInfo.examine"></td>
+			</tr>
+		</tbody>
+	</table>
+	<!-- / .table -->
+</div>
+<!-- / .table-responsive -->

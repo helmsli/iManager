@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinwei.process.dao.ProjectAnnexMapper" >
+  <resultMap id="BaseResultMap" type="com.xinwei.process.entity.ProjectAnnex" >
+    <id column="annex_id" property="annexId" jdbcType="BIGINT" />
+    <result column="annex_name" property="annexName" jdbcType="VARCHAR" />
+    <result column="type_id" property="typeId" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_project_annex
+    where annex_id = #{annexId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xinwei.process.entity.ProjectAnnex" >
+    insert into tb_project_annex (annex_id, annex_name, type_id, 
+      project_id, path)
+    values (#{annexId,jdbcType=BIGINT}, #{annexName,jdbcType=VARCHAR}, #{typeId,jdbcType=BIGINT}, 
+      #{projectId,jdbcType=BIGINT}, #{path,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.xinwei.process.entity.ProjectAnnex" >
+    update tb_project_annex
+    set annex_name = #{annexName,jdbcType=VARCHAR},
+      type_id = #{typeId,jdbcType=BIGINT},
+      project_id = #{projectId,jdbcType=BIGINT},
+      path = #{path,jdbcType=VARCHAR}
+    where annex_id = #{annexId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select annex_id, annex_name, type_id, project_id, path
+    from tb_project_annex
+    where annex_id = #{annexId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select annex_id, annex_name, type_id, project_id, path
+    from tb_project_annex
+  </select>
+    <select id="selectMonthlyReportByProjectId"  parameterType="java.lang.Long" resultMap="BaseResultMap" >
+    select annex_id, annex_name, type_id, project_id, path
+    from tb_project_annex
+    where project_id = #{projectId,jdbcType=BIGINT} and type_id=6
+  </select>
+    <select id="selectByProjectIdAndTypeId" resultMap="BaseResultMap" >
+    select annex_id, annex_name, type_id, project_id, path
+    from tb_project_annex
+    where project_id = #{projectId,jdbcType=BIGINT} and type_id = #{typeId,jdbcType=BIGINT} 
+  </select>
+</mapper>

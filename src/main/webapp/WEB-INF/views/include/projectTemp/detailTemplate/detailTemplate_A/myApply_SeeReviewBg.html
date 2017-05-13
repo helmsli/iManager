@@ -1,0 +1,63 @@
+<meta charset="UTF-8">
+<!-- / .col-12 -->
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="decisionCommittee"  btn-permission="Approve:committee">
+	<div class="row p-t-5 p-b-5 clearfix" ng-show="controllerBgState.committeeBgReview" >
+    	<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left">决策委员会意见：</div>
+    	<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 p-l-5">
+   			<ul class="margin-0 padding-0 hide">
+    			<li><span class="font-bold col-red">不同意</span><span class="p-l-10">同意通过申请</span><span class="p-l-10">2017-01-08</span></li>
+     		</ul>
+      		<div class="form-group">
+				<div class="form-line">
+					<div class="radio">
+	              		<div class="radio-inline">
+	              			<input name="group1" type="radio" class="with-gap radio-col-blue" value="同意" id="radio_1" ng-model="suggestion.suggestionFlag"/>
+	                  		<label for="radio_1">同意</label>
+	              		</div>
+	             		<div class="radio-inline">
+	             			<input name="group1" type="radio" class="with-gap radio-col-blue" value="不同意" id="radio_2" ng-model="suggestion.suggestionFlag"/>
+	                 		<label for="radio_2">不同意</label>
+	             		</div>
+	               </div>
+				</div>
+			</div>
+  			<div class="form-group m-b-0">
+            	<div class="form-line">
+                     <textarea rows="4" id="caucus" class="form-control no-resize" placeholder="请输入您的评审意见..." ng-model="suggestion.suggestionDescription"></textarea>
+                 </div>
+            </div>
+    	</div>
+   </div>
+</div>
+<!-- / .col-12 -->
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="divisionManager"   btn-permission="Approve:manager">
+	<div class="row p-t-5 p-b-5 clearfix" ng-show="controllerBgState.departBgReview">
+	<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left">部门经理审批意见：</div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 p-l-5">
+			<ul class="margin-0 padding-0 hide">
+				<li><span class="font-bold col-red">不同意</span><span class="p-l-10">不同意申请</span><span class="p-l-10">2017-01-08</span></li>
+			</ul>
+			<div class="form-group">
+				<div class="form-line">
+					<div class="radio" >
+						<div class="radio-inline" >
+							<input name="group2" type="radio" class="with-gap radio-col-blue" value="同意" id="radio_3" ng-model="managerSuggestion.suggestionFlag" />
+							<label for="radio_3">同意</label>
+						</div>
+						<div class="radio-inline">
+							<input name="group2" type="radio" class="with-gap radio-col-blue" value="不同意" id="radio_4" ng-model="managerSuggestion.suggestionFlag"/>
+							<label for="radio_4">不同意</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group m-b-0">
+				<div class="form-line">
+					<textarea rows="4" class="form-control no-resize" id="departComment" placeholder="请输入您的评审意见..." ng-model="managerSuggestion.suggestionDescription"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- / .col-12 -->
+<script src="../../js/process_global/createProject/myApplySeeReview.js" type="text/javascript"></script>

@@ -1,0 +1,98 @@
+<meta charset="UTF-8">
+<div class="modal-dialog" ng-controller="myDataController">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel" >指定{{dataListTittle}}</h4>
+        </div>
+        <div class="modal-body">       	
+        	<div class="row clearfix">
+        		<div class="col-lg-12">
+        			<div class="row p-b-15">
+        				<div class="col-lg-12 p-b-15">
+        					<div class="search-group">
+                           		<div class="search-inline">
+                            		<input type="search" class="form-control" placeholder="请输入..." ng-model="queryKey">
+                                	<span class="btn-group"><button type="button" class="btn btn-primary waves-effect" ng-click="query()">搜索</button></span>
+                            	</div>
+                           	</div>
+        				</div>
+        				<div class="col-lg-1 p-r-0">已选:</div>
+        				<div class="col-lg-11 p-l-0">
+		        			<div id="chosenAll">
+		        				<span class="chosen" ng-show="showFlag"></span>
+		        				<span class="chosen" ng-repeat="data in arrList"><i class="fa fa-times-circle-o" ng-click="deleteOnly(data.id)"></i>{{data.firstname}}</span>
+		        			</div>
+        				</div>
+        			</div>
+        		</div>
+        		<div class="col-lg-12"></div>
+        	</div>
+        	<div class="table-responsive m-b-0">
+        		<table id="tablePost" class="table table-bordered table-striped m-b-0">
+        			<thead>
+        				<tr>
+        					<th width="4%" data-name="onlyList">
+        						<label class="checkbox-inline">
+									<input type="checkbox" id="che_2"  class="filled-in chk-col-blue" ng-click="setCheckAll('che_2')"/>
+									<label for="che_2" ></label>
+								</label>
+							</th>
+        					<th ng-repeat="i in titleList" class="text-center">{{i}}</th>
+        				</tr>
+        			</thead>
+        			<tbody id="box">
+        				<tr ng-repeat="data in dataList">
+        					<td width="4%" data-name="onlyList">
+        						<label class="checkbox-inline">
+        							<input type="checkbox" class="filled-in chk-col-blue" data-checkBoxname="listCheckbox" ng-click="checkOnly(data.id,data.firstname);" data-checkName="{{data.firstname}}" id="{{data.id}}" value="{{data.id}}" ng-checked="getChecked(data.id)">
+        							<label for="{{data.id}}" data-forId="{{data.id}}" ></label>
+        						</label>
+        					</td>
+        					<td width="16%">{{data.firstname}}</td>
+        					<td width="40%">{{data.department}}</td>
+        					<td width="40%">{{data.company_name}}</td>
+        				</tr>
+        				
+        			</tbody>
+        		</table>
+        	</div>
+			<div class="table-tips">
+				<div class="choose-data align-center hide">
+              		<span class="error-block">
+              			<i class="fa fa-exclamation-triangle"></i>
+              			对不起，没有查询到您需要的数据!
+              		</span>
+              	</div>
+              	<div class="no-data align-center hide" id="tabNoData">
+              		<span class="error-block">
+              			<i class="fa fa-exclamation-triangle"></i>
+              			暂无相关数据！
+              		</span>
+              	</div>
+			</div>
+			<!-- / .table-tips -->
+			<div class="row hide" id="tabPageNav">
+  			    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+      				<div class="checkAll-group">&nbsp;</div>
+      			</div>
+      			<div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+      				<div class="dataTables_paginate">
+      					<ul class="pagination pagination_reset" id="pageNav" data-ng-init="showInFo()"></ul>
+      				</div>
+      			</div>
+			</div>
+			<!-- / .tabPageNav -->
+        </div>
+        <div class="modal-footer align-center">
+            <button type="button" class="btn btn-success m-r-5" ng-click="confirmSelectAssignPersion()">确认</button>
+            <button type="button" class="btn btn-primary m-l-5" data-dismiss="modal">返回</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("input[data-checkname='111']").prop("checked","checked");
+})
+
+</script>

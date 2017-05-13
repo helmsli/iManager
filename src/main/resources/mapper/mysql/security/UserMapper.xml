@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinwei.security.dao.UserDao">
+<!-- 开启本mapper的namespace下的二级缓存 -->
+<cache type="org.mybatis.caches.ehcache.EhcacheCache" />
+   <resultMap id="BaseResultMap" type="com.xinwei.security.entity.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="department_id" property="department_id" jdbcType="INTEGER" />
+    <result column="company_name" property="company_name" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="firstname" property="firstname" jdbcType="VARCHAR" />
+    <result column="lastname" property="lastname" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="salt" property="salt" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="createtime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="cardno" property="cardno" jdbcType="VARCHAR" />
+    <result column="cardtype" property="cardtype" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="imgurl" property="imgurl" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="isDisabled" property="isDisabled" jdbcType="INTEGER" />
+    <result column="approval_status" property="approvalStatus" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="com.xinwei.security.entity.User">
+  	insert INTO security_user (
+  		department_id,company_name,username,firstname,lastname,password,salt,phone,cardno,cardtype,
+  		email,createtime,birthday,address,sex,imgurl,status,isDisabled,approval_status
+	)
+	VALUES(
+		#{department_id},#{company_name},#{username},#{firstname},#{lastname},#{password},#{salt},#{phone},#{cardno},#{cardtype},
+		#{email},#{createTime} ,#{birthday},#{address},#{sex},#{imgurl},#{status},#{isDisabled},#{approvalStatus}
+	)
+  </insert>
+  
+  <update id="update" parameterType="com.xinwei.security.entity.User" > 
+  	update security_user 
+  	   set department_id = #{department_id},company_name = #{company_name},username=#{username},firstname=#{firstname},lastname=#{lastname},
+  	   	   phone=#{phone},email=#{email},birthday=#{birthday},address=#{address},cardno=#{cardno},cardtype=#{cardtype},
+  	   	   sex=#{sex},password=#{password},salt=#{salt},isDisabled=#{isDisabled},approval_status=#{approvalStatus}
+  	  where id=#{id}
+  </update>
+  
+  <update id="moveDepartment"  >
+  	update security_user 
+  	   set department_id = #{department_id}
+  	  where id in (
+  	  	<foreach collection="userIds" item="userId" separator="," >
+				#{userId}
+	 	</foreach>
+	 )
+  </update>
+  
+  <delete id="delete" parameterType="java.lang.Long">
+  	update security_user set status =  1 where id = #{id}
+  </delete>
+  
+	<!-- 查询单条记录 -->
+	<select id="get" parameterType="java.lang.Long"  resultMap="BaseResultMap"  useCache="true">
+		SELECT * FROM security_user WHERE id = #{id}
+	</select>
+	
+	<!-- 根据用户ID查询单位 -->
+    <select id="getCompanyNameByUserId" parameterType="java.lang.Long"  resultType="java.lang.String"  useCache="true">
+		SELECT company_name FROM security_user WHERE id = #{id}
+	</select>
+	
+	<select id="findByUsername" parameterType="java.lang.String"  resultMap="BaseResultMap" useCache="true">
+		SELECT * FROM security_user WHERE username = #{username}
+		<if test="id != null  and id !=0">
+			 	and id != #{id}
+	 	 </if>
+	 	 and status = 0
+	</select>
+	
+	<select id="findByPageCount" resultType="java.lang.Long">
+		select count(1) from security_user where 1=1  <include refid="queryString" /> 
+	</select>
+	
+	<select id="findByPage"  resultMap="BaseResultMap">
+ 	 	select * from security_user  
+ 	 	 where 1= 1 <include refid="queryString" /> order by id
+ 	 	 limit #{startRow},#{pageSize}
+	</select>
+	
+	<sql id="queryString">
+		 and status=0
+   	     <if test="username != null and username !=''">
+			 	and (
+			 	    username like CONCAT('%',#{username},'%')  
+			 	    or firstname like CONCAT('%',#{username},'%')
+			 	)
+	 	 </if>
+	 	 <if test="roleId != null and roleId !=0">
+			 	and id in( select user_id from security_user_role where role_id = #{roleId})
+	 	 </if> 
+	 	 <if test="department_id != null and department_id !=0">
+			 	and department_id = #{department_id}
+	 	 </if> 
+	 	 <if test="approvalStatus != null and approvalStatus ==0">
+			 	and approval_status = 0
+	 	 </if>
+  	</sql>
+
+</mapper>
+
+
+
+
+

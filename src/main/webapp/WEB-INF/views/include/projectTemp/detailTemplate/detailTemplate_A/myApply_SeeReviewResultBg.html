@@ -1,0 +1,28 @@
+<meta charset="UTF-8">
+<div class="tab-content">
+	<div role="tabpanel" class="row clearfix tab-pane fade active in"  id="phone_number" >
+		<!-- / .col-12 -->
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+			<div class="row p-t-5 clearfix">
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left" ng-show="controllerBgState.committeeBgReviewResult">决策委员会意见：</div>
+				<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 p-l-5">
+					<span class="font-bold col-red" ng-bind="begainCommitee.conclusion"></span>
+					<span class="p-l-10" ng-bind="begainCommitee.comments"></span>
+				</div>
+			</div>
+		</div>
+		<!-- / .col-12 -->
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="departConclusion"ng-show="controllerBgState.departBgReviewResult">
+			<div class="row p-t-5 p-b-5 clearfix">
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left">部门经理审批意见：</div>
+				<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 p-l-5">
+					<span class="font-bold col-red" ng-bind="begaindepartLeader.conclusion"></span>
+					<span class="p-l-10" ng-bind="begaindepartLeader.comments"></span>
+				</div>
+			</div>
+		</div>
+		<!-- / .col-12 -->
+	</div>
+	<!-- / .row -->
+</div>
+<!-- / .tab-content -->

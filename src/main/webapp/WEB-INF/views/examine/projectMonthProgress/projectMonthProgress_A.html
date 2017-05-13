@@ -1,0 +1,62 @@
+<meta charset="UTF-8">
+<div class="table-responsive" ng-init="initQuestionTable()">
+	<table class="table table-bordered m-b-0" id="questionTemplateC">
+		<thead>
+			<tr>
+				<th width="5%" data-columnName="index">序号</th>
+				<th width="15%" data-columnName="date">时间</th>
+				<th width="20%" class="align-center" data-columnName="title">活动名称</th>
+				<th width="20%" class="align-center" data-columnName="content">活动内容</th>
+				<th width="20%" class="align-center" data-columnName="produce">产出</th>
+				<th width="10%" data-columnName="reviewTimes">评审次数</th>
+				<th width="10%" data-columnName="codeTimes">代码走读次数</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!--tbody的class名不能为‘show’,否则表格不能自动撑开-->
+			<tr ng-repeat="data in questionList" data-id="{{$index}}">
+				<td class="align-center">{{$index+1}}</td>
+				<td class="pre-wrap" data-columnName="time" onblur="checkThisVal(this);" needblur="false" contentEditable="true" ng-bind="data.time"></td>
+				<td class="pre-wrap" data-columnName="title" onblur="checkThisVal(this);" needblur="false" contentEditable="true" ng-bind="data.title"></td>
+				<td class="pre-wrap" data-columnName="content" onblur="checkThisVal(this);" needblur="false" contentEditable="true" ng-bind="data.content"></td>
+				<td class="pre-wrap" data-columnName="produce" onblur="checkThisVal(this);" needblur="false" contentEditable="true" ng-bind="data.produce"></td>
+				<td class="pre-wrap"  data-columnName="reviewTimes" onblur="checkThisVal(this);" needblur="false" contentEditable="true" ng-bind="data.reviewTimes"></td>
+				<td class="pre-wrap"  data-columnName="codeTimes"  onblur="checkThisVal(this);" needblur="false" contentEditable="true" ng-bind="data.codeTimes"></td>
+			</tr>
+		</tbody>
+	</table>
+	<!-- / .table -->
+	<table class="table table-bordered m-b-0" style="margin-top:-1px;" ng-init="initQuestion2()" id="tableProjectInfo">
+		<tbody>
+			<tr>
+				<td width="30%" class="pre-wrap" data-columnName="" ng-bind="projectLable.specialExplain"></td>
+				<td width="70%" class="pre-wrap" data-columnName="specialExplain" contentEditable="true" ng-bind="reportInfo.specialExplain"></td>
+			</tr>
+			<tr>
+				<td class="pre-wrap" data-columnName="" ng-bind="projectLable.innovation"></td>
+				<td class="pre-wrap" data-columnName="innovation" contentEditable="true" ng-bind="reportInfo.innovation"></td>
+			</tr>
+			<tr>
+				<td class="pre-wrap" data-columnName="" ng-bind="projectLable.changeConditions"></td>
+				<td class="pre-wrap" data-columnName="changeConditions" contentEditable="true" ng-bind="reportInfo.changeConditions"></td>
+			</tr>
+			<tr>
+				<td class="pre-wrap" data-columnName="" ng-bind="projectLable.riskDescription"></td>
+				<td class="pre-wrap" data-columnName="riskDescription" contentEditable="true" ng-bind="reportInfo.riskDescription"></td>
+			</tr>
+			<tr>
+				<td class="pre-wrap" data-columnName="" ng-bind="projectLable.summary"></td>
+				<td class="pre-wrap" data-columnName="summary" contentEditable="true" ng-bind="reportInfo.summary"></td>
+			</tr>
+			<tr>
+				<td class="pre-wrap" data-columnName="" ng-bind="projectLable.improvementPlan"></td>
+				<td class="pre-wrap" data-columnName="improvementPlan" contentEditable="true" ng-bind="reportInfo.improvementPlan"></td>
+			</tr>
+		</tbody>
+	</table>
+	<!-- / .table -->
+</div>
+<!-- / .table-responsive -->
+<script type="text/javascript">
+
+</script>

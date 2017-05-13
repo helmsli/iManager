@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinwei.process.dao.DepartleaderPublishMapper" >
+  <resultMap id="BaseResultMap" type="com.xinwei.process.entity.DepartleaderPublish" >
+    <id column="publish_id" property="publishId" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="BIGINT" />
+    <result column="service_type" property="serviceType" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_person" property="createPerson" jdbcType="VARCHAR" />
+    <result column="data1" property="data1" jdbcType="VARCHAR" />
+    <result column="data2" property="data2" jdbcType="VARCHAR" />
+    <result column="data3" property="data3" jdbcType="VARCHAR" />
+    <result column="data4" property="data4" jdbcType="VARCHAR" />
+    <result column="data5" property="data5" jdbcType="VARCHAR" />
+    <result column="data6" property="data6" jdbcType="VARCHAR" />
+    <result column="data7" property="data7" jdbcType="VARCHAR" />
+    <result column="data8" property="data8" jdbcType="VARCHAR" />
+    <result column="data9" property="data9" jdbcType="VARCHAR" />
+    <result column="data10" property="data10" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_departleader_publish
+    where publish_id = #{publishId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xinwei.process.entity.DepartleaderPublish" >
+    insert into tb_departleader_publish (publish_id, title, category_id, 
+      service_type, description, create_time, 
+      create_person,
+      data1, data2, data3, 
+      data4, data5, data6, 
+      data7, data8, data9, 
+      data10)
+    values (#{publishId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{categoryId,jdbcType=BIGINT}, 
+      #{serviceType,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createPerson,jdbcType=VARCHAR}, 
+      #{data1,jdbcType=VARCHAR}, #{data2,jdbcType=VARCHAR}, #{data3,jdbcType=VARCHAR}, 
+      #{data4,jdbcType=VARCHAR}, #{data5,jdbcType=VARCHAR}, #{data6,jdbcType=VARCHAR}, 
+      #{data7,jdbcType=VARCHAR}, #{data8,jdbcType=VARCHAR}, #{data9,jdbcType=VARCHAR}, 
+      #{data10,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.xinwei.process.entity.DepartleaderPublish" >
+    update tb_departleader_publish
+    set title = #{title,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=BIGINT},
+      service_type = #{serviceType,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_person = #{createPerson,jdbcType=VARCHAR},
+      data1 = #{data1,jdbcType=VARCHAR},
+      data2 = #{data2,jdbcType=VARCHAR},
+      data3 = #{data3,jdbcType=VARCHAR},
+      data4 = #{data4,jdbcType=VARCHAR},
+      data5 = #{data5,jdbcType=VARCHAR},
+      data6 = #{data6,jdbcType=VARCHAR},
+      data7 = #{data7,jdbcType=VARCHAR},
+      data8 = #{data8,jdbcType=VARCHAR},
+      data9 = #{data9,jdbcType=VARCHAR},
+      data10 = #{data10,jdbcType=VARCHAR}
+    where publish_id = #{publishId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select publish_id, title, category_id, service_type, description, create_time, create_person, 
+    data1, data2, data3, data4, data5, data6, data7, 
+    data8, data9, data10
+    from tb_departleader_publish
+    where publish_id = #{publishId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select publish_id, title, category_id, service_type, description, create_time, create_person, 
+    data1, data2, data3, data4, data5, data6, data7, 
+    data8, data9, data10
+    from tb_departleader_publish
+  </select>
+  <select id="countAll" resultType="java.lang.Long" >
+    select count(1)
+    from tb_departleader_publish
+  </select>
+  <select id="selectAllByPage" resultMap="BaseResultMap" >
+    select publish_id, title, category_id, service_type,create_time, create_person,data1
+    from tb_departleader_publish
+    order by publish_id desc
+    limit #{startRow},#{pageSize}
+  </select>
+  <select id="countByCategoryId" resultType="java.lang.Long" >
+    select count(1)
+    from tb_departleader_publish
+    where category_id = #{categoryId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByCategoryId" resultMap="BaseResultMap" >
+    select publish_id, title, category_id, service_type,create_time, create_person,data1
+    from ( 
+    	select * from tb_departleader_publish
+    	where category_id = #{categoryId,jdbcType=BIGINT}
+        order by publish_id desc
+    ) d
+    limit #{startRow},#{pageSize}
+  </select>
+  <select id="countByUser" resultType="java.lang.Long" >
+    select count(1)
+    from tb_departleader_publish
+    where create_person = #{createPerson,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByUser" resultMap="BaseResultMap" >
+    select publish_id, title, category_id, service_type,create_time, create_person,data1
+    from tb_departleader_publish
+    where create_person = #{createPerson,jdbcType=VARCHAR}
+    order by publish_id desc
+    limit #{startRow},#{pageSize}
+  </select>
+  <select id="countByUserAndCategoryId" resultType="java.lang.Long" >
+    select count(1)
+    from tb_departleader_publish
+    where create_person = #{createPerson,jdbcType=VARCHAR}
+    and category_id = #{categoryId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByUserAndCategoryId" resultMap="BaseResultMap" >
+    select publish_id, title, category_id, service_type,create_time, create_person,data1
+    from tb_departleader_publish
+    where create_person = #{createPerson,jdbcType=VARCHAR}
+    and category_id = #{categoryId,jdbcType=BIGINT}
+    order by publish_id desc
+    limit #{startRow},#{pageSize}
+  </select>
+  <select id="countApplyListByUser" resultType="java.lang.Long" >
+    select count(1)
+    from tb_departleader_publish
+    where <include refid="queryString" />
+  </select>
+  <select id="selectApplyListByUser" resultMap="BaseResultMap" >
+    select publish_id, title, category_id, service_type,create_time, create_person,data1
+    from tb_departleader_publish
+    where <include refid="queryString" />
+    order by publish_id desc
+    limit #{startRow},#{pageSize}
+  </select>
+  <select id="countApplyListByUserAndCategoryId" resultType="java.lang.Long" >
+    select count(1)
+    from tb_departleader_publish
+    where <include refid="queryString" />
+    and category_id = #{categoryId,jdbcType=BIGINT}
+  </select>
+  <select id="selectApplyListByUserAndCategoryId" resultMap="BaseResultMap" >
+    select publish_id, title, category_id, service_type,create_time, create_person,data1
+    from tb_departleader_publish
+    where <include refid="queryString" />
+    and category_id = #{categoryId,jdbcType=BIGINT}
+    order by publish_id desc
+    limit #{startRow},#{pageSize}
+  </select>
+  
+  <sql id="queryString">
+  	publish_id in( select publish_id from tb_publish_applyPerson where apply_person_id = #{applyPersonId}
+  	and project_id is null)
+  </sql>
+  
+  <select id="selectByIdList" resultMap="BaseResultMap" >
+    select publish_id, title, category_id, service_type,create_time, create_person,data1
+    from tb_departleader_publish
+    where publish_id in (
+  	  	<foreach collection="idList" item="publishId" separator="," >
+				#{publishId}
+	 	</foreach>
+	 )
+  </select>
+</mapper>

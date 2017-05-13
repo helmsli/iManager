@@ -1,0 +1,51 @@
+<meta charset="UTF-8">
+<style>
+	.line{border-bottom:1px solid #ececec; padding:5px 0px; line-height:24px;}
+	.boldFont{font-weight:bold;}
+</style>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-show="projectFlowInfo.show">
+	<div class="row clearfix" ng-repeat="data in projectFlowInfo">
+		<!-- 办理结果 -->
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-b-10" ng-if="data.result.type==='approve'">
+			<div class="row clearfix">
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 align-right">{{data.title}}</div>
+				<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+					<div class="row clearfix">
+						<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 font-bold col-red" ng-bind="data.result.result=='0'?'同意':'不同意'"></div>
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 p-l-0">
+							<span ng-bind="data.result.comment"></span>
+							<a href="#" class="p-l-10 col-blue" ng-show="data.result.isAttach" filePath="{{data.data2[0].path}}" ng-click="attachDownLoad(data.data2[0].annexName);">附件下载</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 文件列表 -->
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-b-10" ng-if="data.result.type==='file'">
+			<div class="row clearfix">
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 align-right">{{data.title}}</div>
+				<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+					<div class="table-responsive m-b-0">
+			 			<table class="table table-striped table-bordered m-b-0">
+					        <thead>
+					        	<tr>
+					           		<th width="10%">提交时间</th>
+					           		<th width="80%">文件名称</th>
+					           		<th width="10%">操作</th>
+					           </tr>
+					        </thead>
+					        <tbody>
+								<tr ng-repeat="fileList in data.data1">
+									<td>{{fileList.uploadTime}}</td>
+									<td>{{fileList.originalFilename}}</td>
+									<td><a href="javascript:void(0);" filePath="{{fileList.path}}" onclick="window.open(this.getAttribute('filePath'),'','width=200,height=100');">下载</a></td>
+								</tr>
+					        </tbody>
+					    </table>
+				   </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- / .row -->
+</div>

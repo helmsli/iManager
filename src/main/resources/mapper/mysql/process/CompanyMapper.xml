@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinwei.process.dao.CompanyMapper" >
+  <resultMap id="BaseResultMap" type="com.xinwei.process.entity.Company" >
+    <id column="company_id" property="companyId" jdbcType="BIGINT" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="company_property" property="companyProperty" jdbcType="VARCHAR" />
+    <result column="certificate_type" property="certificateType" jdbcType="VARCHAR" />
+    <result column="certificate_id" property="certificateId" jdbcType="VARCHAR" />
+    <result column="register_address" property="registerAddress" jdbcType="VARCHAR" />
+    <result column="business_address" property="businessAddress" jdbcType="VARCHAR" />
+    <result column="link_man" property="linkMan" jdbcType="VARCHAR" />
+    <result column="link_tel" property="linkTel" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="create_person" property="createPerson" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="approve_person" property="approvePerson" jdbcType="VARCHAR" />
+    <result column="approve_time" property="approveTime" jdbcType="TIMESTAMP" />
+    <result column="current_status" property="currentStatus" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_company
+    where company_id = #{companyId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xinwei.process.entity.Company" >
+    insert into tb_company (company_id, company_name, company_property, 
+      certificate_type, certificate_id, register_address, 
+      business_address, link_man, link_tel, 
+      email, create_person, create_time, 
+      approve_person, approve_time, current_status
+      )
+    values (#{companyId,jdbcType=BIGINT}, #{companyName,jdbcType=VARCHAR}, #{companyProperty,jdbcType=VARCHAR}, 
+      #{certificateType,jdbcType=VARCHAR}, #{certificateId,jdbcType=VARCHAR}, #{registerAddress,jdbcType=VARCHAR}, 
+      #{businessAddress,jdbcType=VARCHAR}, #{linkMan,jdbcType=VARCHAR}, #{linkTel,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{createPerson,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{approvePerson,jdbcType=VARCHAR}, #{approveTime,jdbcType=TIMESTAMP}, #{currentStatus,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.xinwei.process.entity.Company" >
+    update tb_company
+    set company_name = #{companyName,jdbcType=VARCHAR},
+      company_property = #{companyProperty,jdbcType=VARCHAR},
+      certificate_type = #{certificateType,jdbcType=VARCHAR},
+      certificate_id = #{certificateId,jdbcType=VARCHAR},
+      register_address = #{registerAddress,jdbcType=VARCHAR},
+      business_address = #{businessAddress,jdbcType=VARCHAR},
+      link_man = #{linkMan,jdbcType=VARCHAR},
+      link_tel = #{linkTel,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      create_person = #{createPerson,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      approve_person = #{approvePerson,jdbcType=VARCHAR},
+      approve_time = #{approveTime,jdbcType=TIMESTAMP},
+      current_status = #{currentStatus,jdbcType=VARCHAR}
+    where company_id = #{companyId,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateCurrentStatusByCompanyId" parameterType="com.xinwei.process.entity.Company" >
+    update tb_company
+    set current_status = #{currentStatus,jdbcType=VARCHAR}
+    where company_id = #{companyId,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select *
+    from tb_company
+    where company_id = #{companyId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectApprovedCompaniesByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select *
+    from tb_company
+    where company_name = #{companyName,jdbcType=VARCHAR} and current_status='1'
+  </select>
+  
+  <select id="selectCompaniesByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select *
+    from tb_company
+    where company_name = #{companyName,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="countApprovedCompanies" resultType="java.lang.Long" >
+    select count(1) 
+    from tb_company
+    where current_status='1'
+  </select>
+  
+  <select id="selectApprovedCompanies" resultMap="BaseResultMap" >
+    select * from tb_company
+    where current_status='1'
+    limit #{startRow},#{pageSize}
+  </select>
+  
+  <select id="selectApprovedCompaniesIdAndName" resultMap="BaseResultMap" >
+    select company_id, company_name
+    from tb_company 
+    where current_status='1'
+  </select>
+</mapper>

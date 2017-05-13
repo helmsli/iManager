@@ -1,0 +1,105 @@
+<meta charset="UTF-8">
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style=" border:1px solid #ff6600; overflow:hidden;">
+	<!-- -conent- -->
+	<div style=" border:1px solid #ff6600; overflow:hidden; display:none;">
+		<!-- --阶段主状态显示--- -->
+		<div>
+			<ul class="nav nav-tabs" >
+				<li ng-show="PAGE_VIEW.STEP_pm_sanjibm_qingqiu_FLAG">专家初期</li>
+				<li ng-show="expertReviewFlag.middle">专家中期</li>
+				<li ng-show="expertReviewFlag.finished">专家终期</li>
+			</ul>
+		</div>
+		<!-- --阶段主状态态显示的的打分情况--- -->
+			<div ng-show="expertReviewFlag.create" >
+				评审专家列表
+				<ul ng-show="expertReview.create[0].expertList">
+					<li ng-repeat="data in expertReview.create[0].expertList">{{data.postName}}</li>
+				</ul>
+				评审专家打分列表
+				<ul ng-show="expertReview.create[0].expertScore">
+					<li ng-repeat="data in expertReview.create[0].expertScore">{{data.postName}}--{{data.expertScore}}</li>
+				</ul>
+			</div>
+			
+	
+			
+			
+			<li ng-repeat="data in expertList" >
+				<span ng-show="data.PAGE_VIEW_STEP_state">{{data.postName}}--{{data.expertScore}}</span>
+			</li>
+				
+			
+			
+			
+			<div ng-show="expertReviewFlag.middle">专家中期{{expertReview.middle}}
+				评审专家列表
+				<ul ng-show="expertReview.middle[0].expertList">
+					<li ng-repeat="data in expertReview.middle[0].expertList">{{data.postName}}</li>
+				</ul>
+				评审专家打分列表
+				<ul ng-show="expertReview.middle[0].expertScore">
+					<li ng-repeat="data in expertReview.middle[0].expertScore">{{data.postName}}--{{data.expertScore}}</li>
+				</ul>
+			</div>
+			
+			
+			<div ng-show="expertReviewFlag.finished">专家终期{{expertReview.finished}}
+				评审专家列表
+				<ul ng-show="expertReview.finished[0].expertList">
+					<li ng-repeat="data in expertReview.finished[0].expertList">{{data.postName}}</li>
+				</ul>
+				评审专家打分列表
+				<ul ng-show="expertReview.finished[0].expertScore">
+					<li ng-repeat="data in expertReview.finished[0].expertScore">{{data.postName}}--{{data.expertScore}}</li>
+				</ul>
+			</div>
+	</div>
+	<!-- ------专家域显示END------- -->
+		
+		<!-- <div>
+			<ul>
+				<li><a href="">查看尽职调查</a></li>
+				<li><a href="">查看评审材料</a></li>
+				<li><a href="">查看评审结果</a></li>
+			</ul>
+		</div> -->
+		<!-- ------决策委员会显示域显示------- -->
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div>
+				<ul class="nav nav-tabs" >
+					<li  ng-show="committeeApprovalFlag.create" class="active" data-target="#committeeApproval_create" data-toggle="tab" >决策委员初期</li>
+					<li ng-show="committeeApprovalFlag.middle" data-target="#committeeApproval_middle" data-toggle="tab" >决策委员中期</li>
+					<li ng-show="committeeApprovalFlag.finished" data-target="#committeeApproval_finished" data-toggle="tab" >决策委员终期</li>
+				</ul>
+			</div>
+			<div>
+				<ul>
+					<li ng-show="committeeApprovalFlag.create" class="clearfix tab-pane fade active in" id="committeeApproval_create" >决策委员初期:{{committeeApproval.create[0].conclusion}}-{{committeeApproval.create[0].time}}</li>
+					<li ng-show="committeeApprovalFlag.middle" class="clearfix tab-pane fade" id="committeeApproval_middle">决策委员中期{{committeeApproval.middle[0].conclusion}}--{{committeeApproval.middle[0].time}}</li>
+					<li ng-show="committeeApprovalFlag.finished" class="clearfix tab-pane fade"  id="committeeApproval_finished">决策委员终期{{committeeApproval.finished[0].conclusion}}--{{committeeApproval.middle[0].time}}</li>
+				</ul>
+			</div>
+		</div>
+		<!-- ------决策委员会显示域显示END------- -->
+		<!-- / .col-12 -->
+		<!-- ------部门经理审批信息显示域显示------- -->
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div>
+				<ul class="nav nav-tabs" >
+					<li class="active" data-target="#departleaderApprovalFlag_create" data-toggle="tab"   ng-show="departleaderApprovalFlag.create">部门经理初期</li>
+					<li  data-target="#departleaderApprovalFlag_middle" data-toggle="tab" ng-show="departleaderApprovalFlag.middle">部门经理中期</li>
+					<li  data-target="#departleaderApprovalFlag_finished" data-toggle="tab" ng-show="departleaderApprovalFlag.finished">部门经理终期</li>
+				</ul>
+			</div>
+			<div>
+				<ul>
+					<li id="departleaderApprovalFlag_create" class="clearfix tab-pane fade active in" ng-show="departleaderApprovalFlag.create">部门经理初期:{{departleaderApproval.create[0].conclusion}}-{{departleaderApproval.create[0].time}}</li>
+					<li id="departleaderApprovalFlag_middle" class="clearfix tab-pane fade " ng-show="departleaderApprovalFlag.middle">部门经理中期{{departleaderApproval.middle[0].conclusion}}--{{departleaderApproval.middle[0].time}}</li>
+					<li id="departleaderApprovalFlag_finished" class="clearfix tab-pane fade" ng-show="departleaderApprovalFlag.finished">部门经理终期{{departleaderApproval.finished[0].conclusion}}--{{departleaderApproval.middle[0].time}}</li>
+				</ul>
+			</div>
+		</div>
+		<!-- / .col-12 -->
+		<!-- ------部门经理审批信息显示域显示END------- -->
+</div>

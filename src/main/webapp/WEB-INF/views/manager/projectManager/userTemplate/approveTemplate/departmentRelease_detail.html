@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html data-ng-app="App">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+		<title>Manager system</title>
+		
+		<!-- Plugin Css -->
+    	<link href="../../plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    	<link href="../../plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    	<link href="../../plugins/material-design-preloader/md-preloader.css" rel="stylesheet" />
+    	<link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    	<link href="../../plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    	<link href="../../plugins/node-waves/waves.min.css" rel="stylesheet" />
+   	 	<link href="../../plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+    	<link href="../../plugins/animate-css/animate.css" rel="stylesheet" />
+    	
+	    <!-- Custom Css -->
+    	<link href="../../css/custom.css" rel="stylesheet">
+	    <link href="../../css/themes/default/skin.css" rel="stylesheet" type="text/css" title="default"/>
+	    <style>
+	    	.table-show{display:table-row-group;}
+	    	.table-hide{display:none;}
+	    </style>
+
+	</head>
+	<body ng-controller="app">
+		<div class="page-loader-wrapper" ng-include="'../include/loading.html'"></div>
+		<div class="overlay"></div>
+		<!-- Page Loader -->
+		<div id="wrapper">
+			<div class="header" ng-include="'../include/header.html'"></div>
+			<div class="menus" ng-include="'../include/leftMenu.html'"></div>
+			<div id="page-wrapper" ng-controller="departLeaderReleaseSee">
+				<div class="panel">
+					<div class="panel-heading">
+						<h2 class="panel-title">部门经理发布</h2>
+					</div>
+					<div  class="panel-body min-height-550">
+						<form>
+							<div class="row clearfix p-b-15">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 p-r-0 align-right">项目类型:</div>
+                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">{{dataDetail.serviceType}}</div>
+                            </div>
+                            <div class="row clearfix p-b-15">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 p-r-0 align-right">项目主题:</div>
+                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12"ng-bind="dataDetail.title">
+                                   
+                                </div>
+                            </div>
+                            <div class="row clearfix p-b-15">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 p-r-0 align-right">项目描述:</div>
+                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12" ng-bind="dataDetail.description">
+                                </div>
+                            </div>
+                            <div class="row clearfix p-b-15" ng-repeat="data in dataDetailAttach">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 p-r-0 align-right">附件:</div>
+                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                               		<span ng-bind="data.originalFilename"></span>
+                               		<a href="javascript:void(0);" class="p-l-1 col-blue" ng-show="isAttach" filePath="{{data.path}}" ng-click="attachDownLoad(data.annexName)">附件下载</a>
+                                </div>
+                            </div>                            
+                            <!-- 选择附件开始 -->
+                            <div class="row clearfix" ng-show="approveFlag">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 p-r-0 p-t-5 align-right">附件:</div>
+                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <div class="form-line">
+                                        	<div class="file-group">
+               									<input type="text" name="fileName" id="fileName" class="form-control" placeholder="选择要上传的文件..." />
+                   								<input type="button" value="选择文件" class="btn btn-primary"/>
+                   								<input type="file" name="filefield" id="uploadFile" onchange="document.getElementById('fileName').value=this.value;uploadButtonSubmit('uploadFile',this)" />
+                   							</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <!-- 选择附件结束 -->
+                            <hr>
+                            <div class="row clearfix align-center">
+                            	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            		<button type="button" class="btn btn-success waves-effect m-r-8"  ng-show="approveFlag" onclick="submitDeclare()">申报</button>
+                            		<button type="button" class="btn btn-primary waves-effect m-l-8" onclick="cancleButton()">取消</button>
+                            	</div>
+                            </div>
+						</form>
+					</div>
+				</div>
+				<!-- / .panel -->
+			</div>
+			<!-- / #page-wrapper -->
+		</div>
+		<!-- / #wrapper -->
+	</body>
+	<!-- Plugin Js -->
+    <script src="../../plugins/jquery/jquery-2.2.4.min.js"></script>
+    <script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../plugins/angular/angular.min.js"></script>
+    <script src="../../plugins/ocLazyLoad/ocLazyLoad.min.js"></script>
+    <script src="../../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <script src="../../plugins/bootstrap-notify/bootstrap-notify.js"></script>
+    <script src="../../plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="../../plugins/node-waves/waves.js"></script>
+    <script src="../../plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="../../js/ui/dialogs.js"></script>
+    <script src="../../js/ui/modals.js"></script>
+    <script src="../../js/ui/notifications.js"></script>
+    <script src="../../js/ui/tooltips-popovers.js"></script>
+    <script src="../../js/ui/load_resize.js"></script>
+    <script src="../../plugins/angular/angular-translate.min.js"> </script>
+	<script src="../../plugins/angular/angular-translate-loader-static-files.min.js"> </script>
+    <!-- Custom JS -->
+    <script src="../../js/server/server.js" type="text/javascript"></script>
+	<script src="../../js/cookie.js" type="text/javascript"></script>
+	<script src="../../js/skin.js" type="text/javascript"></script>
+	<script src="../../js/config/config_skin.js" type="text/javascript"></script>
+	<script src="../../js/App.js" type="text/javascript"></script>
+	<script src="../../js/home.js" type="text/javascript"></script>
+	
+	<!-- 业务信息 -->
+	<script src="../../js/fileupload/fileupload.js" type="text/javascript"></script>
+	<script src="../../js/process_global/project/config_projectPagePath.js" type="text/javascript"></script>
+	<script src="../../js/process_global/project/departmentReleaseSee.js" type="text/javascript"></script>
+</html>

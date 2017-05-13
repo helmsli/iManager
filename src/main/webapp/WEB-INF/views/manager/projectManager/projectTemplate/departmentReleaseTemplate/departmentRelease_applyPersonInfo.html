@@ -1,0 +1,31 @@
+<meta charset="UTF-8">
+<div class="table-responsive m-b-0">
+	<table class="table table-bordered m-b-0">
+		<tbody>
+	       	<tr>
+				<td width="10%" class="align-right">申报人姓名：</td>
+              	<td width="20%" ng-bind="user.firstname"></td>
+              	<td width="10%" class="align-right">性别：</td>
+              	<td width="60%" ng-bind="user.sex"></td>
+			</tr>
+			<tr>
+				<td class="align-right">电话号码:</td>
+              	<td ng-bind="user.phone"></td>
+              	<td class="align-right">所在单位:</td>
+              	<td ng-bind="user.company_name"></td>
+			</tr>
+			<tr>
+				<td class="align-right">出生日期:</td>
+              	<td ng-bind="user.birthday"></td>
+              	<td class="align-right">邮件地址:</td>
+              	<td ng-bind="user.email"></td>
+			</tr>
+			<tr>
+				<td class="align-right">证件类型:</td>
+              	<td ng-bind="user.cardtype"></td>
+              	<td class="align-right">证件号码:</td>
+              	<td ng-bind="user.cardno"></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

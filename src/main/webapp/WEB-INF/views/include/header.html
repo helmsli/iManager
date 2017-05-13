@@ -1,0 +1,72 @@
+<meta charset="UTF-8">
+<!-- Bootstrap Css -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="head_ms">
+	<a  id="head_navbar_toggle" class="navbar-toggle" data-toggle="collapse"  data-target=".navbar-collapse"><i class="fa fa-bars"></i></a>
+	<a class="navbar-brand manager-navbar" href="javascript:void(0);">后台管理系统 </a>
+	
+	<ul class="nav navbar-nav navbar-left navbar-top-links" id="headerModal" ng-if="headerTypeShow">
+	    <li  ng-repeat = "menu in menuList">
+	        <a ng-href="{{server_url}}{{menu.children.length>0?menu.children[0].action:menu.action}}"
+	           ng-if="menu.name!='MENU_DEMO_HOME'">
+	        {{menu.name|translate }}   
+	        </a>
+	    </li>
+    </ul>
+    <ul class="nav navbar-right navbar-top-links">
+        <li class="dropdown">
+            <a class="user-profile dropdown-toggle" data-toggle="dropdown" href="#">
+            	<!--<img src="../images/header_user_default.png" class="img-circle" />-->
+            	
+            	<i class="fa fa-user" style="display: inline-block;"></i>
+            	<em class="user-name" ng-bind="userName" data-ng-init="initHead()"></em>
+            	<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+            	<li><a  ng-href="{{userInfoHref}}" ><i class="fa fa-user fa-fw"></i>用户资料</a></li>
+            	<li><a  ng-href="{{modifPwdHref}}"><i class="fa fa-edit fa-fw"></i>修改密码</a></li>
+            	<li class="divider"></li>
+                <li><a href="#" ng-click="toLogout()"><i class="fa fa-sign-out fa-fw"></i>退出</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a class="dropdown-toggle skin-fa" data-toggle="dropdown" href="#">
+            	<i class="fa fa-ellipsis-v"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user" id="skin">
+            	<li><span href="javascript:;" id="default" onclick="mySkin.changeSkin('blue');"><i class="fa fa-stop fa-fw"></i>蓝色</span></li>
+            	<li><span href="javascript:;" id="yellow" onclick="mySkin.changeSkin('yellow');"><i class="fa fa-stop fa-fw"></i>黄色</span></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+<script>
+	$(function(){
+		$(window).resize(function() {
+			var clientWidth = document.body.clientWidth+17;
+			if(clientWidth>=768){
+				$(".overlay").fadeOut();
+			}else{
+				$("#leftMenu_navbar").removeClass("in");
+			}
+		});
+
+		/*小屏幕时，点击菜单按钮，菜单底部添加遮罩层*/
+		$("#head_navbar_toggle").on("click",function(){
+			$(".overlay").fadeToggle();
+			/*if($(".overlay").length!=0){
+				if($(".overlay").css("display")=="none"){
+					$(".overlay").fadeIn();
+					
+				}else{
+					$(".overlay").fadeOut();
+				}
+			}*/
+		});
+		/*遮罩层点击时，消失*/
+		$(".overlay").on("click",function(){
+			$(".overlay").fadeOut();
+			//菜单面板折叠
+			$("#leftMenu_navbar").removeClass("in");
+		});
+	});
+</script>

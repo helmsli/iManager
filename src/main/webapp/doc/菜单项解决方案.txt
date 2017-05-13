@@ -1,0 +1,27 @@
+
+	
+	要跳转的页面不在父页面的菜单项解决方案
+
+
+	1.获取当前URL参数；
+	2.判断URL参数是否包含from参数；
+	3.如果有from 变更Scope.newPageAction 参数值；（angular 同步NEWPAGEACTION 刷新左侧菜单高亮显示类）—备注：newPageAction参数是当前要显示的菜单；
+	4.没有不处理；
+	
+	
+	备注：在app.js全局变量：from--父级URL的fileName;
+			
+			调用方法：
+			url = "newApply.html?from="+from;
+			
+			处理方法：
+			
+		var request=parseQueryString();
+    	if(request.from)
+		{
+    		$scope.newPageAction=request.from;
+		}
+		
+		
+		注：manger下的一级html页面命名时不能带“_”（下划线），二级html页面命名时必须带“_”（下划线），这样约定是避免二级html页面不能定位左侧菜单高亮显示问题。
+		

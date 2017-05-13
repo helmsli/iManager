@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinwei.security.dao.UserDao">
+	<!-- 开启本mapper的namespace下的二级缓存 -->
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache" />
+
+  <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="User">
+  	insert INTO security_user (
+  		department_id,username,firstname,lastname,password,salt,phone,cardno,cardtype,
+  		email,createtime,birthday,address,sex,imgurl,status,isDisabled
+	)
+	VALUES(
+		#{department_id},#{username},#{firstname},#{lastname},#{password},#{salt},#{phone},#{cardno},#{cardtype},
+		#{email},#{createTime} ,#{birthday},#{address},#{sex},#{imgurl},#{status},#{isDisabled}
+	)
+  </insert>
+  
+  
+  <update id="update" parameterType="User" >
+  	update security_user 
+  	   set department_id = #{department_id},username=#{username},firstname=#{firstname},lastname=#{lastname},
+  	   	   phone=#{phone},email=#{email},birthday=#{birthday},address=#{address},cardno=#{cardno},cardtype=#{cardtype},
+  	   	   sex=#{sex},password=#{password},salt=#{salt},isDisabled=#{isDisabled}
+  	  where id=#{id}
+  </update>
+  
+  <update id="moveDepartment"  >
+  	update security_user 
+  	   set department_id = #{department_id}
+  	  where id in (
+  	  	<foreach collection="userIds" item="userId" separator="," >
+				#{userId}
+	 	</foreach>
+	 )
+  </update>
+  
+  
+  <delete id="delete" parameterType="java.lang.Long">
+  	update security_user set status =  1 where id = #{id}
+  </delete>
+  
+  
+  
+	<!-- 查询单条记录 -->
+	<select id="get" parameterType="java.lang.Long"   resultType="User"  useCache="true">
+		SELECT * FROM security_user WHERE id = #{id}
+	</select>
+	
+	<select id="findByUsername" parameterType="java.lang.String"    resultType="User" useCache="true">
+		SELECT * FROM security_user WHERE username = #{username}
+		<if test="id != null  and id !=0">
+			 	and id != #{id}
+	 	 </if>
+	 	 and status = 0
+	</select>
+	
+	
+	
+	
+	
+	<select id="findByPageCount" resultType="java.lang.Long">
+		select count(1) from security_user where 1=1  <include refid="queryString" /> 
+	</select>
+	
+	<select id="findByPage"    resultType="User">
+ 	 	select * from security_user  
+ 	 	 where 1= 1 <include refid="queryString" /> order by id
+ 	 	 limit #{startRow},#{pageSize}
+	</select>
+	
+	<sql id="queryString">
+		 and status=0
+   	     <if test="username != null and username !=''">
+			 	and username like CONCAT('%',#{username},'%')  
+	 	 </if> 
+	 	 <if test="roleId != null and roleId !=0">
+			 	and id in( select user_id from security_user_role where role_id = #{roleId})
+	 	 </if> 
+	 	 <if test="department_id != null and department_id !=0">
+			 	and department_id = #{department_id}
+	 	 </if> 
+  	</sql>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>
+
+
+
+
+

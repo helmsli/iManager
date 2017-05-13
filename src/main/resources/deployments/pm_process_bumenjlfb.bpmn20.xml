@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
+  <process id="pm_process_bumenjlfb" name="部门经理发布流程" isExecutable="true">
+    <startEvent id="pm_bumenjlfb_start" name="project_start"></startEvent>
+    <userTask id="pm_xiangmugly_chushen" name="项目管理员初审" activiti:assignee="${officer}">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${bumenjlfbListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="to_pm_xiangmugly_chushen" sourceRef="pm_bumenjlfb_start" targetRef="pm_xiangmugly_chushen"></sequenceFlow>
+    <userTask id="pm_juecewyh_pingshen" name="决策委员会评审" activiti:assignee="${committee}">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${bumenjlfbListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="pm_sanjibm_xg" name="三级部门经理修改" activiti:assignee="${threeLevelsLeader}">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${bumenjlfbListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="pm_bumenjl_pingshen" name="部门经理审批" activiti:assignee="${departLeader}">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${bumenjlfbListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <endEvent id="pm_bumenjlfb_end">
+      <extensionElements>
+        <activiti:executionListener event="start" delegateExpression="${bumenjlfbEndListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <exclusiveGateway id="pm_sanjibm_request_result" name="项目管理员初审结果"></exclusiveGateway>
+    <exclusiveGateway id="pm_juecewyh_pingshen_result" name="决策委员会评审结果"></exclusiveGateway>
+    <sequenceFlow id="to_pm_sanjibm_request_result" sourceRef="pm_xiangmugly_chushen" targetRef="pm_sanjibm_request_result"></sequenceFlow>
+    <sequenceFlow id="to_pm_juecewyh_pingshen" sourceRef="pm_sanjibm_request_result" targetRef="pm_juecewyh_pingshen">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pm_xiangmugly_chushen_result eq 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="pm_sanjibm_request_result2pm_sanjibm_jujue" sourceRef="pm_sanjibm_request_result" targetRef="pm_sanjibm_xg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pm_xiangmugly_chushen_result eq 'reject'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="pm_bmjl_pingshen_result1" sourceRef="pm_bmjl_pingshen_result" targetRef="pm_sanjibm_xg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pm_bumenjl_pingshen_result eq 'reject'}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="pm_bmjl_pingshen_result" name="部门经理评审结果"></exclusiveGateway>
+    <sequenceFlow id="to_pm_bmjl_pingshen_result" sourceRef="pm_bumenjl_pingshen" targetRef="pm_bmjl_pingshen_result"></sequenceFlow>
+    <sequenceFlow id="flow1" sourceRef="pm_juecewyh_pingshen" targetRef="pm_juecewyh_pingshen_result"></sequenceFlow>
+    <sequenceFlow id="pm_juecewyh_pingshen_result2pm_bumenjl_pingshen" sourceRef="pm_juecewyh_pingshen_result" targetRef="pm_bumenjl_pingshen">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pm_juecewyh_pingshen_result eq 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="pm_juecewyh_pingshen_result_to_pm_sanjibm_jujue" sourceRef="pm_juecewyh_pingshen_result" targetRef="pm_sanjibm_xg">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pm_juecewyh_pingshen_result eq 'reject'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="pm_sanjibm_xg2pm_xiangmugly_chushen" sourceRef="pm_sanjibm_xg" targetRef="pm_xiangmugly_chushen"></sequenceFlow>
+    <sequenceFlow id="to_pm_bumenjlfb_end" sourceRef="pm_bmjl_pingshen_result" targetRef="pm_bumenjlfb_end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pm_bumenjl_pingshen_result eq 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_pm_process_bumenjlfb">
+    <bpmndi:BPMNPlane bpmnElement="pm_process_bumenjlfb" id="BPMNPlane_pm_process_bumenjlfb">
+      <bpmndi:BPMNShape bpmnElement="pm_bumenjlfb_start" id="BPMNShape_pm_bumenjlfb_start">
+        <omgdc:Bounds height="35.0" width="35.0" x="320.0" y="105.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pm_xiangmugly_chushen" id="BPMNShape_pm_xiangmugly_chushen">
+        <omgdc:Bounds height="80.0" width="100.0" x="460.0" y="82.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pm_juecewyh_pingshen" id="BPMNShape_pm_juecewyh_pingshen">
+        <omgdc:Bounds height="80.0" width="100.0" x="820.0" y="82.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pm_sanjibm_xg" id="BPMNShape_pm_sanjibm_xg">
+        <omgdc:Bounds height="80.0" width="100.0" x="599.0" y="206.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pm_bumenjl_pingshen" id="BPMNShape_pm_bumenjl_pingshen">
+        <omgdc:Bounds height="80.0" width="100.0" x="820.0" y="346.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pm_bumenjlfb_end" id="BPMNShape_pm_bumenjlfb_end">
+        <omgdc:Bounds height="35.0" width="35.0" x="320.0" y="368.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pm_sanjibm_request_result" id="BPMNShape_pm_sanjibm_request_result">
+        <omgdc:Bounds height="40.0" width="40.0" x="628.0" y="102.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pm_juecewyh_pingshen_result" id="BPMNShape_pm_juecewyh_pingshen_result">
+        <omgdc:Bounds height="40.0" width="40.0" x="849.0" y="225.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pm_bmjl_pingshen_result" id="BPMNShape_pm_bmjl_pingshen_result">
+        <omgdc:Bounds height="40.0" width="40.0" x="628.0" y="366.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="to_pm_xiangmugly_chushen" id="BPMNEdge_to_pm_xiangmugly_chushen">
+        <omgdi:waypoint x="355.0" y="122.0"></omgdi:waypoint>
+        <omgdi:waypoint x="460.0" y="122.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="to_pm_sanjibm_request_result" id="BPMNEdge_to_pm_sanjibm_request_result">
+        <omgdi:waypoint x="560.0" y="122.0"></omgdi:waypoint>
+        <omgdi:waypoint x="628.0" y="122.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="to_pm_juecewyh_pingshen" id="BPMNEdge_to_pm_juecewyh_pingshen">
+        <omgdi:waypoint x="668.0" y="122.0"></omgdi:waypoint>
+        <omgdi:waypoint x="820.0" y="122.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="pm_sanjibm_request_result2pm_sanjibm_jujue" id="BPMNEdge_pm_sanjibm_request_result2pm_sanjibm_jujue">
+        <omgdi:waypoint x="648.0" y="142.0"></omgdi:waypoint>
+        <omgdi:waypoint x="649.0" y="206.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="pm_bmjl_pingshen_result1" id="BPMNEdge_pm_bmjl_pingshen_result1">
+        <omgdi:waypoint x="648.0" y="366.0"></omgdi:waypoint>
+        <omgdi:waypoint x="649.0" y="286.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="to_pm_bmjl_pingshen_result" id="BPMNEdge_to_pm_bmjl_pingshen_result">
+        <omgdi:waypoint x="820.0" y="386.0"></omgdi:waypoint>
+        <omgdi:waypoint x="668.0" y="386.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="870.0" y="162.0"></omgdi:waypoint>
+        <omgdi:waypoint x="869.0" y="225.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="pm_juecewyh_pingshen_result2pm_bumenjl_pingshen" id="BPMNEdge_pm_juecewyh_pingshen_result2pm_bumenjl_pingshen">
+        <omgdi:waypoint x="869.0" y="265.0"></omgdi:waypoint>
+        <omgdi:waypoint x="870.0" y="346.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="pm_juecewyh_pingshen_result_to_pm_sanjibm_jujue" id="BPMNEdge_pm_juecewyh_pingshen_result_to_pm_sanjibm_jujue">
+        <omgdi:waypoint x="849.0" y="245.0"></omgdi:waypoint>
+        <omgdi:waypoint x="699.0" y="246.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="pm_sanjibm_xg2pm_xiangmugly_chushen" id="BPMNEdge_pm_sanjibm_xg2pm_xiangmugly_chushen">
+        <omgdi:waypoint x="599.0" y="246.0"></omgdi:waypoint>
+        <omgdi:waypoint x="510.0" y="245.0"></omgdi:waypoint>
+        <omgdi:waypoint x="510.0" y="162.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="to_pm_bumenjlfb_end" id="BPMNEdge_to_pm_bumenjlfb_end">
+        <omgdi:waypoint x="628.0" y="386.0"></omgdi:waypoint>
+        <omgdi:waypoint x="355.0" y="385.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

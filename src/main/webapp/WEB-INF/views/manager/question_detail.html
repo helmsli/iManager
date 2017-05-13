@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html data-ng-app="App">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+		<title>Manager system</title>
+		
+		<!-- Plugin Css -->
+    	<link href="../../plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    	<link href="../../plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    	<link href="../../plugins/material-design-preloader/md-preloader.css" rel="stylesheet" />
+    	<link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    	<link href="../../plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    	<link href="../../plugins/node-waves/waves.min.css" rel="stylesheet" />
+   	 	<link href="../../plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+    	<link href="../../plugins/animate-css/animate.css" rel="stylesheet" />
+    	
+	    <!-- Custom Css -->
+    	<link href="../../css/custom.css" rel="stylesheet">
+	    <link href="../../css/themes/default/skin.css" rel="stylesheet" type="text/css" title="default"/>
+	    <style>
+	    	.table td{vertical-align: top!important;}
+	    	.table .form-control{padding:6px 12px;}
+	    	.table .form-control-inline{display:inline-block;width:auto;}
+	    	.table.m-t--1{margin-top:-1px;}
+	    	.tHeight{height:100px;}
+	    	.pre-wrap{vertical-align: top!important;white-space: pre-wrap!important;word-break: break-all;}
+	    </style>
+	</head>
+	<body ng-controller="app">
+		<div class="page-loader-wrapper" ng-include="'../include/loading.html'"></div>
+		<div class="overlay"></div>
+		<!-- Page Loader -->
+		<div id="wrapper">
+			<div class="header" ng-include="'../include/header.html'"></div>
+			<div class="menus" ng-include="'../include/leftMenu.html'"></div>
+			<div id="page-wrapper" ng-controller="initQuestionData">
+				<div class="panel" ng-init="initQuestion()">
+					<div class="panel-heading">
+						<h2 class="panel-title">尽职调查</h2>
+						<span class="abs pull-right-20">
+							<button type="button" class="btn btn-primary waves-effect" ng-click="cancelMyapplySeeWin();">关闭</button>
+						</span>
+					</div>
+					<div class="panel-body min-height-500" ng-include="'../question/'+templateName+''"></div>
+				</div>
+				<!-- / .panel -->
+			</div>
+			<!-- / #page-wrapper -->
+		</div>
+		<!-- / #wrapper -->
+	</body>
+	<!-- Plugin Js -->
+    <script src="../../plugins/jquery/jquery-2.2.4.min.js"></script>
+    <script src="../../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../plugins/angular/angular.min.js"></script>
+    <script src="../../plugins/ocLazyLoad/ocLazyLoad.min.js"></script>
+    <script src="../../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <script src="../../plugins/bootstrap-notify/bootstrap-notify.js"></script>
+    <script src="../../plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="../../plugins/node-waves/waves.js"></script>
+    <script src="../../plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="../../js/ui/dialogs.js"></script>
+    <script src="../../js/ui/modals.js"></script>
+    <script src="../../js/ui/notifications.js"></script>
+    <script src="../../js/ui/tooltips-popovers.js"></script>
+    <script src="../../js/ui/load_resize.js"></script>
+    <script src="../../plugins/angular/angular-translate.min.js"> </script>
+	<script src="../../plugins/angular/angular-translate-loader-static-files.min.js"> </script>
+    <!-- Custom JS -->
+    <script src="../../js/server/server.js" type="text/javascript"></script>
+	<script src="../../js/cookie.js" type="text/javascript"></script>
+	<script src="../../js/skin.js" type="text/javascript"></script>
+	<script src="../../js/config/config_skin.js" type="text/javascript"></script>
+	<script src="../../js/App.js" type="text/javascript"></script>
+	<script src="../../js/home.js" type="text/javascript"></script>
+	
+	<!-- 业务信息 JS -->
+	<script src="../../js/process_global/getTemplatePath.js" type="text/javascript"></script>
+	<script src="../../js/process_global/question/question_detail.js" type="text/javascript"></script>
+</html>

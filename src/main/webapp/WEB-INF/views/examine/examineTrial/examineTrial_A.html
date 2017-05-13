@@ -1,0 +1,47 @@
+<meta charset="UTF-8">
+
+<div class="table-responsive" ng-init="initQuestionTable()">
+	<table class="table table-bordered m-b-0" id="questionTemplateC">
+		<thead>
+			<tr>
+				<th width="5%" data-columnName="index">序号</th>
+				<th width="50%" data-columnName="title">项目评价内容</th>
+				<th width="10%" class="align-center" data-columnName="scoreVal">总分值</th>
+				<th width="10%" class="align-center" data-columnName="score">分值</th>
+				<th width="25%" data-columnName="mark">备注</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!--tbody的class名不能为‘show’,否则表格不能自动撑开-->
+			<tr ng-repeat="data in questionList" data-id="{{$index}}">
+				<td class="align-center">{{$index+1}}</td>
+				<td class="pre-wrap">{{data.title}}</td>
+				<td class="pre-wrap align-center" data-columnName="scoreVal">{{data.scoreVal}}</td>
+				<td class="pre-wrap align-center" data-columnName="score" data-group="{{$index}}" data-type="number" data-datename="payNumber" onblur="checkThisVal(this);" contentEditable="true">{{data.score}}</td>
+				<td class="pre-wrap" data-columnName="content"  onblur="checkThisVal(this);" contentEditable="true">{{data.content}}</td>
+			</tr>
+		</tbody>
+		<tfoot ng-init="initQuestion2()" id="tableProjectInfo">
+			<tr>
+				<td width="30%" colspan="2" class="pre-wrap" data-columnName="">{{projectLable.score}}</td>
+				<td class="pre-wrap align-center" data-columnName="scoreVal">{{projectInfo.totalScoreVal}}</td>
+				<td class="pre-wrap align-center" data-columnName="score" data-type="number" id="totalScore" ng-model="projectInfo.score">{{projectInfo.score}}</td>
+				<td class="pre-wrap" data-columnName="marks" contentEditable="true">{{projectInfo.marks}}</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="pre-wrap" data-columnName="">{{projectLable.scoringMan}}</td>
+				<td colspan="3" class="pre-wrap" data-columnName="scoringMan" contentEditable="true">{{projectInfo.scoringMan}}</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="pre-wrap" data-columnName="">{{projectLable.scoringDepartment}}</td>
+				<td colspan="3" class="pre-wrap" data-columnName="scoringDepartment" contentEditable="true">{{projectInfo.scoringDepartment}}</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="pre-wrap" data-columnName="">{{projectLable.scoringTime}}</td>
+				<td colspan="3" class="pre-wrap" data-columnName="scoringTime" dataType="datetimepicker" data-editableType="datetimepicker" id="scoringTime">{{projectInfo.scoringTime}}</td>
+			</tr>
+		</tfoot>
+	</table>
+	<!-- / .table -->
+</div>
+<!-- / .table-responsive -->

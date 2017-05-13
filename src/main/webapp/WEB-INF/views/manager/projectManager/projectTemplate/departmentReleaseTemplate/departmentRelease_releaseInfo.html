@@ -1,0 +1,30 @@
+<meta charset="UTF-8">
+<div class="table-responsive m-b-0">
+	<table class="table table-bordered m-b-0">
+		<tbody>
+			<tr>
+               <td width="10%" class="align-right">发布人：</td>
+              	<td width="20%" ng-bind="dataDetail.createPerson"></td>
+              	<td width="10%" class="align-right">发布时间：</td>
+              	<td width="60%" ng-bind="dataDetail.createTime"></td>
+			</tr>
+			<tr>
+               <td class="align-right">项目类型:</td>
+              	<td ng-bind="dataDetail.serviceType"></td>
+              	<td class="align-right">项目主题:</td>
+              	<td ng-bind="dataDetail.title"></td>
+			</tr>
+			<tr>
+               <td class="align-right">项目描述:</td>
+              	<td colspan="3" ng-bind="dataDetail.description"></td>
+			</tr>
+			<tr ng-repeat="data in dataDetailAttach">
+               <td class="align-right">附件:</td>
+              	<td colspan="3">
+              		<span ng-bind="data.originalFilename"></span>
+          			<a href="javascript:void(0);" class="p-l-10 col-blue" ng-show="isAttach" filePath="{{data.path}}" ng-click="attachDownLoad(data.annexName)">附件下载</a>
+              	</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

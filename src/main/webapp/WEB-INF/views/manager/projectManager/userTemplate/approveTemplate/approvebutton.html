@@ -1,0 +1,18 @@
+<meta charset="UTF-8">
+
+<!-- / .col-12 -->
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"  id="decisionCommittee" >
+	
+    <div class="p-t-15 align-center">
+			                <button type="button" class="btn btn-success waves-effect m-r-5"  onclick="submitApproval()">{{suggestion.buttontitle}}</button>
+			                <button type="button" class="btn btn-primary waves-effect m-l-5" ng-click="cancelMyapplySeeWin();">关闭</button> 
+			                <!-- committeeSuggestionDate();managerSuggestionDate() -->
+			                <!-- 操作按钮结束 -->
+		                </div>
+</div>
+
+<script>
+//g_state由系统定义，确定办理的步骤
+var scope=getAngularScope("projectModel");
+globalRegisterHtml(scope.gloablParm.state);
+</script>

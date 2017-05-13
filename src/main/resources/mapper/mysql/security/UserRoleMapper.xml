@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinwei.security.dao.UserRoleDao">
+	
+	<!-- 开启本mapper的namespace下的二级缓存 -->
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache" />
+
+	<resultMap id="UserRoleMap" type="UserRole">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="role_id" property="role_id" jdbcType="BIGINT" />
+		<result column="user_id" property="user_id" jdbcType="BIGINT" />
+		<collection property="user" ofType="User">
+			<id column="user_id" property="id" />
+		</collection>
+		<collection property="role" ofType="Role">
+			<id column="role_id" property="id" />
+			<result column="rolename" property="name" />
+		</collection>
+	</resultMap>
+
+	<select id="get" parameterType="java.lang.Long" resultMap="UserRoleMap" >
+		SELECT * FROM security_user_role WHERE id = #{id}
+	</select>
+
+
+
+
+	<select id="findRolesByUserId" parameterType="java.lang.Long"  useCache="false"
+		resultType="Role">
+		select a.*
+		from security_role a
+		inner join security_user_role b on a.id=b.role_id
+		where b.user_id = #{user_id}
+	</select>
+
+	<select id="findCountByRoleId" parameterType="java.lang.Long"  useCache="true"
+		resultType="java.lang.Long">
+		SELECT count(1)
+		  FROM security_user_role a
+		 where a.role_id = #{role_id}
+	</select>
+
+	<select id="findUsersByRoleIdCount"     resultType="java.lang.Long" useCache="true">
+		select count(1) from security_user where 1=1
+		 <include refid="queryRoleString" /> 
+	</select>
+	
+	<select id="findUsersByRoleId"    resultType="User" useCache="true">
+	 	select * from security_user where 1=1
+		 <include refid="queryRoleString" /> 
+		 limit #{startRow},#{pageSize}
+	</select>
+	
+	<select id="findAllUsersByRoleId"    resultType="User" useCache="true">
+	 	select id,username,firstname,lastname,company_name
+	 	from security_user 
+	 	where id 
+	 	in (select user_id from security_user_role where role_id=#{role_id})
+	</select>
+	
+	<select id="findByRoleIdUserIdCount"  parameterType="UserRole"   resultType="java.lang.Long" >
+		SELECT count(1)
+		  FROM security_user_role A
+		 where user_id = #{user_id} and role_id = #{role_id}
+	</select>
+
+	<select id="countUsersByRoleIdAndNameOrCompanyName"  resultType="java.lang.Long" useCache="true">
+		select count(1) 
+		 <include refid="queryByRoleIdAndNameOrCompanyName" /> 
+	</select>
+	
+	<select id="findUsersByRoleIdAndNameOrCompanyName"  resultType="User" useCache="true">
+	 	select id,username,firstname,lastname,company_name
+		 <include refid="queryByRoleIdAndNameOrCompanyName" /> 
+		 limit #{startRow},#{pageSize}
+	</select>
+	
+	<sql id="queryRoleString">
+		 <if test="containRoleId == 0">
+		 		and id in (select user_id from security_user_role where role_id=#{role_id})
+		  </if>
+		  <if test="containRoleId == 1">
+		  		and id not in (select user_id from security_user_role where role_id=#{role_id})
+		  </if> 
+		  and status=0
+  	</sql>
+  	
+  	<sql id="queryByRoleIdAndNameOrCompanyName">
+		 from(
+		   select * from security_user 
+	 	   where id 
+	 	   in (select user_id from security_user_role where role_id=#{role_id})
+		 ) t
+		 where 1=1 
+		 <if test="firstname != null and firstname !=''">
+			 and firstname like #{firstname}
+	 	 </if>
+		 <if test="company_name != null and company_name !=''">
+		     or company_name like #{company_name}
+	 	 </if>
+  	</sql>
+
+	<delete id="deleteByUserId" parameterType="java.lang.Long">
+		delete from
+		security_user_role where user_id = #{user_id}
+	</delete>
+	
+	<delete id="deleteUserRole" parameterType="UserRole">
+		delete from
+		security_user_role where user_id = #{user_id} and role_id = #{role_id}
+	</delete>
+
+	<insert id="save" parameterType="UserRole" >
+		insert INTO security_user_role (user_id,role_id)
+		VALUES (#{user_id},#{role_id})
+	</insert>
+
+</mapper>
+
+
+
+
+

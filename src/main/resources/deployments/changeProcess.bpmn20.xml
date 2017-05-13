@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
+  <process id="changeProcess" name="变更流程" isExecutable="true">
+    <startEvent id="startChangeProcess" name="开始变更"></startEvent>
+    <userTask id="committeeApprovalChange" name="决策委员会审批变更" activiti:assignee="${committee}" activiti:candidateUsers="${committees}" activiti:candidateGroups="${committeeGroup}">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${changeCurrentStateListener}"></activiti:taskListener>
+        <activiti:taskListener event="complete" delegateExpression="${changePreviousStateListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="departleaderApprovalChange" name="部门经理审批变更" activiti:assignee="${departLeader}" activiti:candidateGroups="${departLeaderGroup}">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${changeCurrentStateListener}"></activiti:taskListener>
+        <activiti:taskListener event="complete" delegateExpression="${changePreviousStateListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <exclusiveGateway id="committeeApprovalChangeConclusion" name="决策委员会审批变更结论" activiti:async="true"></exclusiveGateway>
+    <userTask id="modifyChange" name="修改变更" activiti:assignee="${projectManager}">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${changeCurrentStateListener}"></activiti:taskListener>
+        <activiti:taskListener event="complete" delegateExpression="${changePreviousStateListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <endEvent id="endChangeProcess" name="结束变更">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="${changeEndListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <exclusiveGateway id="isAgreeChange" name="是否同意修改变更"></exclusiveGateway>
+    <sequenceFlow id="toIsAgreeChange" sourceRef="modifyChange" targetRef="isAgreeChange"></sequenceFlow>
+    <sequenceFlow id="agreeChange" name="同意变更" sourceRef="isAgreeChange" targetRef="committeeApprovalChange">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${modifyChange_result eq 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="notAgreeChange" name="不同意变更" sourceRef="isAgreeChange" targetRef="endChangeProcess">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${modifyChange_result eq 'reject'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="startChange2committeeApprovalChange" sourceRef="startChangeProcess" targetRef="committeeApprovalChange"></sequenceFlow>
+    <sequenceFlow id="toCommitteeApprovalChangeConclusion" sourceRef="committeeApprovalChange" targetRef="committeeApprovalChangeConclusion"></sequenceFlow>
+    <sequenceFlow id="committeeApprovalChangeNotPass" name="决策委员会审批变更不通过" sourceRef="committeeApprovalChangeConclusion" targetRef="modifyChange">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${committeeApprovalChange_result eq 'reject'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="committeeApprovalChangePass" name="决策委员会审批变更通过" sourceRef="committeeApprovalChangeConclusion" targetRef="departleaderApprovalChange">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${committeeApprovalChange_result eq 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="departleaderApprovalChangeConclusion" name="部门经理审批变更结论"></exclusiveGateway>
+    <sequenceFlow id="toDepartleaderApprovalChangeConclusion" sourceRef="departleaderApprovalChange" targetRef="departleaderApprovalChangeConclusion"></sequenceFlow>
+    <sequenceFlow id="departleaderApprovalChangePass" name="部门经理审批变更通过" sourceRef="departleaderApprovalChangeConclusion" targetRef="endChangeProcess">
+      <extensionElements>
+        <activiti:executionListener event="take" delegateExpression="${changePassListener}"></activiti:executionListener>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${departleaderApprovalChange_result eq 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="departleaderApprovalChangeNotPass" name="部门经理审批变更不通过" sourceRef="departleaderApprovalChangeConclusion" targetRef="modifyChange">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${departleaderApprovalChange_result eq 'reject'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_changeProcess">
+    <bpmndi:BPMNPlane bpmnElement="changeProcess" id="BPMNPlane_changeProcess">
+      <bpmndi:BPMNShape bpmnElement="startChangeProcess" id="BPMNShape_startChangeProcess">
+        <omgdc:Bounds height="35.0" width="35.0" x="110.0" y="40.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="committeeApprovalChange" id="BPMNShape_committeeApprovalChange">
+        <omgdc:Bounds height="80.0" width="121.0" x="490.0" y="18.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="departleaderApprovalChange" id="BPMNShape_departleaderApprovalChange">
+        <omgdc:Bounds height="80.0" width="100.0" x="501.0" y="270.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="committeeApprovalChangeConclusion" id="BPMNShape_committeeApprovalChangeConclusion">
+        <omgdc:Bounds height="40.0" width="40.0" x="530.0" y="180.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="modifyChange" id="BPMNShape_modifyChange">
+        <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="161.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endChangeProcess" id="BPMNShape_endChangeProcess">
+        <omgdc:Bounds height="35.0" width="35.0" x="173.0" y="510.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="isAgreeChange" id="BPMNShape_isAgreeChange">
+        <omgdc:Bounds height="40.0" width="40.0" x="170.0" y="180.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="departleaderApprovalChangeConclusion" id="BPMNShape_departleaderApprovalChangeConclusion">
+        <omgdc:Bounds height="40.0" width="40.0" x="530.0" y="410.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="toIsAgreeChange" id="BPMNEdge_toIsAgreeChange">
+        <omgdi:waypoint x="350.0" y="201.0"></omgdi:waypoint>
+        <omgdi:waypoint x="210.0" y="200.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="agreeChange" id="BPMNEdge_agreeChange">
+        <omgdi:waypoint x="190.0" y="180.0"></omgdi:waypoint>
+        <omgdi:waypoint x="190.0" y="85.0"></omgdi:waypoint>
+        <omgdi:waypoint x="459.0" y="85.0"></omgdi:waypoint>
+        <omgdi:waypoint x="489.0" y="85.0"></omgdi:waypoint>
+        <omgdi:waypoint x="490.0" y="58.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="190.0" y="180.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="notAgreeChange" id="BPMNEdge_notAgreeChange">
+        <omgdi:waypoint x="190.0" y="220.0"></omgdi:waypoint>
+        <omgdi:waypoint x="190.0" y="510.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="60.0" x="190.0" y="220.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="startChange2committeeApprovalChange" id="BPMNEdge_startChange2committeeApprovalChange">
+        <omgdi:waypoint x="145.0" y="57.0"></omgdi:waypoint>
+        <omgdi:waypoint x="490.0" y="58.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toCommitteeApprovalChangeConclusion" id="BPMNEdge_toCommitteeApprovalChangeConclusion">
+        <omgdi:waypoint x="550.0" y="98.0"></omgdi:waypoint>
+        <omgdi:waypoint x="550.0" y="180.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="committeeApprovalChangeNotPass" id="BPMNEdge_committeeApprovalChangeNotPass">
+        <omgdi:waypoint x="530.0" y="200.0"></omgdi:waypoint>
+        <omgdi:waypoint x="450.0" y="201.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="450.0" y="151.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="committeeApprovalChangePass" id="BPMNEdge_committeeApprovalChangePass">
+        <omgdi:waypoint x="550.0" y="220.0"></omgdi:waypoint>
+        <omgdi:waypoint x="551.0" y="270.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="550.0" y="220.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toDepartleaderApprovalChangeConclusion" id="BPMNEdge_toDepartleaderApprovalChangeConclusion">
+        <omgdi:waypoint x="551.0" y="350.0"></omgdi:waypoint>
+        <omgdi:waypoint x="550.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="departleaderApprovalChangePass" id="BPMNEdge_departleaderApprovalChangePass">
+        <omgdi:waypoint x="550.0" y="450.0"></omgdi:waypoint>
+        <omgdi:waypoint x="550.0" y="527.0"></omgdi:waypoint>
+        <omgdi:waypoint x="208.0" y="527.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="550.0" y="450.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="departleaderApprovalChangeNotPass" id="BPMNEdge_departleaderApprovalChangeNotPass">
+        <omgdi:waypoint x="530.0" y="430.0"></omgdi:waypoint>
+        <omgdi:waypoint x="399.0" y="430.0"></omgdi:waypoint>
+        <omgdi:waypoint x="400.0" y="241.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42.0" width="100.0" x="530.0" y="430.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

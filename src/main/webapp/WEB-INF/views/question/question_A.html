@@ -1,0 +1,144 @@
+<meta charset="UTF-8">
+<div class="table-responsive">
+	<table class="table table-bordered">
+		<tbody class="dataList"><!--tbody的class名不能为‘show’,否则表格不能自动撑开-->
+			<tr ng-repeat="data in questionList">
+				<td width="5%" class="align-center">{{$index+1}}</td>
+				<td width="20%">{{data.title}}--{{data.id}}</td>
+				<td width="75%">
+					<div class="radio" >
+                   		<div class="radio-inline" ng-repeat="data in data.options">
+                   			<input ng-value="data.value" name="group_{{$parent.data.id}}" type="radio" class="with-gap radio-col-blue" id="radio_skills_{{$index}}" />
+                       		<label for="radio_skills_{{$index}}">{{data.text}}</label>
+                   		</div>
+                   		
+                   		
+                   		<div class="radio-inline">
+                   			<input value="其他" name="radio_skills" type="radio" class="with-gap radio-col-blue" id="radio_skills_5" />
+                       		<label for="radio_skills_5">其他</label>
+                   		</div>
+                   		<input id="period" class="form-control form-control-inline p-l-5" type="text">
+                   	</div>
+				</td>
+			</tr>
+			<!-- <tr>
+				<td class="align-center">2</td>
+				<td>工作完成情况您对其结果的满意度评价如何？</td>
+				<td>
+					<div class="radio" >
+                   		<div class="radio-inline">
+                   			<input value="满意" name="radio_satis" type="radio" class="with-gap radio-col-blue" id="radio_satis_1" />
+                       		<label for="radio_satis_1">相当满意</label>
+                   		</div>
+                   		<div class="radio-inline">
+                   			<input value="满意" name="radio_satis" type="radio" class="with-gap radio-col-blue" id="radio_satis_2" />
+                       		<label for="radio_satis_2">满意</label>
+                   		</div>
+                   		<div class="radio-inline">
+                   			<input value="一般" name="radio_satis" type="radio" class="with-gap radio-col-blue" id="radio_satis_3" />
+                       		<label for="radio_satis_3">一般</label>
+                   		</div>
+                   		<div class="radio-inline">
+                   			<input value="不满意" name="radio_satis" type="radio" class="with-gap radio-col-blue" id="radio_satis_4" />
+                       		<label for="radio_satis_4">不满意</label>
+                   		</div>
+                   		<div class="radio-inline">
+                   			<input value="其他" name="radio_satis" type="radio" class="with-gap radio-col-blue" id="radio_satis_5" />
+                       		<label for="radio_satis_5">其他</label>
+                   		</div>
+                   		<input id="period" class="form-control form-control-inline p-l-5" type="text">
+                   	</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="align-center">3</td>
+				<td>团队合作精神您是如何评价的？</td>
+				<td>
+					<div class="radio" >
+                   		<div class="radio-inline">
+                   			<input value="优秀" name="radio_group" type="radio" class="with-gap radio-col-blue" id="radio_group_1" />
+                       		<label for="radio_group_1">优秀</label>
+                   		</div>
+                   		<div class="radio-inline">
+                   			<input value="良好" name="radio_group" type="radio" class="with-gap radio-col-blue" id="radio_group_2" />
+                       		<label for="radio_group_2">良好</label>
+                   		</div>
+                   		<div class="radio-inline">
+                   			<input value="一般" name="radio_group" type="radio" class="with-gap radio-col-blue" id="radio_group_3" />
+                       		<label for="radio_group_3">一般</label>
+                   		</div>
+                   		<div class="radio-inline">
+                   			<input value="优秀" name="radio_group" type="radio" class="with-gap radio-col-blue" id="radio_group_4" />
+                       		<label for="radio_group_4">较差</label>
+                   		</div>
+                   		<div class="radio-inline">
+                   			<input value="其他" name="radio_group" type="radio" class="with-gap radio-col-blue" id="radio_group_5" />
+                       		<label for="radio_group_5">其他</label>
+                   		</div>
+                   		<input id="period" class="form-control form-control-inline p-l-5" type="text">
+                   	</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="align-center">4</td>
+				<td>与上司、同事关系（人际关系/沟通能力）</td>
+				<td>
+					<div class="radio" >
+                   		<div class="radio-inline">
+                   			<input value="非常融洽" name="radio_contact" type="radio" class="with-gap radio-col-blue" id="radio_contact_1" />
+                       		<label for="radio_contact_1">非常融洽</label>
+                   		</div>
+                   		<div class="radio-inline">
+                   			<input value="融洽" name="radio_contact" type="radio" class="with-gap radio-col-blue" id="radio_contact_2" />
+                       		<label for="radio_contact_2">融洽</label>
+                   		</div>
+                   		<div class="radio-inline">
+                   			<input value="一般" name="radio_contact" type="radio" class="with-gap radio-col-blue" id="radio_contact_3" />
+                       		<label for="radio_contact_3">一般</label>
+                   		</div>
+                   		<div class="radio-inline">
+                   			<input value="有隔阂" name="radio_contact" type="radio" class="with-gap radio-col-blue" id="radio_contact_4" />
+                       		<label for="radio_contact_4">有隔阂</label>
+                   		</div>
+                   		<div class="radio-inline">
+                   			<input value="其他" name="radio_contact" type="radio" class="with-gap radio-col-blue" id="radio_contact_5" />
+                       		<label for="radio_contact_5">其他</label>
+                   		</div>
+                   		<input id="period" class="form-control form-control-inline p-l-5" type="text">
+                   	</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="align-center">5</td>
+				<td>参与项目期间内与同事和上司关系如何？是否给予相关奖惩？</td>
+				<td>
+					<textarea rows="4" class="form-control no-resize min-height-50" placeholder="请输入您想要的..."></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td class="align-center">6</td>
+				<td>参与项目期间内对其整体评价如何评价？</td>
+				<td>
+					<textarea rows="4" class="form-control no-resize min-height-50" placeholder="请输入您想要的..."></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td class="align-center">7</td>
+				<td>还有对该同志一些个人情况进行补充吗？</td>
+				<td>
+					<textarea rows="4" class="form-control no-resize min-height-50" placeholder="请输入您想要的..."></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<div class="row" style="margin:20px 0;">
+						<div class="col-lg-3 col-lg-offset-6">调查人员：<input id="period" class="form-control form-control-inline p-l-5" type="text"></div>
+						<div class="col-lg-3">调查日期：<input id="period" class="form-control form-control-inline p-l-5" type="text"></div>
+					</div>
+				</td>
+			</tr> -->
+       </tbody>
+   </table>
+   <!-- / .table -->	
+</div>
+<!-- / .table-responsive -->

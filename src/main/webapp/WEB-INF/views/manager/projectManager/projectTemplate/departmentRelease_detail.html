@@ -1,0 +1,100 @@
+<meta charset="UTF-8">
+<fieldset class="panel">
+	<legend id="collapseTitle_01"><button type="button" class="btn btn-link" data-toggle="collapse" data-parent="#collapseGroup" data-target="#collapseContent_01"><i class="fa fa-angle-double-up m-r-5"></i>发布信息</button></legend>
+	<div id="collapseContent_01" class="panel-collapse collapse in">
+		<div class="table-responsive m-b-0">
+ 			<table class="table table-bordered m-b-0">
+		        <tbody>
+			       	<tr>
+		                <td width="10%" class="align-right">发布人：</td>
+		               	<td width="20%" ng-bind="dataDetail.createPerson"></td>
+		               	<td width="10%" class="align-right">发布时间：</td>
+		               	<td width="60%" ng-bind="dataDetail.createTime"></td>
+					</tr>
+					<tr>
+		                <td class="align-right">项目类型:</td>
+		               	<td ng-bind="dataDetail.serviceType"></td>
+		               	<td class="align-right">项目主题:</td>
+		               	<td ng-bind="dataDetail.title"></td>
+					</tr>
+					<tr>
+		                <td class="align-right">项目描述:</td>
+		               	<td colspan="3" ng-bind="dataDetail.description"></td>
+					</tr>
+					<tr ng-repeat="data in dataDetailAttach">
+		                <td class="align-right">附件:</td>
+		               	<td colspan="3">
+		               		<span ng-bind="data.originalFilename"></span>
+	            			<a href="javascript:void(0);" class="p-l-10 col-blue" ng-show="isAttach" filePath="{{data.path}}" ng-click="attachDownLoad(data.annexName)">附件下载</a>
+		               	</td>
+					</tr>
+		        </tbody>
+		   </table>
+	   </div>
+	</div>
+</fieldset>
+<fieldset class="panel">
+	<legend id="collapseTitle_02"><button type="button" class="btn btn-link" data-toggle="collapse" data-parent="#collapseGroup" data-target="#collapseContent_02"><i class="fa fa-angle-double-up m-r-5"></i>申报信息</button></legend>
+	<div id="collapseContent_02" class="panel-collapse collapse">
+		<div class="table-responsive m-b-0">
+ 			<table class="table table-bordered m-b-0">
+		        <tbody>
+			       	<tr>
+		                <td width="10%" class="align-right">申报编号：</td>
+		               	<td width="20%" ng-bind="threeleaderApplication.applicationId"></td>
+		               	<td width="10%" class="align-right">申报时间：</td>
+		               	<td width="60%" ng-bind="threeleaderApplication.applyTime"></td>
+					</tr>
+					<tr>
+						<td width="10%" class="align-right">申报人：</td>
+		               	<td width="20%" ng-bind="threeleaderApplication.applyPerson"></td>
+		                <td class="align-right">申报状态:</td>
+		               	<td ng-bind="threeleaderApplication.stateName"></td>
+					</tr>
+					<tr ng-repeat="data in ApplyDetailAttach">
+		                <td class="align-right">附件:</td>
+		               	<td colspan="3">
+		               		<span ng-bind="data.originalFilename"></span>
+	            			<a href="javascript:void(0);" class="p-l-10 col-blue" ng-show="applyIsAttach" filePath="{{data.path}}" ng-click="attachDownLoad(data.annexName)">附件下载</a>
+		               	</td>
+					</tr>
+		        </tbody>
+		   </table>
+	   </div>
+	</div>
+</fieldset>
+<fieldset class="panel">
+	<legend id="collapseTitle_03"><button type="button" class="btn btn-link" data-toggle="collapse" data-parent="#collapseGroup" data-target="#collapseContent_03"><i class="fa fa-angle-double-up m-r-5"></i>申报人信息</button></legend>
+	<div id="collapseContent_03" class="panel-collapse collapse">
+		<div class="table-responsive m-b-0">
+ 			<table class="table table-bordered m-b-0">
+		        <tbody>
+			       	<tr>
+		                <td width="10%" class="align-right">申报人姓名：</td>
+		               	<td width="20%" ng-bind="user.firstname"></td>
+		               	<td width="10%" class="align-right">性别：</td>
+		               	<td width="60%" ng-bind="user.sex"></td>
+					</tr>
+					<tr>
+		                <td class="align-right">电话号码:</td>
+		               	<td ng-bind="user.phone"></td>
+		               	<td class="align-right">所在单位:</td>
+		               	<td ng-bind="user.company_name"></td>
+					</tr>
+					<tr>
+		                <td class="align-right">出生日期:</td>
+		               	<td ng-bind="user.birthday"></td>
+		               	<td class="align-right">邮件地址:</td>
+		               	<td ng-bind="user.email"></td>
+					</tr>
+					<tr>
+		                <td class="align-right">证件类型:</td>
+		               	<td ng-bind="user.cardtype"></td>
+		               	<td class="align-right">证件号码:</td>
+		               	<td ng-bind="user.cardno"></td>
+					</tr>
+		        </tbody>
+		   </table>
+	   </div>
+	</div>
+</fieldset>

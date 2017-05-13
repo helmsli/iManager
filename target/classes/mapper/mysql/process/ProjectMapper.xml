@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinwei.process.dao.ProjectMapper" >
+  <resultMap id="BaseResultMap" type="com.xinwei.process.entity.Project" >
+    <id column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="project_manager_id" property="projectManagerId" jdbcType="BIGINT" />
+    <result column="project_manager_name" property="projectManagerName" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="BIGINT" />
+    <result column="subcategory" property="subcategory" jdbcType="VARCHAR" />
+    <result column="cycle_type" property="cycleType" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="state_name" property="stateName" jdbcType="VARCHAR" />
+    <result column="project_task_id" property="projectTaskId" jdbcType="VARCHAR" />
+    <result column="project_process_instance_id" property="projectProcessInstanceId" jdbcType="VARCHAR" />
+    <result column="project_ext_info" property="projectExtInfo" jdbcType="VARCHAR" />
+    <result column="project_task_detail" property="projectTaskDetail" jdbcType="VARCHAR" />
+    <result column="self_appraise" property="selfAppraise" jdbcType="VARCHAR" />
+    <result column="depart_leader_appraise" property="departLeaderAppraise" jdbcType="VARCHAR" />
+    <result column="project_costs" property="projectCosts" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="complete_time" property="completeTime" jdbcType="TIMESTAMP" />
+    <result column="project_apply_time" property="projectApplyTime" jdbcType="TIMESTAMP" />
+    <result column="telno" property="telno" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="project_milestone" property="projectMilestone" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_project
+    where project_id = #{projectId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xinwei.process.entity.Project" >
+    insert into tb_project (project_id, project_name, project_manager_id, 
+      project_manager_name, category_id, subcategory, 
+      cycle_type, state, state_name, 
+      project_task_id, project_process_instance_id, 
+      project_ext_info, project_task_detail, self_appraise, 
+      depart_leader_appraise, project_costs, start_time, 
+      complete_time, project_apply_time, telno, 
+      email, project_milestone)
+    values (#{projectId,jdbcType=BIGINT}, #{projectName,jdbcType=VARCHAR}, #{projectManagerId,jdbcType=BIGINT}, 
+      #{projectManagerName,jdbcType=VARCHAR}, #{categoryId,jdbcType=BIGINT}, #{subcategory,jdbcType=VARCHAR}, 
+      #{cycleType,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{stateName,jdbcType=VARCHAR}, 
+      #{projectTaskId,jdbcType=VARCHAR}, #{projectProcessInstanceId,jdbcType=VARCHAR}, 
+      #{projectExtInfo,jdbcType=VARCHAR}, #{projectTaskDetail,jdbcType=VARCHAR}, #{selfAppraise,jdbcType=VARCHAR}, 
+      #{departLeaderAppraise,jdbcType=VARCHAR}, #{projectCosts,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{completeTime,jdbcType=TIMESTAMP}, #{projectApplyTime,jdbcType=TIMESTAMP}, #{telno,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{projectMilestone,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.xinwei.process.entity.Project" >
+    update tb_project
+    set project_name = #{projectName,jdbcType=VARCHAR},
+      project_manager_id = #{projectManagerId,jdbcType=BIGINT},
+      project_manager_name = #{projectManagerName,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=BIGINT},
+      subcategory = #{subcategory,jdbcType=VARCHAR},
+      cycle_type = #{cycleType,jdbcType=VARCHAR},
+      state = #{state,jdbcType=VARCHAR},
+      state_name = #{stateName,jdbcType=VARCHAR},
+      project_task_id = #{projectTaskId,jdbcType=VARCHAR},
+      project_process_instance_id = #{projectProcessInstanceId,jdbcType=VARCHAR},
+      project_ext_info = #{projectExtInfo,jdbcType=VARCHAR},
+      project_task_detail = #{projectTaskDetail,jdbcType=VARCHAR},
+      self_appraise = #{selfAppraise,jdbcType=VARCHAR},
+      depart_leader_appraise = #{departLeaderAppraise,jdbcType=VARCHAR},
+      project_costs = #{projectCosts,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      complete_time = #{completeTime,jdbcType=TIMESTAMP},
+      project_apply_time = #{projectApplyTime,jdbcType=TIMESTAMP},
+      telno = #{telno,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      project_milestone = #{projectMilestone,jdbcType=VARCHAR}
+    where project_id = #{projectId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select project_id, project_name, project_manager_id, project_manager_name, category_id, 
+    subcategory, cycle_type, state, state_name, project_task_id, project_process_instance_id, 
+    project_ext_info, project_task_detail, self_appraise, depart_leader_appraise, project_costs, 
+    start_time, complete_time, project_apply_time, telno, email, project_milestone
+    from tb_project
+    where project_id = #{projectId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select project_id, project_name, project_manager_id, project_manager_name, category_id, 
+    subcategory, cycle_type, state, state_name, project_task_id, project_process_instance_id, 
+    project_ext_info, project_task_detail, self_appraise, depart_leader_appraise, project_costs, 
+    start_time, complete_time, project_apply_time, telno, email, project_milestone
+    from tb_project
+  </select> <select id="getProjectListByUserIdCount" resultType="java.lang.Long" useCache="true">
+    select count(1) from tb_project 
+    where project_manager_id = #{userId} and category_id = #{categoryId}
+   </select>
+  <select id="getProjectListByUserId" resultMap="BaseResultMap" useCache="true">
+    select * from tb_project 
+       where project_manager_id = #{userId} and category_id = #{categoryId}
+     limit #{startRow},#{pageSize}
+  </select>
+    
+    <select id="getFinishedProjectListByUserIdCount" resultType="java.lang.Long" useCache="true">
+    select count(1) from tb_project 
+     where project_manager_id = #{userId}  and category_id = #{categoryId} and state = 006 
+   </select>
+  <select id="getFinishedProjectListByUserId" resultMap="BaseResultMap" useCache="true">
+    select * from tb_project 
+       where project_manager_id = #{userId}  and category_id = #{categoryId} and state = 006
+     limit #{startRow},#{pageSize}
+  </select>
+  
+   <update id="updateSelfAppraiseByProjectId" parameterType="com.xinwei.process.entity.Project" >
+    update tb_project set 
+    self_appraise = #{selfAppraise,jdbcType=VARCHAR}
+    where project_id = #{projectId,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateDepartLeaderAppraiseByProjectId" parameterType="com.xinwei.process.entity.Project" >
+    update tb_project set 
+    depart_leader_appraise = #{departLeaderAppraise,jdbcType=VARCHAR}
+    where project_id = #{projectId,jdbcType=BIGINT}
+  </update>
+  
+</mapper>

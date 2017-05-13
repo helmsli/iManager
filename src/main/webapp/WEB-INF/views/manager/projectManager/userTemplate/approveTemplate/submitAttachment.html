@@ -1,0 +1,23 @@
+<meta charset="UTF-8">
+<div class="col-lg-12">
+	<div class="row p-t-20 p-b-5 clearfix" >
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 p-r-5 form-control-label" class="align-right"><label>附件</label></div>
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 p-l-5">
+			<div class="form-group">
+	               <div class="form-line">
+	                   <div class="file-group">
+						<input type="text" name="fileName" id="submitMaterialMetaphaseInput" class="form-control" placeholder="选择文件...">
+						<input type="button" value="选择文件" class="btn btn-primary">
+						<input type="file" name="file" id="submitMaterialMetaphase" onchange="document.getElementById('submitMaterialMetaphaseInput').value=this.value; uploadButtonSubmit('submitMaterialMetaphase',this);">
+					</div>
+	               </div>
+	           </div>
+		</div>
+	</div>
+	<div class="p-t-15 align-center">
+			                <button type="button" class="btn btn-success waves-effect m-r-5"  onclick="submitAttachment()" id="submmitButton">提交</button>
+			                <button type="button" class="btn btn-primary waves-effect m-l-5" ng-click="cancelMyapplySeeWin();">关闭</button> 
+			                <!-- committeeSuggestionDate();managerSuggestionDate() -->
+			                <!-- 操作按钮结束 -->
+		                </div>
+</div>

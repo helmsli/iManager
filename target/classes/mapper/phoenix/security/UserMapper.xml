@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinwei.security.dao.UserDao">
+	<!-- 开启本mapper的namespace下的二级缓存 -->
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache" />
+
+  
+  
+  <insert id="save" parameterType="User">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+	        SELECT NEXT VALUE FOR stat.security_user 
+	    </selectKey> 
+  		upsert INTO stat.security_user (
+	  		id,department_id,username,firstname,lastname,password,salt,phone,cardno,cardtype,
+	  		email,createtime,birthday,address,sex,imgurl,status,isDisabled
+		)
+		VALUES(
+			#{id},#{department_id},#{username},#{firstname},#{lastname},#{password},#{salt},#{phone},#{cardno},#{cardtype},
+			#{email},#{createTime} ,#{birthday},#{address},#{sex},#{imgurl},#{status},#{isDisabled}
+		)
+    </insert>
+  
+  
+  
+  <update id="update" parameterType="User" >
+  	upsert INTO stat.security_user (
+	  		id,department_id,username,firstname,lastname,password,salt,phone,cardno,cardtype,
+	  		email,createtime,birthday,address,sex,imgurl,status,isDisabled
+		)
+		VALUES(
+			#{id},#{department_id},#{username},#{firstname},#{lastname},#{password},#{salt},#{phone},#{cardno},#{cardtype},
+			#{email},#{createTime} ,#{birthday},#{address},#{sex},#{imgurl},#{status},#{isDisabled}
+		)
+  </update>
+  
+  <update id="moveDepartment"  >
+  	  	<foreach collection="userIds" item="userId" separator="" >
+		upsert into stat.security_user(id,department_id) values(#{userId},#{department_id}) 
+	 	</foreach>
+  </update>
+  
+  
+  <delete id="delete" parameterType="java.lang.Long">
+  	upsert into stat.security_user(id,status) values(#{id},1)
+  </delete>
+  
+  
+  
+	<!-- 查询单条记录 -->
+	<select id="get" parameterType="java.lang.Long"   resultType="User"  useCache="true">
+		SELECT * FROM stat.security_user WHERE id = #{id}
+	</select>
+	
+	<select id="findByUsername" parameterType="java.lang.String"    resultType="User" useCache="true">
+		SELECT * FROM stat.security_user WHERE username = #{username}
+		<if test="id != null  and id !=0">
+			 	and id != #{id}
+	 	 </if>
+	 	 and status = 0
+	</select>
+	
+	
+	
+	
+	
+	<select id="findByPageCount" resultType="java.lang.Long">
+		select count(1)
+		  from stat.security_user where 1=1  <include refid="queryString" /> 
+	</select>
+	
+	<select id="findByPage"    resultType="User">
+ 	 	 SELECT * FROM stat.security_user  
+ 	 	  where 1= 1 <include refid="queryString" /> 
+ 	 	    and id >= ( 
+	 	 	 		select CASE WHEN max(id) is null THEN 0 else max(id) END  
+		 	 	 	  from (
+		 	 	 			select id  from stat.security_user where 1= 1 <include refid="queryString" />  order by id limit #{startRow}
+		 	 	 	  )
+		 	 	)
+ 	 	 order by id  limit #{pageSize}
+	</select>
+	
+	<sql id="queryString">
+		 and status=0
+   	     <if test="username != null and username !=''">
+			 	and username like CONCAT('%',#{username},'%')  
+	 	 </if> 
+	 	 <if test="roleId != null and roleId !=0">
+			 	and id in( select user_id from stat.security_user_role where role_id = #{roleId})
+	 	 </if> 
+	 	 <if test="department_id != null and department_id !=0">
+			 	and department_id = #{department_id}
+	 	 </if> 
+  	</sql>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>
+
+
+
+
+

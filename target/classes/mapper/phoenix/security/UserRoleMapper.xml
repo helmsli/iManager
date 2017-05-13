@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinwei.security.dao.UserRoleDao">
+	
+	<!-- 开启本mapper的namespace下的二级缓存 -->
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache" />
+
+	<resultMap id="UserRoleMap" type="UserRole">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="role_id" property="role_id" jdbcType="BIGINT" />
+		<result column="user_id" property="user_id" jdbcType="BIGINT" />
+		<collection property="user" ofType="User">
+			<id column="user_id" property="id" />
+		</collection>
+		<collection property="role" ofType="Role">
+			<id column="role_id" property="id" />
+			<result column="rolename" property="name" />
+		</collection>
+	</resultMap>
+
+	<select id="get" parameterType="java.lang.Long" resultMap="UserRoleMap" >
+		SELECT * FROM stat.security_user_role WHERE id = #{id}
+	</select>
+
+
+
+
+	<select id="findRolesByUserId" parameterType="java.lang.Long"  useCache="false"
+		resultType="Role">
+		select a.*
+		from stat.security_role a
+		inner join stat.security_user_role b on a.id=b.role_id
+		where b.user_id = #{user_id}
+	</select>
+
+	<select id="findCountByRoleId" parameterType="java.lang.Long"  useCache="true"
+		resultType="java.lang.Long">
+		SELECT count(1)
+		  FROM stat.security_user_role a
+		 where a.role_id = #{role_id}
+	</select>
+
+
+
+	<select id="findUsersByRoleIdCount"     resultType="java.lang.Long" useCache="true">
+		select count(1)
+		  from stat.security_user where 1=1
+		 <include refid="queryRoleString" /> 
+	</select>
+	
+	<select id="findUsersByRoleId"    resultType="User" useCache="true">
+		 SELECT * FROM stat.security_user  
+ 	 	  where 1= 1 <include refid="queryRoleString" /> 
+ 	 	    and id >= ( 
+		 	 	 		select CASE WHEN max(id) is null THEN 0 else max(id) END  
+		 	 	 		  from (
+				 	 	 		  select id from stat.security_user where 1= 1 <include refid="queryRoleString" />  order by id limit #{startRow}
+				 	 	 		)
+		 	 	)
+ 	 	  order by id  limit #{pageSize}
+	</select>
+	
+	
+	<sql id="queryRoleString">
+		 <if test="containRoleId == 0">
+		 		and id in (select user_id from stat.security_user_role where role_id=#{role_id})
+		  </if>
+		  <if test="containRoleId == 1">
+		  		and id not in (select user_id from stat.security_user_role where role_id=#{role_id})
+		  </if> 
+		  and status=0
+  	</sql>
+
+
+	<delete id="deleteByUserId" parameterType="java.lang.Long">
+		delete from
+		stat.security_user_role where user_id = #{user_id}
+	</delete>
+	
+	
+	<select id="findByRoleIdUserIdCount"  parameterType="UserRole"   resultType="java.lang.Long" >
+		SELECT count(1)
+		  FROM stat.security_user_role A
+		 where user_id = #{user_id} and role_id = #{role_id}
+	</select>
+	
+	<delete id="deleteUserRole" parameterType="UserRole">
+		delete from
+		stat.security_user_role where user_id = #{user_id} and role_id = #{role_id}
+	</delete>
+
+
+
+
+	<insert id="save" parameterType="UserRole">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+	        SELECT NEXT VALUE FOR stat.security_user_role 
+	    </selectKey> 
+  		upsert INTO stat.security_user_role (id,user_id,role_id)
+		VALUES (#{id},#{user_id},#{role_id})
+    </insert>
+
+</mapper>
+
+
+
+
+

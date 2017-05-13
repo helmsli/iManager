@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinwei.process.dao.DataPermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.xinwei.process.entity.DataPermission" >
+    <result column="data_id" property="dataId" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="BIGINT" />
+    <result column="data_type" property="dataType" jdbcType="VARCHAR" />
+    <result column="permission_type" property="permissionType" jdbcType="VARCHAR" />
+    <result column="permission_id" property="permissionId" jdbcType="VARCHAR" />
+    <result column="ext_data1" property="extData1" jdbcType="VARCHAR" />
+    <result column="ext_data2" property="extData2" jdbcType="VARCHAR" />
+    <result column="ext_data3" property="extData3" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.xinwei.process.entity.DataPermission" >
+    insert into tb_data_permission (data_id, category_id, data_type, 
+      permission_type, permission_id, ext_data1, 
+      ext_data2, ext_data3)
+    values (#{dataId,jdbcType=VARCHAR}, #{categoryId,jdbcType=BIGINT}, #{dataType,jdbcType=VARCHAR}, 
+      #{permissionType,jdbcType=VARCHAR}, #{permissionId,jdbcType=VARCHAR}, #{extData1,jdbcType=VARCHAR}, 
+      #{extData2,jdbcType=VARCHAR}, #{extData3,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select data_id, category_id, data_type, permission_type, permission_id, ext_data1, 
+    ext_data2, ext_data3
+    from tb_data_permission
+  </select>
+  
+  <delete id="deleteByConditions" >
+    delete from tb_data_permission
+    where 1=1 <include refid="queryConditions" />
+  </delete>
+  
+  <select id="countByConditions" resultType="java.lang.Long">
+    select count(1)
+    from tb_data_permission
+    where 1=1 <include refid="queryConditions" />
+  </select>
+  
+  <select id="selectListByConditions" resultType="java.lang.String">
+    select distinct data_id
+    from tb_data_permission
+    where 1=1 <include refid="queryConditions" />
+    limit #{startRow},#{pageSize}
+  </select>
+  
+  <sql id="queryConditions">
+   	     <if test="categoryId != null and categoryId !=0">
+			 	and category_id = #{categoryId,jdbcType=BIGINT}  
+	 	 </if> 
+	 	  <if test="dataId != null and dataId !=''">
+			 	and data_id = #{dataId,jdbcType=VARCHAR}
+	 	 </if>
+	 	 <if test="dataType != null and dataType !=''">
+			 	and data_type = #{dataType,jdbcType=VARCHAR}
+	 	 </if> 
+	 	 <if test="permissionType != null and permissionType !=''">
+			 	 and permission_type = #{permissionType,jdbcType=BIGINT}
+	 	 </if> 
+	 	 <if test="permissionId != null and permissionId !=''">
+			 	 and permission_id = #{permissionId,jdbcType=BIGINT}
+	 	 </if> 
+	 	 <if test="extData1 != null and extData1 !=''">
+			 	and ext_data1 = #{extData1,jdbcType=VARCHAR}
+	 	 </if> 
+	 	 <if test="extData2 != null and extData2 !=''">
+			 	and ext_data2 = #{extData2,jdbcType=VARCHAR}
+	 	 </if>
+	 	 <if test="extData3 != null and extData3 !=''">
+			 	and ext_data3 = #{extData3,jdbcType=VARCHAR}
+	 	 </if>
+  	</sql>
+</mapper>

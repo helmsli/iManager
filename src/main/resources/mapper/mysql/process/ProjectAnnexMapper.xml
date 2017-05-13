@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinwei.process.dao.ProjectAnnexMapper" >
+  <resultMap id="BaseResultMap" type="com.xinwei.process.entity.ProjectAnnex" >
+    <id column="annex_id" property="annexId" jdbcType="BIGINT" />
+    <result column="annex_name" property="annexName" jdbcType="VARCHAR" />
+    <result column="original_filename" property="originalFilename" jdbcType="VARCHAR" />
+    <result column="type_id" property="typeId" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_project_annex
+    where annex_id = #{annexId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xinwei.process.entity.ProjectAnnex" >
+    insert into tb_project_annex (annex_id, annex_name, original_filename, 
+      type_id, project_id, path, 
+      user_id, upload_time)
+    values (#{annexId,jdbcType=BIGINT}, #{annexName,jdbcType=VARCHAR}, #{originalFilename,jdbcType=VARCHAR}, 
+      #{typeId,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{path,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=VARCHAR}, #{uploadTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.xinwei.process.entity.ProjectAnnex" >
+    update tb_project_annex
+    set annex_name = #{annexName,jdbcType=VARCHAR},
+      original_filename = #{originalFilename,jdbcType=VARCHAR},
+      type_id = #{typeId,jdbcType=BIGINT},
+      project_id = #{projectId,jdbcType=BIGINT},
+      path = #{path,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      upload_time = #{uploadTime,jdbcType=TIMESTAMP}
+    where annex_id = #{annexId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select annex_id, annex_name, original_filename, type_id, project_id, path, user_id, 
+    upload_time
+    from tb_project_annex
+    where annex_id = #{annexId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectByAnnexName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select annex_id, annex_name, original_filename, type_id, project_id, path, user_id, 
+    upload_time
+    from tb_project_annex
+    where annex_name = #{annexName,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select annex_id, annex_name, original_filename, type_id, project_id, path, user_id, 
+    upload_time
+    from tb_project_annex
+  </select>
+    <select id="selectMonthlyReportByProjectId"  parameterType="java.lang.Long" resultMap="BaseResultMap" >
+    select annex_id, annex_name, original_filename, type_id, project_id, path, user_id, 
+    upload_time
+    from tb_project_annex
+    where project_id = #{projectId,jdbcType=BIGINT} and type_id=6
+  </select>
+  
+  <select id="selectByProjectId" resultMap="BaseResultMap" >
+    select annex_id, annex_name, original_filename, type_id, project_id, path, user_id, 
+    upload_time
+    from tb_project_annex
+    where project_id = #{projectId,jdbcType=BIGINT} 
+  </select>
+  
+  <select id="selectByProjectIdAndTypeId" resultMap="BaseResultMap" >
+    select annex_id, annex_name, original_filename, type_id, project_id, path, user_id, 
+    upload_time
+    from tb_project_annex
+    where project_id = #{projectId,jdbcType=BIGINT} and type_id = #{typeId,jdbcType=BIGINT} 
+  </select>
+  <update id="updateProjectIdAndTypeId" parameterType="com.xinwei.process.entity.ProjectAnnex" >
+    update tb_project_annex
+    set 
+      type_id = #{typeId,jdbcType=BIGINT},
+      project_id = #{projectId,jdbcType=BIGINT}
+    where annex_id = #{annexId,jdbcType=BIGINT}
+  </update>
+</mapper>

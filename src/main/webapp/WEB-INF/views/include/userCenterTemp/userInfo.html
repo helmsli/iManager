@@ -1,0 +1,55 @@
+<meta charset="UTF-8">
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+	<div class="row p-t-5 p-b-5 clearfix">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 p-r-5 align-right"><label data-for="projectName"></label>账号名称：</div>
+		<div data-datename="projectName" class="col-lg-8 col-md-8 col-sm-8 col-xs-8 p-l-5" ng-bind="userInfo.username"></div>
+	</div>
+	<div class="row p-t-5 p-b-5 clearfix">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 p-r-5 align-right"><label data-for="startTime"></label>姓名：</div>
+		<div data-datename="startTime" class="col-lg-8 col-md-8 col-sm-8 col-xs-8 p-l-5" ng-bind="userInfo.firstname"></div>
+	</div>
+	<div class="row p-t-5 p-b-5 clearfix">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 p-r-5 align-right"><label data-for="telno"></label>性别：</div>
+		<div data-datename ="telno" class="col-lg-8 col-md-8 col-sm-8 col-xs-8 p-l-5">{{userInfo.sex==0?'男':'女'}}</div>
+	</div>
+	<div class="row p-t-5 p-b-5 clearfix">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 p-r-5 align-right"><label data-for="projectCycle"></label>电话号码：</div>
+		<div  data-datename="projectCycle" class="col-lg-8 col-md-8 col-sm-8 col-xs-8 p-l-5" ng-bind="userInfo.phone"></div>
+	</div>
+</div>
+<!-- / .col-6 -->
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+	<div class="row p-t-5 p-b-5 clearfix">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 p-r-5 align-right">出生日期：</div>
+		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 p-l-5" ng-bind="userInfo.birthday"></div>
+	</div>
+	<div class="row p-t-5 p-b-5 clearfix">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 p-r-5 align-right"><label data-for="projectName"></label>E-mail：</div>
+		<div data-datename="endTime" class="col-lg-8 col-md-8 col-sm-8 col-xs-8 p-l-5" ng-bind="userInfo.email"></div>
+	</div>
+	<div class="row p-t-5 p-b-5 clearfix">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 p-r-5 align-right"><label data-for="email"></label>证件类型：</div>
+		<div data-datename="email" class="col-lg-8 col-md-8 col-sm-8 col-xs-8 p-l-5">{{userInfo.cardtype==0?'身份证':'护照'}}</div>
+	</div>
+	<div class="row p-t-5 p-b-5 clearfix">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 p-r-5 align-right"><label data-for="projectCategory"></label>证件号码：</div>
+		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 p-l-5" ng-bind="userInfo.cardno"></div>
+	</div>
+</div>
+<!-- / .col-6 -->
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+	<div class="row p-t-5 p-b-5 clearfix">
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left"><label data-for="taskDescribe"></label>地址：</div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 p-l-5" ng-bind="userInfo.address"></div>
+	</div>
+	<div class="row p-t-5 p-b-5 clearfix">
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left"><label data-for="taskbackground"></label>角色：</div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 p-l-5">
+			<span ng-repeat="role in userInfo.roles" ng-bind="role.name" style="margin-right:5px"></span>
+		</div>
+	</div>
+	<div class="row p-t-5 p-b-5 clearfix">
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left"><label data-for="taskgoal"></label>用户状态：</div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 p-l-5">{{userInfo.status==1?'已失效':'使用中'}}</div>
+	</div>
+</div>

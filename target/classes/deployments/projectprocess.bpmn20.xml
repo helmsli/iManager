@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
+  <process id="process" isExecutable="true">
+    <startEvent id="startProcess" name="开始"></startEvent>
+    <userTask id="dispatcherMasterApproval" name="项目管理人员指定评审专家立项审批" activiti:assignee="5">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${commonListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="inputmastergrade" name="初级项目管理人员录入评审专家评分" activiti:assignee="5">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${commonListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <exclusiveGateway id="primaryReviewConclusion" name="初期评审结论"></exclusiveGateway>
+    <userTask id="pmSubmitMIdMaterial" name="项目经理提交中期评审材料" activiti:assignee="3">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${commonListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="DispatcherMidMaster" name="项目管理人员指定中期评审专家"></userTask>
+    <userTask id="departleaderApproval" name="部门经理审批" activiti:assignee="7">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${commonListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="midApprovalReport" name="项目经理提交中期评审报告"></userTask>
+    <exclusiveGateway id="midConclusion" name="中期评审结论"></exclusiveGateway>
+    <userTask id="pmSubmitEndMaterial" name="项目经理提交终期评审材料"></userTask>
+    <userTask id="PMSelfConclusion" name="项目经理自评"></userTask>
+    <userTask id="DispatcherEndMaster" name="项目管理人员指定终期评审专家"></userTask>
+    <exclusiveGateway id="endConclusion" name="终期评审结论"></exclusiveGateway>
+    <exclusiveGateway id="resultOfEndChecked" name="项目管理人员审核终期结果"></exclusiveGateway>
+    <exclusiveGateway id="resultOfMidChecked" name="项目管理人员审核中期结果"></exclusiveGateway>
+    <parallelGateway id="publishParallelfork"></parallelGateway>
+    <userTask id="departleaderMidApproval" name="部门经理审核中期结果"></userTask>
+    <userTask id="departleaderEndApproval" name="部门经理审核终期结果"></userTask>
+    <parallelGateway id="monthlyReportJoin"></parallelGateway>
+    <endEvent id="endProcess" name="结束">
+    	<extensionElements>
+		    <activiti:executionListener event="start"
+			   delegateExpression="${endEventListener}">
+		    </activiti:executionListener>
+	    </extensionElements>
+    </endEvent>
+    <userTask id="pmModifyMaterial" name="项目经理修改评审材料" activiti:assignee="3">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${commonListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="inputMidGrade" name="初级项目管理人员录入中期评审专家评分"></userTask>
+    <parallelGateway id="midMasterJoin" name="中期评审结论"></parallelGateway>
+    <userTask id="endApprovalReport" name="项目经理提交终期评审报告"></userTask>
+    <userTask id="inputEndGrade" name="初级项目管理人员录入终期评审专家评分"></userTask>
+    <parallelGateway id="EndMasterfork"></parallelGateway>
+    <parallelGateway id="endMasterJoin"></parallelGateway>
+    <userTask id="departleaderConclusion" name="部门经理评价"></userTask>
+    <userTask id="midCommitteeApproval" name="决策委员会中期评审"></userTask>
+    <userTask id="committeeEndApproval" name="决策委员会终期评审"></userTask>
+    <parallelGateway id="MidMasterfork"></parallelGateway>
+    <userTask id="committeeApproval" name="决策委员会审批" activiti:assignee="6">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${commonListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <exclusiveGateway id="resultOfDepartApproval"></exclusiveGateway>
+    <sequenceFlow id="toCommitteeApproval" sourceRef="inputmastergrade" targetRef="committeeApproval"></sequenceFlow>
+    <sequenceFlow id="toprimaryReviewConclusion" sourceRef="committeeApproval" targetRef="primaryReviewConclusion"></sequenceFlow>
+    <sequenceFlow id="start2dispatcherMasterApproval" sourceRef="startProcess" targetRef="dispatcherMasterApproval"></sequenceFlow>
+    <sequenceFlow id="todispatcherMasterApproval2InputGrade" sourceRef="dispatcherMasterApproval" targetRef="inputmastergrade"></sequenceFlow>
+    <sequenceFlow id="toPMSubmitMIdMaterial" sourceRef="publishParallelfork" targetRef="pmSubmitMIdMaterial"></sequenceFlow>
+    <sequenceFlow id="toMidApprovalReport" sourceRef="MidMasterfork" targetRef="midApprovalReport"></sequenceFlow>
+    <sequenceFlow id="toInputMidGrade" sourceRef="MidMasterfork" targetRef="inputMidGrade"></sequenceFlow>
+    <sequenceFlow id="toResultOfMidChecked" sourceRef="departleaderMidApproval" targetRef="resultOfMidChecked"></sequenceFlow>
+    <sequenceFlow id="toDispatcherEndMaster" sourceRef="pmSubmitEndMaterial" targetRef="DispatcherEndMaster"></sequenceFlow>
+    <sequenceFlow id="toResultOfEndChecked" sourceRef="departleaderEndApproval" targetRef="resultOfEndChecked"></sequenceFlow>
+    <sequenceFlow id="toPMSelfConclusion" sourceRef="monthlyReportJoin" targetRef="PMSelfConclusion"></sequenceFlow>
+    <sequenceFlow id="toEndMasterfork" sourceRef="DispatcherEndMaster" targetRef="EndMasterfork"></sequenceFlow>
+    <sequenceFlow id="toEndApprovalReport" sourceRef="EndMasterfork" targetRef="endApprovalReport"></sequenceFlow>
+    <sequenceFlow id="toInputEndGrade" sourceRef="EndMasterfork" targetRef="inputEndGrade"></sequenceFlow>
+    <sequenceFlow id="toResultOfdepartapproval" sourceRef="departleaderApproval" targetRef="resultOfDepartApproval"></sequenceFlow>
+    <sequenceFlow id="modifyMaterial2dispatcherMaster" name="修改评审材料" sourceRef="pmModifyMaterial" targetRef="dispatcherMasterApproval"></sequenceFlow>
+    <sequenceFlow id="toDepartleaderConclusion" sourceRef="PMSelfConclusion" targetRef="departleaderConclusion"></sequenceFlow>
+    <sequenceFlow id="departleaderConclusion2EndProcess" sourceRef="departleaderConclusion" targetRef="endProcess"></sequenceFlow>
+    <sequenceFlow id="toMidConclusion" sourceRef="midCommitteeApproval" targetRef="midConclusion"></sequenceFlow>
+    <sequenceFlow id="midApprovalReport2midMasterJoin" sourceRef="midApprovalReport" targetRef="midMasterJoin"></sequenceFlow>
+    <sequenceFlow id="inputMidGrade2midMasterJoin" sourceRef="inputMidGrade" targetRef="midMasterJoin"></sequenceFlow>
+    <sequenceFlow id="toMidCommitteeApproval" sourceRef="midMasterJoin" targetRef="midCommitteeApproval"></sequenceFlow>
+    <sequenceFlow id="endApprovalReport2endMasterJoin" sourceRef="endApprovalReport" targetRef="endMasterJoin"></sequenceFlow>
+    <sequenceFlow id="inputEndGrade2endMasterJoin" sourceRef="inputEndGrade" targetRef="endMasterJoin"></sequenceFlow>
+    <sequenceFlow id="toCommitteeEndApproval" sourceRef="endMasterJoin" targetRef="committeeEndApproval"></sequenceFlow>
+    <sequenceFlow id="toEndConclusion" sourceRef="committeeEndApproval" targetRef="endConclusion"></sequenceFlow>
+    <exclusiveGateway id="isAllComplete"></exclusiveGateway>
+    <sequenceFlow id="toDispatcherMidMaster" sourceRef="pmSubmitMIdMaterial" targetRef="DispatcherMidMaster"></sequenceFlow>
+    <sequenceFlow id="midConclusionPass" name="中期评审通过" sourceRef="midConclusion" targetRef="departleaderMidApproval">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${midConclusion eq 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="resultOfMidCheckedNotPass" name="中期结果不合格" sourceRef="resultOfMidChecked" targetRef="pmSubmitMIdMaterial">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${resultOfMidChecked eq "notpass"}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="resultOfMidCheckedPass" name="中期结果合格" sourceRef="resultOfMidChecked" targetRef="pmSubmitEndMaterial">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${resultOfMidChecked eq 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="MonthlyReportTimerTask" name="定时任务" activiti:delegateExpression="${monthlyReportTimerTask}"></serviceTask>
+    <userTask id="submitMonthlyReport" name="按月提交月度报告"></userTask>
+    <sequenceFlow id="primaryReviewConclusionPass" name="初期评审通过" sourceRef="primaryReviewConclusion" targetRef="departleaderApproval">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${primaryReviewConclusion eq 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="primaryReviewConclusionNotPass" name="初期评审不通过" sourceRef="primaryReviewConclusion" targetRef="pmModifyMaterial">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${primaryReviewConclusion eq 'notpass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="resultOfDepartApprovalNeedModify" name="修改评审材料" sourceRef="resultOfDepartApproval" targetRef="pmModifyMaterial">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${resultOfDepartApproval eq 'notpass'}]]></conditionExpression>
+    </sequenceFlow> 
+    <sequenceFlow id="resultOfDepartApprovalPass" name="审批通过" sourceRef="resultOfDepartApproval" targetRef="publishParallelfork">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${resultOfDepartApproval eq 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="toMidMasterfork" sourceRef="DispatcherMidMaster" targetRef="MidMasterfork"></sequenceFlow>
+    <sequenceFlow id="resultOfDepartApprovalNotPass" name="评审未通过" sourceRef="resultOfDepartApproval" targetRef="endProcess">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${resultOfDepartApproval eq 'endProcess'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="midConclusionNotPass" name="中期评审不通过" sourceRef="midConclusion" targetRef="pmSubmitMIdMaterial">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${midConclusion eq 'notpass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="endConclusionNotPass" name="终期评审不通过" sourceRef="endConclusion" targetRef="pmSubmitEndMaterial">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${endConclusion eq 'notpass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="endConclusionPass" name="终期评审通过" sourceRef="endConclusion" targetRef="departleaderEndApproval">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${endConclusion eq 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="resultOfEndCheckedNotPass" name="终期结果不合格" sourceRef="resultOfEndChecked" targetRef="pmSubmitEndMaterial">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${resultOfEndChecked eq 'notpass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="resultOfEndCheckedPass" name="终期结果合格" sourceRef="resultOfEndChecked" targetRef="monthlyReportJoin">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${resultOfEndChecked eq 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="toSubmitMonthlyReport" sourceRef="MonthlyReportTimerTask" targetRef="submitMonthlyReport"></sequenceFlow>
+    <sequenceFlow id="finishAllMonthlyReport" sourceRef="isAllComplete" targetRef="monthlyReportJoin">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isAllComplete eq 'complete'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-5CDCAFA4-B821-43D2-BC3E-5129C1A19992" sourceRef="isAllComplete" targetRef="MonthlyReportTimerTask">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isAllComplete eq 'notcomplete'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="toisAllComplete" sourceRef="submitMonthlyReport" targetRef="isAllComplete"></sequenceFlow>
+    <sequenceFlow id="flow1" sourceRef="publishParallelfork" targetRef="MonthlyReportTimerTask"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_process">
+    <bpmndi:BPMNPlane bpmnElement="process" id="BPMNPlane_process">
+      <bpmndi:BPMNShape bpmnElement="startProcess" id="BPMNShape_startProcess">
+        <omgdc:Bounds height="35.0" width="35.0" x="35.0" y="25.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="dispatcherMasterApproval" id="BPMNShape_dispatcherMasterApproval">
+        <omgdc:Bounds height="80.0" width="100.0" x="330.0" y="0.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="inputmastergrade" id="BPMNShape_inputmastergrade">
+        <omgdc:Bounds height="80.0" width="100.0" x="580.0" y="0.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="primaryReviewConclusion" id="BPMNShape_primaryReviewConclusion">
+        <omgdc:Bounds height="40.0" width="40.0" x="1080.0" y="20.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pmSubmitMIdMaterial" id="BPMNShape_pmSubmitMIdMaterial">
+        <omgdc:Bounds height="80.0" width="100.0" x="580.0" y="225.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="DispatcherMidMaster" id="BPMNShape_DispatcherMidMaster">
+        <omgdc:Bounds height="80.0" width="100.0" x="1185.0" y="225.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="departleaderApproval" id="BPMNShape_departleaderApproval">
+        <omgdc:Bounds height="80.0" width="100.0" x="1275.0" y="0.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="midApprovalReport" id="BPMNShape_midApprovalReport">
+        <omgdc:Bounds height="80.0" width="100.0" x="1005.0" y="285.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="midConclusion" id="BPMNShape_midConclusion">
+        <omgdc:Bounds height="40.0" width="40.0" x="615.0" y="405.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pmSubmitEndMaterial" id="BPMNShape_pmSubmitEndMaterial">
+        <omgdc:Bounds height="80.0" width="100.0" x="620.0" y="500.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="PMSelfConclusion" id="BPMNShape_PMSelfConclusion">
+        <omgdc:Bounds height="80.0" width="100.0" x="360.0" y="845.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="DispatcherEndMaster" id="BPMNShape_DispatcherEndMaster">
+        <omgdc:Bounds height="80.0" width="100.0" x="1125.0" y="500.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endConclusion" id="BPMNShape_endConclusion">
+        <omgdc:Bounds height="40.0" width="40.0" x="650.0" y="705.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="resultOfEndChecked" id="BPMNShape_resultOfEndChecked">
+        <omgdc:Bounds height="40.0" width="40.0" x="175.0" y="705.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="resultOfMidChecked" id="BPMNShape_resultOfMidChecked">
+        <omgdc:Bounds height="40.0" width="40.0" x="175.0" y="405.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="publishParallelfork" id="BPMNShape_publishParallelfork">
+        <omgdc:Bounds height="40.0" width="40.0" x="610.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="departleaderMidApproval" id="BPMNShape_departleaderMidApproval">
+        <omgdc:Bounds height="80.0" width="100.0" x="360.0" y="385.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="departleaderEndApproval" id="BPMNShape_departleaderEndApproval">
+        <omgdc:Bounds height="80.0" width="100.0" x="400.0" y="685.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="monthlyReportJoin" id="BPMNShape_monthlyReportJoin">
+        <omgdc:Bounds height="40.0" width="40.0" x="175.0" y="865.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endProcess" id="BPMNShape_endProcess">
+        <omgdc:Bounds height="35.0" width="35.0" x="1311.0" y="876.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pmModifyMaterial" id="BPMNShape_pmModifyMaterial">
+        <omgdc:Bounds height="82.0" width="100.0" x="105.0" y="60.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="inputMidGrade" id="BPMNShape_inputMidGrade">
+        <omgdc:Bounds height="80.0" width="100.0" x="990.0" y="445.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="midMasterJoin" id="BPMNShape_midMasterJoin">
+        <omgdc:Bounds height="40.0" width="40.0" x="895.0" y="405.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endApprovalReport" id="BPMNShape_endApprovalReport">
+        <omgdc:Bounds height="80.0" width="100.0" x="979.0" y="638.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="inputEndGrade" id="BPMNShape_inputEndGrade">
+        <omgdc:Bounds height="80.0" width="100.0" x="979.0" y="743.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="EndMasterfork" id="BPMNShape_EndMasterfork">
+        <omgdc:Bounds height="40.0" width="40.0" x="1159.0" y="658.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endMasterJoin" id="BPMNShape_endMasterJoin">
+        <omgdc:Bounds height="40.0" width="40.0" x="901.0" y="703.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="departleaderConclusion" id="BPMNShape_departleaderConclusion">
+        <omgdc:Bounds height="80.0" width="100.0" x="630.0" y="850.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="midCommitteeApproval" id="BPMNShape_midCommitteeApproval">
+        <omgdc:Bounds height="80.0" width="100.0" x="720.0" y="385.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="committeeEndApproval" id="BPMNShape_committeeEndApproval">
+        <omgdc:Bounds height="80.0" width="100.0" x="765.0" y="685.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="MidMasterfork" id="BPMNShape_MidMasterfork">
+        <omgdc:Bounds height="40.0" width="40.0" x="1215.0" y="410.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="committeeApproval" id="BPMNShape_committeeApproval">
+        <omgdc:Bounds height="80.0" width="100.0" x="810.0" y="0.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="resultOfDepartApproval" id="BPMNShape_resultOfDepartApproval">
+        <omgdc:Bounds height="40.0" width="40.0" x="1305.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="isAllComplete" id="BPMNShape_isAllComplete">
+        <omgdc:Bounds height="40.0" width="40.0" x="0.0" y="500.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="MonthlyReportTimerTask" id="BPMNShape_MonthlyReportTimerTask">
+        <omgdc:Bounds height="80.0" width="100.0" x="75.0" y="480.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="submitMonthlyReport" id="BPMNShape_submitMonthlyReport">
+        <omgdc:Bounds height="80.0" width="100.0" x="75.0" y="638.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="toCommitteeApproval" id="BPMNEdge_toCommitteeApproval">
+        <omgdi:waypoint x="680.0" y="40.0"></omgdi:waypoint>
+        <omgdi:waypoint x="810.0" y="40.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toprimaryReviewConclusion" id="BPMNEdge_toprimaryReviewConclusion">
+        <omgdi:waypoint x="910.0" y="40.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1080.0" y="40.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="start2dispatcherMasterApproval" id="BPMNEdge_start2dispatcherMasterApproval">
+        <omgdi:waypoint x="70.0" y="42.0"></omgdi:waypoint>
+        <omgdi:waypoint x="330.0" y="40.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="todispatcherMasterApproval2InputGrade" id="BPMNEdge_todispatcherMasterApproval2InputGrade">
+        <omgdi:waypoint x="430.0" y="40.0"></omgdi:waypoint>
+        <omgdi:waypoint x="580.0" y="40.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toPMSubmitMIdMaterial" id="BPMNEdge_toPMSubmitMIdMaterial">
+        <omgdi:waypoint x="630.0" y="190.0"></omgdi:waypoint>
+        <omgdi:waypoint x="630.0" y="225.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toMidApprovalReport" id="BPMNEdge_toMidApprovalReport">
+        <omgdi:waypoint x="1235.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1055.0" y="365.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toInputMidGrade" id="BPMNEdge_toInputMidGrade">
+        <omgdi:waypoint x="1215.0" y="430.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1040.0" y="445.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toResultOfMidChecked" id="BPMNEdge_toResultOfMidChecked">
+        <omgdi:waypoint x="360.0" y="425.0"></omgdi:waypoint>
+        <omgdi:waypoint x="215.0" y="425.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toDispatcherEndMaster" id="BPMNEdge_toDispatcherEndMaster">
+        <omgdi:waypoint x="720.0" y="540.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1125.0" y="540.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toResultOfEndChecked" id="BPMNEdge_toResultOfEndChecked">
+        <omgdi:waypoint x="400.0" y="725.0"></omgdi:waypoint>
+        <omgdi:waypoint x="215.0" y="725.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toPMSelfConclusion" id="BPMNEdge_toPMSelfConclusion">
+        <omgdi:waypoint x="215.0" y="885.0"></omgdi:waypoint>
+        <omgdi:waypoint x="360.0" y="885.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toEndMasterfork" id="BPMNEdge_toEndMasterfork">
+        <omgdi:waypoint x="1175.0" y="580.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1179.0" y="658.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toEndApprovalReport" id="BPMNEdge_toEndApprovalReport">
+        <omgdi:waypoint x="1159.0" y="678.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1079.0" y="678.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toInputEndGrade" id="BPMNEdge_toInputEndGrade">
+        <omgdi:waypoint x="1179.0" y="698.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1029.0" y="743.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toResultOfdepartapproval" id="BPMNEdge_toResultOfdepartapproval">
+        <omgdi:waypoint x="1325.0" y="80.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1325.0" y="150.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="modifyMaterial2dispatcherMaster" id="BPMNEdge_modifyMaterial2dispatcherMaster">
+        <omgdi:waypoint x="205.0" y="101.0"></omgdi:waypoint>
+        <omgdi:waypoint x="380.0" y="80.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="72.0" x="205.0" y="101.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toDepartleaderConclusion" id="BPMNEdge_toDepartleaderConclusion">
+        <omgdi:waypoint x="460.0" y="885.0"></omgdi:waypoint>
+        <omgdi:waypoint x="630.0" y="890.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="departleaderConclusion2EndProcess" id="BPMNEdge_departleaderConclusion2EndProcess">
+        <omgdi:waypoint x="730.0" y="890.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1311.0" y="893.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toMidConclusion" id="BPMNEdge_toMidConclusion">
+        <omgdi:waypoint x="720.0" y="425.0"></omgdi:waypoint>
+        <omgdi:waypoint x="655.0" y="425.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="midApprovalReport2midMasterJoin" id="BPMNEdge_midApprovalReport2midMasterJoin">
+        <omgdi:waypoint x="1055.0" y="365.0"></omgdi:waypoint>
+        <omgdi:waypoint x="915.0" y="405.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="inputMidGrade2midMasterJoin" id="BPMNEdge_inputMidGrade2midMasterJoin">
+        <omgdi:waypoint x="990.0" y="485.0"></omgdi:waypoint>
+        <omgdi:waypoint x="915.0" y="445.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toMidCommitteeApproval" id="BPMNEdge_toMidCommitteeApproval">
+        <omgdi:waypoint x="895.0" y="425.0"></omgdi:waypoint>
+        <omgdi:waypoint x="820.0" y="425.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="endApprovalReport2endMasterJoin" id="BPMNEdge_endApprovalReport2endMasterJoin">
+        <omgdi:waypoint x="979.0" y="678.0"></omgdi:waypoint>
+        <omgdi:waypoint x="921.0" y="703.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="inputEndGrade2endMasterJoin" id="BPMNEdge_inputEndGrade2endMasterJoin">
+        <omgdi:waypoint x="979.0" y="783.0"></omgdi:waypoint>
+        <omgdi:waypoint x="921.0" y="743.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toCommitteeEndApproval" id="BPMNEdge_toCommitteeEndApproval">
+        <omgdi:waypoint x="901.0" y="723.0"></omgdi:waypoint>
+        <omgdi:waypoint x="865.0" y="725.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toEndConclusion" id="BPMNEdge_toEndConclusion">
+        <omgdi:waypoint x="765.0" y="725.0"></omgdi:waypoint>
+        <omgdi:waypoint x="690.0" y="725.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toDispatcherMidMaster" id="BPMNEdge_toDispatcherMidMaster">
+        <omgdi:waypoint x="680.0" y="265.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1185.0" y="265.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="midConclusionPass" id="BPMNEdge_midConclusionPass">
+        <omgdi:waypoint x="615.0" y="425.0"></omgdi:waypoint>
+        <omgdi:waypoint x="460.0" y="425.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="72.0" x="615.0" y="425.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="resultOfMidCheckedNotPass" id="BPMNEdge_resultOfMidCheckedNotPass">
+        <omgdi:waypoint x="195.0" y="405.0"></omgdi:waypoint>
+        <omgdi:waypoint x="195.0" y="265.0"></omgdi:waypoint>
+        <omgdi:waypoint x="580.0" y="265.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="84.0" x="195.0" y="405.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="resultOfMidCheckedPass" id="BPMNEdge_resultOfMidCheckedPass">
+        <omgdi:waypoint x="195.0" y="445.0"></omgdi:waypoint>
+        <omgdi:waypoint x="195.0" y="540.0"></omgdi:waypoint>
+        <omgdi:waypoint x="620.0" y="540.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="72.0" x="195.0" y="445.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="primaryReviewConclusionPass" id="BPMNEdge_primaryReviewConclusionPass">
+        <omgdi:waypoint x="1120.0" y="40.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1275.0" y="40.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="72.0" x="1120.0" y="40.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="primaryReviewConclusionNotPass" id="BPMNEdge_primaryReviewConclusionNotPass">
+        <omgdi:waypoint x="1100.0" y="60.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1100.0" y="95.0"></omgdi:waypoint>
+        <omgdi:waypoint x="205.0" y="101.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="84.0" x="1100.0" y="60.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="resultOfDepartApprovalNeedModify" id="BPMNEdge_resultOfDepartApprovalNeedModify">
+        <omgdi:waypoint x="1305.0" y="170.0"></omgdi:waypoint>
+        <omgdi:waypoint x="155.0" y="142.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="72.0" x="1305.0" y="170.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="resultOfDepartApprovalPass" id="BPMNEdge_resultOfDepartApprovalPass">
+        <omgdi:waypoint x="1305.0" y="170.0"></omgdi:waypoint>
+        <omgdi:waypoint x="650.0" y="170.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="1305.0" y="170.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toMidMasterfork" id="BPMNEdge_toMidMasterfork">
+        <omgdi:waypoint x="1235.0" y="305.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1235.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="resultOfDepartApprovalNotPass" id="BPMNEdge_resultOfDepartApprovalNotPass">
+        <omgdi:waypoint x="1325.0" y="190.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1328.0" y="876.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="60.0" x="1325.0" y="190.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="midConclusionNotPass" id="BPMNEdge_midConclusionNotPass">
+        <omgdi:waypoint x="635.0" y="405.0"></omgdi:waypoint>
+        <omgdi:waypoint x="630.0" y="305.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="84.0" x="635.0" y="405.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="endConclusionNotPass" id="BPMNEdge_endConclusionNotPass">
+        <omgdi:waypoint x="670.0" y="705.0"></omgdi:waypoint>
+        <omgdi:waypoint x="670.0" y="580.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="84.0" x="670.0" y="705.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="endConclusionPass" id="BPMNEdge_endConclusionPass">
+        <omgdi:waypoint x="650.0" y="725.0"></omgdi:waypoint>
+        <omgdi:waypoint x="500.0" y="725.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="72.0" x="650.0" y="725.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="resultOfEndCheckedNotPass" id="BPMNEdge_resultOfEndCheckedNotPass">
+        <omgdi:waypoint x="195.0" y="705.0"></omgdi:waypoint>
+        <omgdi:waypoint x="195.0" y="560.0"></omgdi:waypoint>
+        <omgdi:waypoint x="620.0" y="540.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="84.0" x="195.0" y="705.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="resultOfEndCheckedPass" id="BPMNEdge_resultOfEndCheckedPass">
+        <omgdi:waypoint x="195.0" y="745.0"></omgdi:waypoint>
+        <omgdi:waypoint x="195.0" y="865.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="72.0" x="195.0" y="745.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toSubmitMonthlyReport" id="BPMNEdge_toSubmitMonthlyReport">
+        <omgdi:waypoint x="125.0" y="560.0"></omgdi:waypoint>
+        <omgdi:waypoint x="125.0" y="638.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="finishAllMonthlyReport" id="BPMNEdge_finishAllMonthlyReport">
+        <omgdi:waypoint x="20.0" y="540.0"></omgdi:waypoint>
+        <omgdi:waypoint x="20.0" y="885.0"></omgdi:waypoint>
+        <omgdi:waypoint x="175.0" y="885.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-5CDCAFA4-B821-43D2-BC3E-5129C1A19992" id="BPMNEdge_sid-5CDCAFA4-B821-43D2-BC3E-5129C1A19992">
+        <omgdi:waypoint x="40.0" y="520.0"></omgdi:waypoint>
+        <omgdi:waypoint x="75.0" y="520.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toisAllComplete" id="BPMNEdge_toisAllComplete">
+        <omgdi:waypoint x="125.0" y="638.0"></omgdi:waypoint>
+        <omgdi:waypoint x="20.0" y="540.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="610.0" y="170.0"></omgdi:waypoint>
+        <omgdi:waypoint x="125.0" y="170.0"></omgdi:waypoint>
+        <omgdi:waypoint x="125.0" y="480.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

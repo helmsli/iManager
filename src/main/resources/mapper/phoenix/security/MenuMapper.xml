@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinwei.security.dao.MenuDao">
+
+	<!-- 开启本mapper的namespace下的二级缓存 -->
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache" />
+
+	
+	<select id="findAll"    resultType="Menu" useCache="true">
+		select * from stat.security_menu  order by priority ASC
+	</select>
+	
+	
+	
+</mapper>
+
+
+
+
+

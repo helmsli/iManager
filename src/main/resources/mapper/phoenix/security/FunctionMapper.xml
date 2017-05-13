@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinwei.security.dao.FunctionDao">
+
+	<!-- 开启本mapper的namespace下的二级缓存 -->
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache" />
+
+
+	<insert id="save" parameterType="Function">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+	        SELECT NEXT VALUE FOR stat.security_function 
+	    </selectKey> 
+  		upsert INTO stat.security_function (
+	  		id,menu_id,name,action,description,priority,sn,remark
+		)
+		VALUES(
+			#{id},#{menu_id},#{name},#{action},#{description},#{priority},#{sn},#{remark}
+		)
+    </insert>
+
+ 
+  
+  
+  <update id="update" parameterType="Function">
+  	 upsert INTO stat.security_function (
+	  		id,menu_id,name,action,description,priority,sn,remark
+		)
+		VALUES(
+			#{id},#{menu_id},#{name},#{action},#{description},#{priority},#{sn},#{remark}
+		)
+  </update>
+  
+  <delete id="delete" parameterType="java.lang.Long">
+  	delete from stat.security_function where id = #{id}
+  </delete>
+  
+  
+  <select id="findAll"    resultType="Function" useCache="true">
+		select * from stat.security_function  order by priority ASC
+	</select>
+	
+	
+	
+	<select id="findByMenuId"    resultType="Function" useCache="true">
+		select * from stat.security_function  where menu_id=#{menu_id} order by priority ASC
+	</select>
+	
+	
+	
+	
+	
+</mapper>
+
+
+
+
+

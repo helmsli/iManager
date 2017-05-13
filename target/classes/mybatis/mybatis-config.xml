@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- plugins在配置文件中的位置必须符合要求，否则会报错，顺序如下: properties?, settings?, typeAliases?, 
+		typeHandlers?, objectFactory?,objectWrapperFactory?, plugins?, environments?, 
+		databaseIdProvider?, mappers? -->
+
+	<settings>
+		<!-- 打开延迟加载的开关 -->
+		<setting name="lazyLoadingEnabled" value="true"/>
+		<!-- 将积极加载改为消极加载，即延迟加载 -->
+		<setting name="aggressiveLazyLoading" value="false"/>
+		<!-- 开启二级缓存 -->
+		<setting name="cacheEnabled" value="true"/>
+	</settings>
+    <!--  
+	<typeAliases>
+		
+		<typeAlias alias="User" type="com.xinwei.security.entity.User" />
+		<typeAlias alias="Role" type="com.xinwei.security.entity.Role" />
+		<typeAlias alias="UserRole" type="com.xinwei.security.entity.UserRole" />
+		<typeAlias alias="Menu" type="com.xinwei.security.entity.Menu" />
+		<typeAlias alias="Function" type="com.xinwei.security.entity.Function" />
+		<typeAlias alias="UserPermission" type="com.xinwei.security.entity.UserPermission" />
+		<typeAlias alias="RolePermission" type="com.xinwei.security.entity.RolePermission" />
+		<typeAlias alias="Business" type="com.xinwei.security.entity.Business" />
+		<typeAlias alias="Department" type="com.xinwei.security.entity.Department" />
+		
+		
+	     <typeAlias alias="AnnexType" type="com.xinwei.process.entity.AnnexType" />
+	     <typeAlias alias="CommitteeApproval" type="com.xinwei.process.entity.CommitteeApproval" />
+	     <typeAlias alias="DepartleaderApproval" type="com.xinwei.process.entity.DepartleaderApproval" />
+	     <typeAlias alias="ExpertReview" type="com.xinwei.process.entity.ExpertReview" />
+	     <typeAlias alias="Project" type="com.xinwei.process.entity.Project" />
+	     <typeAlias alias="ProjectAnnex" type="com.xinwei.process.entity.ProjectAnnex" />
+	     <typeAlias alias="ProjectCategory" type="com.xinwei.process.entity.ProjectCategory" />
+	     <typeAlias alias="ProjectRequirement" type="com.xinwei.process.entity.ProjectRequirement" />
+	     <typeAlias alias="ProcessUser" type="com.xinwei.process.entity.ProcessUser" />
+		
+		
+		
+	</typeAliases>
+     -->
+	<!-- 定义类型转换器 -->
+	<typeHandlers>
+		<!-- <typeHandler javaType="Boolean" jdbcType="BIT" handler="com.xinwei.util.BooleanTypeHandler" /> -->
+		<typeHandler handler="com.xinwei.util.mybatis.DateTypeHandler" javaType="java.lang.Object" jdbcType="DATE"/>
+	</typeHandlers>
+
+	<plugins>
+		<!-- com.github.pagehelper为PageHelper类所在包名 -->
+		<plugin interceptor="com.github.pagehelper.PageHelper">
+			<property name="dialect" value="mysql" />
+			<!-- 该参数默认为false -->
+			<!-- 设置为true时，会将RowBounds第一个参数offset当成pageNum页码使用 -->
+			<!-- 和startPage中的pageNum效果一样 -->
+			<property name="offsetAsPageNum" value="true" />
+			<!-- 该参数默认为false -->
+			<!-- 设置为true时，使用RowBounds分页会进行count查询 -->
+			<property name="rowBoundsWithCount" value="true" />
+			<!-- 设置为true时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果 -->
+			<!-- （相当于没有执行分页查询，但是返回结果仍然是Page类型） -->
+			<property name="pageSizeZero" value="true" />
+			<!-- 3.3.0版本可用 - 分页参数合理化，默认false禁用 -->
+			<!-- 启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页 -->
+			<!-- 禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据 -->
+			<property name="reasonable" value="false" />
+			<!-- 3.5.0版本可用 - 为了支持startPage(Object params)方法 -->
+			<!-- 增加了一个`params`参数来配置参数映射，用于从Map或ServletRequest中取值 -->
+			<!-- 可以配置pageNum,pageSize,count,pageSizeZero,reasonable,不配置映射的用默认值 -->
+			<!-- 不理解该含义的前提下，不要随便复制该配置 -->
+			<property name="params" value="pageNum=start;pageSize=limit;" />
+		</plugin>
+	</plugins>
+
+
+</configuration>

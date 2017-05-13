@@ -1,0 +1,79 @@
+<meta charset="UTF-8" >
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-column">
+	<div class="row p-t-5 p-b-5 clearfix" ng-show="submitProjectMonthlyReport">
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 p-r-5 form-control-label"><label>提交周期报告：</label></div>
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 p-l-5">
+			<div class="form-group">
+                <div class="form-line">
+                    <div class="file-group">
+						<input type="text" name="fileName" id="fileMaterialMonthlyReport" class="form-control" placeholder="选择文件...">
+						<input type="button" value="选择文件" class="btn btn-primary">
+						<input type="file" name="file" id="submitReportMonthly" onchange="fileUpload('submitReportMonthly');document.getElementById('fileMaterialMonthlyReport').value=this.value">
+					</div>
+                </div>
+            </div> 
+		</div>
+	</div>
+	<!-- / .row -->
+	<div class="row p-t-5 p-b-5 clearfix" ng-show="submitMidtermReviewMaterials" >
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 p-r-5 form-control-label"><label>提交中期评审材料：</label></div>
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 p-l-5">
+			<div class="form-group">
+                <div class="form-line">
+                    <div class="file-group">
+						<input type="text" name="fileName" id="fileMaterialMetaphase" class="form-control" placeholder="选择文件...">
+						<input type="button" value="选择文件" class="btn btn-primary">
+						<input type="file" name="file" id="submitMaterialMetaphase" onchange="fileUpload('submitMaterialMetaphase');document.getElementById('fileMaterialMetaphase').value=this.value">
+					</div>
+                </div>
+            </div>
+		</div>
+	</div>
+	<!-- / .row -->
+	<div class="row p-t-5 p-b-5 clearfix" ng-show="submitMidtermReviewReport">
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 p-r-5 form-control-label"><label>提交中期评审报告：</label></div>
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 p-l-5">
+			<div class="form-group">
+                <div class="form-line">
+                    <div class="file-group">
+						<input type="text" name="fileName" id="fileReportMetaphase" class="form-control" placeholder="选择文件...">
+						<input type="button" value="选择文件" class="btn btn-primary">
+						<input type="file" name="file" id="submitReportMetaphase" onchange="fileUpload('submitReportMetaphase');document.getElementById('fileReportMetaphase').value=this.value">
+					</div>
+                </div>
+            </div> 
+		</div>
+	</div>
+	<!-- / .row -->
+	<div class="row p-t-5 p-b-5 clearfix" ng-show="submitLastReviewMaterials">
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 p-r-5 form-control-label"><label>提交终期评审材料：</label></div>
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 p-l-5">
+			<div class="form-group">
+                <div class="form-line">
+                    <div class="file-group">
+						<input type="text" name="fileName" id="fileMaterialTelophase" class="form-control" placeholder="选择文件...">
+						<input type="button" value="选择文件" class="btn btn-primary">
+						<input type="file" name="file" id="submitMaterialTelophase" onchange="fileUpload('submitMaterialTelophase');document.getElementById('fileMaterialTelophase').value=this.value">
+					</div>
+                </div>
+            </div>  
+		</div>
+	</div>
+	<!-- / .row -->
+	<div class="row p-t-5 p-b-5 clearfix" ng-show="submitLastReviewReport" >
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 p-r-5 form-control-label"><label>提交终期评审报告：</label></div>
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 p-l-5">
+			<div class="form-group">
+                <div class="form-line">
+                    <div class="file-group">
+						<input type="text" name="fileName" id="fileReportMaterialTelophase" class="form-control" placeholder="选择文件...">
+						<input type="button" value="选择文件" class="btn btn-primary">
+						<input type="file" name="file" id="submitReportTelophase" onchange="fileUpload('submitReportTelophase');document.getElementById('fileReportMaterialTelophase').value=this.value">
+					</div>
+                </div>
+            </div> 
+		</div>
+	</div>
+	<!-- / .row -->
+</div>
+<!-- / .col-12 -->

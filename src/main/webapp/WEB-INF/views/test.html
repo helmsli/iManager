@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html >
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" >
+        <meta  >
+		<title>home</title>
+		
+		
+	    <!-- Plugin Js -->
+	    <script src="../plugins/jquery/jquery-2.2.4.min.js"></script>
+	    
+	</head>
+	<body>
+		<input type="button" value="sum" id="testid"/>
+		<script type="text/javascript">
+		$(function(){
+			//alert(1);
+			$("#testid").click(function(){
+				
+				var json1 = JSON.stringify({roleIds:[1],id:3});
+				 var userIds = [];
+				 userIds.push(3);
+				 userIds.push(4);
+				 //url:"/authority_ms/management/user/create",
+				$.ajax({
+					url:"/authority_ms/management/user/list",
+					type:"post",
+					data:{
+						"request.department_id":"0101",
+						"page.pageNum":1,
+						"page.pageSize":10
+
+					},
+					dataType:"json",
+					success:function(result){
+						alert(result);
+						
+					},
+					error:function(error1,error2,error3){
+						alert('errre');
+					}
+				})
+			});
+		})
+		
+		</script>
+		
+	</body>
+</html>

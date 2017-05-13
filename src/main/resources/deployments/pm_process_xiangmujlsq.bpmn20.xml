@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
+  <process id="pm_process_xiangmujlsq" name="项目经理申请流程" isExecutable="true">
+    <startEvent id="pm_process_xiangmujlsq_start" name="项目经理申请流程开始"></startEvent>
+    <userTask id="dispatcherMasterApproval" name="指定评审专家立项审批" activiti:assignee="${officer}">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${projectCurrentStateListener}"></activiti:taskListener>
+        <activiti:taskListener event="complete" delegateExpression="${projectPreviousStateListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="inputmastergrade" name="管理人员录入评审专家评分" activiti:assignee="${officer}">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${projectCurrentStateListener}"></activiti:taskListener>
+        <activiti:taskListener event="complete" delegateExpression="${projectPreviousStateListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <exclusiveGateway id="primaryReviewConclusion" name="初期评审结论"></exclusiveGateway>
+    <userTask id="departleaderApproval" name="部门经理审批" activiti:assignee="${departLeader}">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${projectCurrentStateListener}"></activiti:taskListener>
+        <activiti:taskListener event="complete" delegateExpression="${projectPreviousStateListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <endEvent id="pm_process_xiangmujlsq_end" name="项目经理申请流程结束">
+      <extensionElements>
+        <activiti:executionListener event="start" delegateExpression="${xiangmujianguanListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
+    <userTask id="pmModifyMaterial" name="项目经理修改评审材料" activiti:assignee="${projectManager}">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${projectCurrentStateListener}"></activiti:taskListener>
+        <activiti:taskListener event="complete" delegateExpression="${projectPreviousStateListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="committeeApproval" name="决策委员会审批" activiti:assignee="${committee}">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${projectCurrentStateListener}"></activiti:taskListener>
+        <activiti:taskListener event="complete" delegateExpression="${projectPreviousStateListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <exclusiveGateway id="resultOfDepartApproval"></exclusiveGateway>
+    <sequenceFlow id="toCommitteeApproval" sourceRef="inputmastergrade" targetRef="committeeApproval"></sequenceFlow>
+    <sequenceFlow id="toprimaryReviewConclusion" sourceRef="committeeApproval" targetRef="primaryReviewConclusion"></sequenceFlow>
+    <sequenceFlow id="start2dispatcherMasterApproval" sourceRef="pm_process_xiangmujlsq_start" targetRef="dispatcherMasterApproval"></sequenceFlow>
+    <sequenceFlow id="todispatcherMasterApproval2InputGrade" sourceRef="dispatcherMasterApproval" targetRef="inputmastergrade"></sequenceFlow>
+    <sequenceFlow id="toResultOfdepartapproval" sourceRef="departleaderApproval" targetRef="resultOfDepartApproval"></sequenceFlow>
+    <sequenceFlow id="modifyMaterial2dispatcherMaster" name="修改评审材料" sourceRef="pmModifyMaterial" targetRef="dispatcherMasterApproval"></sequenceFlow>
+    <sequenceFlow id="primaryReviewConclusionPass" name="初期评审通过" sourceRef="primaryReviewConclusion" targetRef="departleaderApproval">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${committeeApproval_result eq 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="primaryReviewConclusionNotPass" name="初期评审不通过" sourceRef="primaryReviewConclusion" targetRef="pmModifyMaterial">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${committeeApproval_result eq 'reject'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="resultOfDepartApprovalNotPass" name="评审通过" sourceRef="resultOfDepartApproval" targetRef="pm_process_xiangmujlsq_end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${departleaderApproval_result eq 'pass'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="resultOfDepartApprovalNeedModify" name="修改评审材料" sourceRef="resultOfDepartApproval" targetRef="pmModifyMaterial">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${departleaderApproval_result eq 'reject'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_pm_process_xiangmujlsq">
+    <bpmndi:BPMNPlane bpmnElement="pm_process_xiangmujlsq" id="BPMNPlane_pm_process_xiangmujlsq">
+      <bpmndi:BPMNShape bpmnElement="pm_process_xiangmujlsq_start" id="BPMNShape_pm_process_xiangmujlsq_start">
+        <omgdc:Bounds height="35.0" width="35.0" x="217.0" y="22.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="dispatcherMasterApproval" id="BPMNShape_dispatcherMasterApproval">
+        <omgdc:Bounds height="80.0" width="100.0" x="330.0" y="0.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="inputmastergrade" id="BPMNShape_inputmastergrade">
+        <omgdc:Bounds height="80.0" width="100.0" x="520.0" y="0.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="primaryReviewConclusion" id="BPMNShape_primaryReviewConclusion">
+        <omgdc:Bounds height="40.0" width="40.0" x="742.0" y="158.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="departleaderApproval" id="BPMNShape_departleaderApproval">
+        <omgdc:Bounds height="80.0" width="100.0" x="713.0" y="261.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pm_process_xiangmujlsq_end" id="BPMNShape_pm_process_xiangmujlsq_end">
+        <omgdc:Bounds height="35.0" width="35.0" x="745.0" y="510.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pmModifyMaterial" id="BPMNShape_pmModifyMaterial">
+        <omgdc:Bounds height="82.0" width="100.0" x="330.0" y="138.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="committeeApproval" id="BPMNShape_committeeApproval">
+        <omgdc:Bounds height="80.0" width="100.0" x="711.0" y="1.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="resultOfDepartApproval" id="BPMNShape_resultOfDepartApproval">
+        <omgdc:Bounds height="40.0" width="40.0" x="742.0" y="402.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="toCommitteeApproval" id="BPMNEdge_toCommitteeApproval">
+        <omgdi:waypoint x="620.0" y="40.0"></omgdi:waypoint>
+        <omgdi:waypoint x="711.0" y="41.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toprimaryReviewConclusion" id="BPMNEdge_toprimaryReviewConclusion">
+        <omgdi:waypoint x="761.0" y="81.0"></omgdi:waypoint>
+        <omgdi:waypoint x="762.0" y="158.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="start2dispatcherMasterApproval" id="BPMNEdge_start2dispatcherMasterApproval">
+        <omgdi:waypoint x="252.0" y="39.0"></omgdi:waypoint>
+        <omgdi:waypoint x="330.0" y="40.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="todispatcherMasterApproval2InputGrade" id="BPMNEdge_todispatcherMasterApproval2InputGrade">
+        <omgdi:waypoint x="430.0" y="40.0"></omgdi:waypoint>
+        <omgdi:waypoint x="520.0" y="40.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="toResultOfdepartapproval" id="BPMNEdge_toResultOfdepartapproval">
+        <omgdi:waypoint x="763.0" y="341.0"></omgdi:waypoint>
+        <omgdi:waypoint x="762.0" y="402.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="modifyMaterial2dispatcherMaster" id="BPMNEdge_modifyMaterial2dispatcherMaster">
+        <omgdi:waypoint x="380.0" y="138.0"></omgdi:waypoint>
+        <omgdi:waypoint x="380.0" y="80.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="72.0" x="380.0" y="111.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="primaryReviewConclusionPass" id="BPMNEdge_primaryReviewConclusionPass">
+        <omgdi:waypoint x="762.0" y="198.0"></omgdi:waypoint>
+        <omgdi:waypoint x="763.0" y="261.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="762.0" y="198.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="primaryReviewConclusionNotPass" id="BPMNEdge_primaryReviewConclusionNotPass">
+        <omgdi:waypoint x="742.0" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="430.0" y="179.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="660.0" y="158.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="resultOfDepartApprovalNotPass" id="BPMNEdge_resultOfDepartApprovalNotPass">
+        <omgdi:waypoint x="762.0" y="442.0"></omgdi:waypoint>
+        <omgdi:waypoint x="762.0" y="510.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="760.0" y="459.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="resultOfDepartApprovalNeedModify" id="BPMNEdge_resultOfDepartApprovalNeedModify">
+        <omgdi:waypoint x="742.0" y="422.0"></omgdi:waypoint>
+        <omgdi:waypoint x="380.0" y="421.0"></omgdi:waypoint>
+        <omgdi:waypoint x="380.0" y="220.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="641.0" y="403.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

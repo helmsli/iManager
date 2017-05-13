@@ -1,0 +1,56 @@
+<meta charset="UTF-8">
+<div class="table-responsive"  ng-init="initQuestionTable()">
+	<table class="table table-bordered m-b-0" id="questionTemplateC">
+		<thead>
+			<tr>
+				<th data-columnName="firstLevel">一级</th>
+				<th data-columnName="secondLevel">二级指标</th>
+				<th data-columnName="explain">指标说明</th>
+				<th class="align-center" data-columnName="scoreVal">分值</th>
+				<th class="align-center" data-columnName="score">得分</th>
+			</tr>
+		</thead>
+		<tbody ng-init="initQuestion2()"><!--tbody的class名不能为‘show’,否则表格不能自动撑开-->
+			<!-- 项目定位 -->
+			<tr data-group="orientate" ng-repeat="data in reportInfo.orientate.labels" data-index="{{$index}}" data-name="orientate">
+				<td width="20%" rowspan="4" ng-if="$index==0" class="pre-wrap" data-columnName="" data-group-index="0" ng-bind="projectLable.orientate"></td>
+				<td width="30%" class="pre-wrap" contentEditable="true" data-columnName="label" ng-bind="data.label"></td>
+				<td width="30%" class="pre-wrap" contentEditable="true" data-columnName="content" ng-bind="data.content"></td>
+				<td width="10%" class="pre-wrap align-center" data-columnName="scoreVal" ng-bind="data.scoreVal"></td>
+				<td width="10%" rowspan="4" ng-if="$index==0" class="pre-wrap align-center" contentEditable="true" data-type="number" data-columnName="subTotal" ng-bind="reportInfo.orientate.subTotal"></td>
+			</tr>
+			<!-- 项目特征 -->
+			<tr data-group="feature" ng-repeat="data in reportInfo.feature.labels" data-index="{{$index}}" data-name="feature">
+				<td rowspan="3" ng-if="$index==0" class="pre-wrap" data-columnName="" data-group-index="0" ng-bind="projectLable.feature"></td>
+				<td class="pre-wrap" contentEditable="true" data-columnName="label"ng-bind="data.label"></td>
+				<td rowspan="3"  ng-if="$index==0" class="pre-wrap" contentEditable="true" data-columnName="content" ng-bind="reportInfo.feature.conent"></td>
+				<td rowspan="3"  ng-if="$index==0" class="pre-wrap align-center" data-columnName="scoreVal" ng-bind="reportInfo.feature.scoreVal"></td>
+				<td rowspan="3"  ng-if="$index==0" class="pre-wrap align-center" contentEditable="true" data-type="number" data-columnName="subTotal" ng-bind="reportInfo.feature.subTotal"></td>
+			</tr>
+			<!-- 需求与市场提供的关系 -->
+			<tr data-group="demand" ng-repeat="data in reportInfo.demand.labels" data-index="{{$index}}" data-name="demand">
+				<td rowspan="3" ng-if="$index==0" class="pre-wrap" data-columnName="" data-group-index="0" ng-bind="projectLable.demand"></td>
+				<td class="pre-wrap" contentEditable="true" data-columnName="label" ng-bind="data.label"></td>
+				<td rowspan="3" ng-if="$index==0" class="pre-wrap" contentEditable="true" data-columnName="content" ng-bind="reportInfo.demand.conent"></td>
+				<td rowspan="3" ng-if="$index==0" class="pre-wrap align-center" data-columnName="scoreVal" ng-bind="reportInfo.demand.scoreVal"></td>
+				<td rowspan="3" ng-if="$index==0" class="pre-wrap align-center" contentEditable="true" data-type="number" data-columnName="subTotal" ng-bind="reportInfo.demand.subTotal"></td>
+			</tr>
+			<!-- 可行性 -->
+			<tr data-group="feasibility" ng-repeat="data in reportInfo.feasibility.labels" data-index="{{$index}}" data-name="feasibility">
+				<td rowspan="6" ng-if="$index==0" class="pre-wrap" data-columnName="" data-group-index="0" ng-bind="projectLable.feasibility"></td>
+				<td class="pre-wrap" contentEditable="true" data-columnName="label" ng-bind="data.label"></td>
+				<td class="pre-wrap" contentEditable="true" data-columnName="content" ng-bind="data.content"></td>
+				<td class="pre-wrap align-center" data-columnName="scoreVal" ng-bind="data.scoreVal"></td>
+				<td rowspan="6" ng-if="$index==0" class="pre-wrap align-center" contentEditable="true" data-type="number" data-columnName="subTotal" ng-bind="reportInfo.feasibility.subTotal"></td>
+			</tr>
+			<!-- 总分 -->
+			<tr>
+				<td width="80%" colspan="3" class="pre-wrap" data-columnName="" ng-bind="projectLable.totalScore"></td>
+				<td class="pre-wrap align-center" data-columnName="scoreVal" ng-bind="reportInfo.totalScoreVal"></td>
+				<td class="pre-wrap align-center" data-type="number" data-columnName="score" id="totalScore"  ng-bind="reportInfo.totalScore"></td>
+			</tr>
+		</tbody>
+	</table>
+	<!-- / .table -->
+</div>
+<!-- / .table-responsive -->

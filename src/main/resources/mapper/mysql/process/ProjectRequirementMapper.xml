@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinwei.process.dao.ProjectRequirementMapper" >
+  <resultMap id="BaseResultMap" type="com.xinwei.process.entity.ProjectRequirement" >
+    <id column="requirement_id" property="requirementId" jdbcType="BIGINT" />
+    <result column="category_id" property="categoryId" jdbcType="BIGINT" />
+    <result column="publish_time" property="publishTime" jdbcType="DATE" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="requirement_desc" property="requirementDesc" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="complete_time" property="completeTime" jdbcType="DATE" />
+    <result column="reward" property="reward" jdbcType="BIGINT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_project_requirement
+    where requirement_id = #{requirementId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xinwei.process.entity.ProjectRequirement" >
+    insert into tb_project_requirement (requirement_id, category_id, publish_time, 
+      state, requirement_desc, user_id, 
+      complete_time, reward)
+    values (#{requirementId,jdbcType=BIGINT}, #{categoryId,jdbcType=BIGINT}, #{publishTime,jdbcType=DATE}, 
+      #{state,jdbcType=VARCHAR}, #{requirementDesc,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, 
+      #{completeTime,jdbcType=DATE}, #{reward,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.xinwei.process.entity.ProjectRequirement" >
+    update tb_project_requirement
+    set category_id = #{categoryId,jdbcType=BIGINT},
+      publish_time = #{publishTime,jdbcType=DATE},
+      state = #{state,jdbcType=VARCHAR},
+      requirement_desc = #{requirementDesc,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      complete_time = #{completeTime,jdbcType=DATE},
+      reward = #{reward,jdbcType=BIGINT}
+    where requirement_id = #{requirementId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select requirement_id, category_id, publish_time, state, requirement_desc, user_id, 
+    complete_time, reward
+    from tb_project_requirement
+    where requirement_id = #{requirementId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select requirement_id, category_id, publish_time, state, requirement_desc, user_id, 
+    complete_time, reward
+    from tb_project_requirement
+  </select>
+</mapper>
