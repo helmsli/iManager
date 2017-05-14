@@ -78,7 +78,7 @@ App.controller('myDataController', ['$scope', function($scope) {
 		console.log("searchButton");
 		document.getElementById("searchButton").disabled=true;
 		var myParm=parseQueryString();//所有的参数
-		var serviceType=myParm.serviceType;
+		 var serviceType=myParm.serviceType;
         var projectName=myParm.projectName; 
         var pageNum = pageNum||1;
     	var  pageSize = 10;

@@ -40,6 +40,15 @@
       #{data7,jdbcType=VARCHAR}, #{data8,jdbcType=VARCHAR}, #{data9,jdbcType=VARCHAR}, 
       #{data10,jdbcType=VARCHAR})
   </insert>
+  
+  
+  <update id="updateOptimize" parameterType="com.xinwei.process.entity.DepartleaderPublish" >
+    update tb_departleader_publish
+    set  data8 = #{data8,jdbcType=VARCHAR},
+         data9 = #{data9,jdbcType=VARCHAR}
+    where publish_id = #{publishId,jdbcType=BIGINT}
+  </update>
+  
   <update id="updateByPrimaryKey" parameterType="com.xinwei.process.entity.DepartleaderPublish" >
     update tb_departleader_publish
     set title = #{title,jdbcType=VARCHAR},
@@ -115,6 +124,9 @@
     where create_person = #{createPerson,jdbcType=VARCHAR}
     and category_id = #{categoryId,jdbcType=BIGINT}
   </select>
+  
+  
+  
   <select id="selectByUserAndCategoryId" resultMap="BaseResultMap" >
     select publish_id, title, category_id, service_type,create_time, create_person,data1
     from tb_departleader_publish
@@ -156,12 +168,22 @@
   </sql>
   
   <select id="selectByIdList" resultMap="BaseResultMap" >
-    select publish_id, title, category_id, service_type,create_time, create_person,data1
+    select publish_id, title, category_id, service_type,create_time, create_person,data1, data2, data3, data4, data5, data6, data7, 
+    data8, data9, data10
     from tb_departleader_publish
     where publish_id in (
   	  	<foreach collection="idList" item="publishId" separator="," >
 				#{publishId}
 	 	</foreach>
-	 )
+	 ) 
+	  
+       <choose>
+        <when test="data9 != null and data9 != ''">
+            and data9=#{data9,jdbcType=VARCHAR}
+        </when>        
+        <otherwise>
+            and data9='0'
+        </otherwise>
+    </choose>
   </select>
 </mapper>

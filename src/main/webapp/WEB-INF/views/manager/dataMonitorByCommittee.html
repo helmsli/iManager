@@ -39,13 +39,13 @@
 		<div id="wrapper">
 			<div class="header" ng-include="'../include/header.html'"></div>
 			<div class="menus" ng-include="'../include/leftMenu.html'"></div>
-			<div  id="page-wrapper" ng-controller="myDataController" >
+			<div id="page-wrapper" ng-controller="myDataController">
 				<div class="panel">
 					<div class="panel-heading">
 						<div class="row">
 							<div class="col-lg-3">
-								<div class="search-group" >
-		                        	<div class="search-inline"  >
+								<div class="search-group">
+		                        	<div class="search-inline">
 		                         		<input type="search" id="search" class="form-control ng-pristine ng-untouched ng-valid ng-empty" placeholder="请输入项目名称" ng-model="queryProjectName">
 		                             	<span class="btn-group"><button type="button" class="btn btn-primary waves-effect" ng-click="initTabSerach(queryProjectName)">搜索</button></span>
 		                         	</div>

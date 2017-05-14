@@ -71,7 +71,7 @@ function getAllData(){
      console.log(categoryId);
 	   //走创建的
 	   if(!Bg){
-		  
+		   
 		   var obj={
 				   "request.projectId":projectId,
 				   "request.projectName":requestEditData.taskName,
@@ -93,7 +93,6 @@ function getAllData(){
 		       //console.log(requestPostData);
 			   console.log(JSON.stringify(obj));
 			   createTable(obj,function(data){
-				   console.log(data);
 			    	if(data.result == 0){
 			    		swal({
 					    	title: "提交成功",
@@ -113,7 +112,7 @@ function getAllData(){
 	   //走变更的
 	   if(Bg){
 		   var scope=getAngularScope("EditData"); 
-		  
+		   console.log("走变更的");
 		    //data1
 		   project={
 				   "projectId":projectId,
@@ -148,7 +147,6 @@ function getAllData(){
 		  if(Bg==2){
 			  result={"result":0,"comment":"dede","type":"approve"};
 		  }
-		  
 		   var obj={
 				    "request.projectId":projectId,
 				    "request.dataId":scope.changeDataId,
@@ -161,7 +159,6 @@ function getAllData(){
 		   } 
 		   console.log("hahhahah");
 		   console.log(JSON.stringify(obj));
-		   console.log("hahhahah");
 		   edeitTableSaveAjax(obj,function(data){
 		    	if(data.result == 0){
 		    		swal({

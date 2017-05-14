@@ -179,7 +179,7 @@ public class CommonBizController extends BaseController {
 			return result.toString();
 		}
 	// 根据项目类别、业务类型、当前用户角色信息、项目名称（参数可选，支持项目名称模糊查询）查询
-	@RequestMapping(value = "/getByConditions/list", method = {
+	@RequestMapping(value = "/getByConditions/list", produces = "text/html;charset=UTF-8",method = {
 			RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String getByCatetgoryServiceTypeAndProjectName(HttpServletRequest request,Long categoryId,
 			String serviceType,String projectName) {

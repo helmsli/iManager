@@ -62,5 +62,4 @@ public interface ProjectAnnexService{
 	 * 修改项目ID和类型ID
 	 */
 	int updateProjectIdAndTypeId(Long projectId, Long typeId,Long annexId);
-
 }

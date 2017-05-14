@@ -3,10 +3,10 @@ App.controller('initQuestionData', function($scope) {
 	var projectId =parm.projectId; 
 	$scope.dataId=parm.dataId;
 	$scope.projectLable={
-			specialExplain:"特殊情况说明：",
+			specialExplain:"社会效果：",
 			innovation:"创新点和亮点：",
 			changeConditions:"项目变更情况：（如无变更填“无”）",
-			riskDescription:"风险说明：",
+			riskDescription:"媒体报道情况：",
 			summary:"经验总结、工作反思及遇到的困难或问题：",
 			improvementPlan:"改进计划：",
 	};

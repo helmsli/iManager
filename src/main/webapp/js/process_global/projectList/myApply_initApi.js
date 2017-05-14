@@ -239,9 +239,6 @@ function getDepartmentReleaseDataList(projectName,obj)
 	}
 }
 
-
-
-
 /***
  * 我发布的任务列表--根据参数请求不同的数据接口
  * 
@@ -305,8 +302,8 @@ function getDepartmentReleaseDataForShenBaoList(projectName,obj)
 	case "lottery":
 		getCooMartsprojectShenBaoByServer(obj,getCooMartsProjectShenBaoListCall);
 		break;
-	case "camtalk":
-		getCamtalksprojectShenBaoByServer(obj,getCamtalksProjectShenBaoListCall);
+	case "optimize":
+		getDepartmentOptimizeList(obj,getCooMartsProjectShenBaoListCall);
 	    break;
 	case "lottery":
 		getLotterysprojectShenBaoByServer(obj,getLotteryProjectShenBaoListCall);

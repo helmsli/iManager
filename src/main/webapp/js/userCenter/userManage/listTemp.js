@@ -86,7 +86,6 @@ App.controller('app', ['$scope','$ocLazyLoad', function($scope, $ocLazyLoad){
     		console.log("用户list");
     		console.log(data);
     		$scope.list = data.responseInfo.lists;
-    		console.log($scope.list);
     		$scope.page =  data.responseInfo.page;
     		$scope.$applyAsync($scope.list);
 	        //去掉checkbox全选样式
@@ -208,8 +207,6 @@ App.controller('app', ['$scope','$ocLazyLoad', function($scope, $ocLazyLoad){
 	};
 	/*查询按钮触发*/
 	$scope.$on('searchForm',function(e,data){
-		 console.log("查询");
-		 console.log(data);
 		 $scope.searchForm = data;
 		 $scope.getUserList(0);
 	});

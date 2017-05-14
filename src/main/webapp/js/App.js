@@ -345,13 +345,11 @@ function getBasePath(){
 	var fullUrl = location.href;
 	var projectName = "";//项目名
 	var arr =  fullUrl.split("/");
-	projectName = arr[3];	
-	
+	projectName = arr[3];
 	var urlSplit = "";
 	if (port !== null && port !== undefined && port !== '') { 
 		urlSplit=":";
 	} 
-
 	if(projectName!="" && projectName!="views" &&projectName!="login"){
 		return "http://"+root+urlSplit+port+"/"+projectName;
 	}else{

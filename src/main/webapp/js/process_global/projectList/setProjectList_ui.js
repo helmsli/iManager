@@ -211,7 +211,6 @@ function getCooMartsApplyListCall(data){
         	if(mainCurrentStateObj!=null){
         		dataLists[i].assignName=mainCurrentStateObj.assignName;
         	}
-        	
         }
         //得到所有的按钮控制标志绑定到前台
         scope.dataLists=dataLists;
@@ -708,7 +707,6 @@ function getCooMartsDataMonitorListCall(data){
 			pageNav.go(pageInfo.pageNum, pageInfo.pages);
 		}
 		if(dataLists.length == 0){
-			console.log("没数据");
 			$("#tabNoData").removeClass("hide");
 		}else{
 			console.log("有数据");

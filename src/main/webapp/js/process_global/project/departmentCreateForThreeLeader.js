@@ -93,6 +93,7 @@ function submitCreate()
 	/*if(){
 		
 	}*/
+	alert("adfsdf");
 	var scope=getAngularScope("projectManagerModel");
 	var parm = parseQueryString();
 	var projectName=parm.projectName;
@@ -174,6 +175,8 @@ function initSetPersonData(id){
 			//查询出来的专家列表
 			childrenScope.dataList=scope.ThreeLeaderLsit;
 			childrenScope.$applyAsync(childrenScope.ThreeLeaderLsit);
+			//console.log("22222");
+			//console.log(childrenScope.dataList);
 			childrenScope.dataListTittle=scope.project.dataListTittle;
 			
 		}

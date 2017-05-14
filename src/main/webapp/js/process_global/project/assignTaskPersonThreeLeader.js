@@ -149,7 +149,6 @@ App.controller('myDataController', ['$scope', '$ocLazyLoad', function($scope) {
 				{
 					$scope.arrList.push({id:id,firstname:firstname});
 				}
-			//界面没有选中，数组选中	
 			}else{
 				if(hasId)
 				{
@@ -179,7 +178,6 @@ App.controller('myDataController', ['$scope', '$ocLazyLoad', function($scope) {
 	
 	//删除已选中的列表
 	$scope.deleteOnly=function(id){
-		
 		var checkedList=$scope.arrList;
 		$scope.deleteChecked(id);
 		var leng=checkedList.length;
@@ -201,8 +199,10 @@ App.controller('myDataController', ['$scope', '$ocLazyLoad', function($scope) {
 	//确定三级部门经理名称并返给页面input
 	$scope.confirmSelectAssignPersion=function ()
 	{
+		
 		var parentScope=getAngularScope("projectManagerModel");
 		$('#selectedModal').modal('hide');
+		
 		var checkedList=$scope.arrList;
 		parentScope.project.assignPersonText="";
 		for(var i =0; i<checkedList.length ;i++)
@@ -225,9 +225,13 @@ App.controller('myDataController', ['$scope', '$ocLazyLoad', function($scope) {
 			parentScope.project.assignPersonText +=checkedList[i].firstname+",";
 			
 		}
+		
+		
 		//console.log("测试threeLeaderIdLsit");
 		//console.log(JSON.stringify(parentScope.threeLeaderIdLsit));
 	}
+	
+	
 	
 	/**
 	 * 模糊查询匹配的接口

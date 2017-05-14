@@ -4,7 +4,8 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
-		<title>Manager system</title>
+		<!--发布项目需求-->
+		<title>项目管理及信用系统</title>
 		
 		<!-- Plugin Css -->
     	<link href="../../plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -50,7 +51,9 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                        	<select class="form-control show-tick"  ng-model="project.projectType" ng-options="data.name as data.name for data in projectType"></select>
+                                        	<select class="form-control show-tick"  ng-model="project.projectType" ng-options="data.name as data.name for data in projectTypes" ng-change="changeProjectType()"></select>
+                                            
+                                        
                                         </div>
                                     </div>
                                 </div>
@@ -63,31 +66,61 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div class="row clearfix">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 form-control-label"><label>项目发布网址:</label></div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <div class="form-line"><input type="text" class="form-control" placeholder="请输入项目发布的网址" ng-model="project.releaseUrl" /></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
                             <div class="row clearfix">
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 form-control-label"><label>项目描述:</label></div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <div class="form-group">
-                                        <div class="form-line"><textarea rows="4" class="form-control no-resize" placeholder="请输入项目描述..." ng-model="project.description"></textarea></div>
+                                        <div class="form-line"><textarea style="height:80px;" rows="2" class="form-control no-resize" placeholder="请输入项目描述..." ng-model="project.description"></textarea></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row clearfix">
-                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 form-control-label"><label>指定项目经理:</label></div>
+                            <div   class="row clearfix">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 form-control-label"><label id="label_assignPersion">指定机构/组织:</label></div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <div class="row">
                                     	<div class="col-lg-10 col-md-10 col-sm-9 col-xs-8">
                                     		<div class="form-group">
 		                                        <div class="form-line">
-		                                        	<input type="text" class="form-control" value="所有项目经理" ng-model="project.assignPersonText"/>
+		                                        	<input type="text" class="form-control" value="所有组织或者机构" ng-model="project.assignorganization"/>
 		                                        </div>
 		                                    </div>
                                     	</div>
                                     	<div class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
-                                    		<button type="button" class="btn btn-success waves-effec m-l-10 p-r-25 p-l-25" data-toggle="modal" ng-click="initThreeLeader()" data-target="#selectedModal">选择</button>
+                                    		<button type="button" class="btn btn-success waves-effec m-l-10 p-r-25 p-l-25" data-toggle="modal" ng-click="initOrganization()" data-target="#selectedModal">选择</button>
                                     	</div>
                                     </div>
                                 </div>
                             </div>
+                            
+                             <div   class="row clearfix">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 form-control-label"><label id="label_assignThreeEval">指定第三方评估</label></div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="row">
+                                    	<div class="col-lg-10 col-md-10 col-sm-9 col-xs-8">
+                                    		<div class="form-group">
+		                                        <div class="form-line">
+		                                        	<input type="text" class="form-control" value="所有第三方评估" ng-model="project.assignThreeEval"/>
+		                                        </div>
+		                                    </div>
+                                    	</div>
+                                    	<div class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
+                                    		<button type="button" class="btn btn-success waves-effec m-l-10 p-r-25 p-l-25" data-toggle="modal" ng-click="initThreeEval()" data-target="#selectedModal">选择</button>
+                                    	</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="row clearfix">
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 form-control-label"><label>附件:</label></div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">

@@ -35,7 +35,7 @@ var state=scope.gloablParm.state;
 scope.fileUpload={};
 //状态配在config中	
 if(state=="officerApproval"){
-	scope.suggestion.attachTitle="尽职调查附件";//如果是尽职调查，则显示尽职调查附件
+	scope.suggestion.attachTitle="附件";//如果是尽职调查，则显示尽职调查附件
 	scope.setPersonTittle=setPerson.dispatcherMasterApproval[0];
 	scope.setPersonFlag=true;
 	scope.suggestion.commentsFlag=false;
@@ -49,8 +49,6 @@ if(state=="PMSelfConclusion"||state=="departleaderConclusion"){
 if(state=="departleaderApproval"){
 	scope.suggestion.radioRefuseFlag=true;
 }
-
-
 $("#setTime").on("keydown",function(e){
 	 return digitInputInt($(this), e);  
 })
@@ -71,8 +69,8 @@ function uploadButtonSubmit(id){
 	    	{
 	    		scope.fileUpload=new Object();
 	    	}
-	    	console.log("**************");
-	    	console.log(data);
+	    	//console.log("**************");
+	    	//console.log(data);
 	    	scope.fileUpload[scope.gloablParm.state]= data.responseInfo.projectAnnexs;
 	    	scope.projectAnnexs=data.responseInfo.projectAnnexs;
 	    	//console.log(JSON.stringify(data.responseInfo.projectAnnexs));
@@ -151,7 +149,6 @@ function digitInputInt(el, e) {
 function prevent(e) {
 	e.returnValue = false;
 }
-
 
 initApproval();
 

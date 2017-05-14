@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xinwei.process.dao.DataCreateInfoMapper;
@@ -50,6 +53,9 @@ public class DepartleaderPublishServiceImpl implements
 	
 	private final String PUBLISH_SEQ = "departleader_publish_seq";//部门经理发布编号
 	private Logger logger = LoggerFactory.getLogger(DepartleaderPublishServiceImpl.class);
+	/**
+	 * 创建一个发布信息
+	 */
 	@Override
 	public Long save(DepartleaderPublish departleaderPublish) {
 		// 生成项目编号
@@ -102,28 +108,72 @@ public class DepartleaderPublishServiceImpl implements
 			List<Long> publishIdList = ListUtil.fromStringToLongList(dataIdList);
 			// 根据dataIdList(发布ID列表)获取发布集合
 			List<DepartleaderPublish> lists = departleaderPublishDao
-					.selectByIdList(publishIdList);
+					.selectByIdList(publishIdList,DepartleaderPublish.DATA9_ALLOW_APPLICATION);
 			page.setList(lists);
 		}
 		return page;
 	}
 	
+	/**
+	 * 根据当前用户查询所有的待申报列表
+	 */
 	@Override
+	
 	public Page<DepartleaderPublish> getApplyListByCategoryId(User currentUser,
 			Map<String, Object> queryMap) {
+		
+		String Data9_type = DepartleaderPublish.DATA9_ALLOW_APPLICATION;
+		queryMap.put("extData1", DataPermission.PRIVILEGE_canReadWrite);
+		if(queryMap.containsKey(DepartleaderPublish.DATA9_QUERY_KEY))
+		{
+			Data9_type = queryMap.get(DepartleaderPublish.DATA9_QUERY_KEY).toString();
+			//项目优化，填写第三方评估
+			if(Data9_type.equalsIgnoreCase(DepartleaderPublish.DATA9_NEED_optimize))
+			{
+				queryMap.put("extData1", DataPermission.PRIVILEGE_ThreeEval);
+			}
+		}
+		
 		Page<DepartleaderPublish> page = new Page<DepartleaderPublish>(
 				DataPermissionDao.countByConditions(queryMap));
 		queryMap.put("startRow", page.getStartRow());
 		queryMap.put("pageSize", page.getPageSize());
 		// 查询dataPermission表，获取dataID列表
 		List<String> dataIdList = DataPermissionDao
-				.selectListByConditions(queryMap);
+				.selectListByConditions(queryMap);	
+		logger.debug("query optimize1:" + dataIdList.toString());
+		/*
+		//移除很名单中的数据
+		if(null!=dataIdList && !dataIdList.isEmpty())
+		{
+			Map<String, Object> queryBlackListMap = new HashMap<String, Object>();
+			queryBlackListMap.put("categoryId", queryMap.get("categoryId"));
+			queryBlackListMap.put("dataType", queryMap.get("dataType"));
+			queryBlackListMap.put("permissionType", DataPermission.PERMISSIONTYPE_User_Black);
+			queryBlackListMap.put("permissionId", currentUser.getId().toString());
+			
+			 page = new Page<DepartleaderPublish>(
+					DataPermissionDao.countByConditions(queryBlackListMap));
+			 queryBlackListMap.put("startRow", page.getStartRow());
+			 queryBlackListMap.put("pageSize", 1000);
+			// 查询dataPermission表，获取dataID列表
+			List<String> balckList = DataPermissionDao
+					.selectListByConditions(queryBlackListMap);
+			logger.debug("query optimize2:" + dataIdList.toString());
+			dataIdList.removeAll(balckList);
+		}
+		*/
+		logger.debug("query optimize3:" + dataIdList.toString());
 		if(null!=dataIdList && !dataIdList.isEmpty()){
+			
 			
 			List<Long> publishIdList = ListUtil.fromStringToLongList(dataIdList);
 			// 根据dataIdList(发布ID列表)获取发布集合
+			
+			
+			
 			List<DepartleaderPublish> lists = departleaderPublishDao
-					.selectByIdList(publishIdList);
+					.selectByIdList(publishIdList,Data9_type);
 			page.setList(lists);
 		}
 		return page;
@@ -142,7 +192,7 @@ public class DepartleaderPublishServiceImpl implements
 			
 			List<Long> publishIdList =ListUtil.fromStringToLongList(dataIdList);
 			//根据dataIdList(发布ID列表)获取发布集合
-			List<DepartleaderPublish> lists = departleaderPublishDao.selectByIdList(publishIdList);
+			List<DepartleaderPublish> lists = departleaderPublishDao.selectByIdList(publishIdList,DepartleaderPublish.DATA9_ALLOW_APPLICATION);
 			page.setList(lists);
 			
 		}
@@ -172,9 +222,11 @@ public class DepartleaderPublishServiceImpl implements
 		logger.debug("data1: "+ publish.getData1());
 		//获取指定人员列表
 		List<AssignPerson> assignList = gson.fromJson(publish.getData1(), new TypeToken<List<AssignPerson>>() {}.getType());
+		List<AssignPerson> threeEvalList = gson.fromJson(publish.getData3(), new TypeToken<List<AssignPerson>>() {}.getType());
 		
 		if (null != assignList && !assignList.isEmpty()) {
 			List<Long> userIdList = new ArrayList<Long>();
+			List<Long> roleIdList = new ArrayList<Long>();
 			for(AssignPerson assignPerson : assignList){
 				//如果指定为角色
 				if(AssignPerson.Role == assignPerson.getRoleType()){	
@@ -183,6 +235,7 @@ public class DepartleaderPublishServiceImpl implements
 					for(User user : userList){
 						userIdList.add(user.getId());
 					}
+					roleIdList.add(assignPerson.getId());
 				}else{
 					//指定人员
 					userIdList.add(assignPerson.getId());
@@ -195,9 +248,84 @@ public class DepartleaderPublishServiceImpl implements
 				dataPermission.setCategoryId(publish.getCategoryId());
 				dataPermission.setPermissionType(DataPermission.PERMISSIONTYPE_USER);
 				dataPermission.setPermissionId(userId.toString());
+				
+				if(publish.isDingxiang())
+				{
+					dataPermission.setPrivilegeThrreeEval();
+				}
+				
 				DataPermissionDao.insert(dataPermission);
 			}
+			for(Long roleId : roleIdList){
+				DataPermission dataPermission = new DataPermission();
+				dataPermission.setDataId(publish.getPublishId().toString());
+				dataPermission.setDataType(DataInfo.DATATYPE_PUBLISH);
+				dataPermission.setCategoryId(publish.getCategoryId());
+				dataPermission.setPermissionType(DataPermission.PERMISSIONTYPE_ROLE);
+				dataPermission.setPermissionId(roleId.toString());
+				
+				if(publish.isDingxiang())
+				{
+					dataPermission.setPrivilegeThrreeEval();
+				}
+				
+				DataPermissionDao.insert(dataPermission);
+			}
+			
 		}
+		
+		//增加第三方数据查询和监管；
+		if (null != threeEvalList && !threeEvalList.isEmpty()) {
+			List<Long> userIdList = new ArrayList<Long>();
+			List<Long> roleIdList = new ArrayList<Long>();
+			for(AssignPerson assignPerson : threeEvalList){
+				//如果指定为角色
+				if(AssignPerson.Role == assignPerson.getRoleType()){					
+					roleIdList.add(assignPerson.getId());
+				}else{
+					//指定人员
+					userIdList.add(assignPerson.getId());
+				}			
+			}
+			for(Long userId : userIdList){
+				DataPermission dataPermission = new DataPermission();
+				dataPermission.setDataId(publish.getPublishId().toString());
+				dataPermission.setDataType(DataInfo.DATATYPE_PUBLISH);
+				dataPermission.setCategoryId(publish.getCategoryId());
+				dataPermission.setPermissionType(DataPermission.PERMISSIONTYPE_USER);
+				dataPermission.setPermissionId(userId.toString());
+				//如果不是优化项目，不需要填写这个字段
+				if(publish.isDingxiang())
+				{
+					dataPermission.setPrivilegeThrreeEval();
+				}
+				DataPermissionDao.insert(dataPermission);
+			}
+			for(Long roleId : roleIdList){
+				DataPermission dataPermission = new DataPermission();
+				dataPermission.setDataId(publish.getPublishId().toString());
+				dataPermission.setDataType(DataInfo.DATATYPE_PUBLISH);
+				dataPermission.setCategoryId(publish.getCategoryId());
+				dataPermission.setPermissionType(DataPermission.PERMISSIONTYPE_ROLE);
+				dataPermission.setPermissionId(roleId.toString());
+				if(publish.isDingxiang())
+				{
+					dataPermission.setPrivilegeThrreeEval();
+				}
+				DataPermissionDao.insert(dataPermission);
+			}
+		}//end of if (null != threeEvalList 
+		//增加创建者的数据权限
+		DataPermission dataPermission = new DataPermission();
+		dataPermission.setDataId(publish.getPublishId().toString());
+		dataPermission.setDataType(DataInfo.DATATYPE_PUBLISH);
+		dataPermission.setCategoryId(publish.getCategoryId());
+		dataPermission.setPermissionType(DataPermission.PERMISSIONTYPE_USER);
+		dataPermission.setPermissionId(publish.getCreatePerson());
+		dataPermission.setExtData1(dataPermission.PRIVILEGE_Owner);
+		DataPermissionDao.insert(dataPermission);
+		
+		
 	}
 		
 
@@ -231,6 +359,20 @@ public class DepartleaderPublishServiceImpl implements
 				publishApplyPersonDao.insert(publishApplyPerson);
 			}
 		}
+	}
+
+	@Override
+	public Long saveOptimize(DepartleaderPublish departleaderPublish) {
+		// TODO Auto-generated method stub
+		departleaderPublishDao.updateOptimize(departleaderPublish);
+		DataPermission dataPermission = new DataPermission();
+		dataPermission.setCategoryId(departleaderPublish.getCategoryId());
+		dataPermission.setDataType(dataPermission.DATATYPE_PUBLISH);
+		dataPermission.setDataId(departleaderPublish.getPublishId().toString());
+		//设置为能够读取
+		dataPermission.setExtData1(dataPermission.PRIVILEGE_canReadWrite);
+		DataPermissionDao.updateToApplication(dataPermission);
+		return departleaderPublish.getPublishId();
 	}
 	
 }

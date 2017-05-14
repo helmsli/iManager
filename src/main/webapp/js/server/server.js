@@ -3034,6 +3034,7 @@ function leaderCreate(result,obj,callBack){
 	    };
 	 requestAjax(options);
 }
+
 /**
  * 三级部门经理承接部门经理的发布然后再发布(coomarts)
  */
@@ -3259,7 +3260,25 @@ function getCooMartsprojectShenBaoByServer(obj, callBack){
     requestAjax(options);
 }
 
-
+/**
+ * 待优化列表
+ * 
+ * **/
+function getDepartmentOptimizeList(obj, callBack){
+	var options ={
+        "url": "/publish/getNeedOptimizeList/list",
+        "data": obj,
+        callBack: function(data) {
+            callBack(data);
+        },
+        errCallBack:function(e)
+        {
+            console.log("服务器异常");
+        }
+    };
+    //ajax调用函数
+    requestAjax(options);
+}
 
 
 /**

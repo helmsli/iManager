@@ -1,6 +1,7 @@
 package com.xinwei.process.dao;
 
 import com.xinwei.process.entity.DataPermission;
+import com.xinwei.process.entity.DepartleaderPublish;
 
 import java.util.List;
 import java.util.Map;
@@ -29,4 +30,12 @@ public interface DataPermissionMapper {
 	 * @return
 	 */
 	List<String> selectListByConditions(Map<String, Object> queryMap);
+	
+	  /**
+     * 更新优化信息
+     * @param record
+     * @return
+     */
+    int updateToApplication(DataPermission record);
+    
 }

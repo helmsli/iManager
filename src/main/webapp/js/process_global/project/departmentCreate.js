@@ -1,4 +1,3 @@
-var arrList="";
 var roleIds={
 		threeLeader:22
 }
@@ -7,12 +6,15 @@ function initScope($scope) {
 	$scope.id="";
 	
 	//配置项目类型
-	$scope.projectType=[{name:"请选择项目类型"},{name:"cooMarts"},{name:"camTalk"},{name:"lottery"}];
+	$scope.projectTypes=[{name:"请选择项目类型"},{name:"定向项目",id:"dingxiang"},{name:"申请项目",id:"shenqing"}];
+	//$scope.project.projectType="定向项目";
+	
 	$scope.project={
 			title:"",
 			description:"",
 			projectType:"请选择项目类型",
-			dataListTittle:"指定三级部门经理"
+			dataListTittle:"指定三级部门经理",
+			releaseUrl:""
 				
 		}
 	//var state="pm_process_bumenjlfb";
@@ -28,47 +30,134 @@ function initScope($scope) {
 	$scope.fileUpload={};
 	//如果不选择的话默认是获取到的全部的三级部门经理
 	$scope.project.assignPersonText="";
+	$scope.project.assignThreeEval="";
+	$scope.project.assignorganization = "";
 	//默认是全部的部门
 	//用来存放三级部门的id的数组
 	$scope.threeLeaderIdLsit=[];
+	$scope.orgazationIdLsit=[];
+	$scope.threeEvalIdLsit=[];
+	$scope.orgazationArrList=[];
+	
+	$scope.threeEvalArrList=[];
+	
+	
+	
+	
 	//初始化需要去后台取的默认数据(项目经理);
 	$scope.getInitData=function(){
-		
 		//如果是三级部门经理的话就去查询详细的信息
 		var userInfo= localStorage.getItem("userInfo");
 		roleIdValue=JSON.parse(userInfo).roleIds[0];
 		if(roleIdValue==roleIds.threeLeader){
+			
 			getDetail();
 			}
-		var obj={
-				 "request.state":$scope.state
-		}
-		//console.log(obj);
-		getInitDataByserver(obj,function(data){
-			//console.log(data);
-			if(data.result == "0"){
-				$scope.project.dataListTittle=data.responseInfo.name;
-				//console.log($scope.dataListTittle);
-				$scope.threeLeaderIdLsit=data.responseInfo.allowPersion;
-				//console.log($scope.threeLeaderIdLsit);
-				$scope.project.assignPersonText=data.responseInfo.name;
-				$scope.id=$scope.threeLeaderIdLsit[0].id;
-				for(var i=0; i<$scope.threeLeaderIdLsit.length;i++){
-					$scope.threeLeaderIdLsit[i].name=data.responseInfo.name;
-				}
-			}
-		})
-	
+		//todo:
+		//initialize the orgazation
+		$scope.project.assignType = 0; 
+		getprivilege(function (){
+			$scope.project.assignorganization = $scope.project.assignPersonText;
+			
+			$scope.orgazationIdLsit = $scope.threeLeaderIdLsit;
+			//alert("org:"+JSON.stringify($scope.orgazationIdLsit));
+		});
+		//initialize the threeEval
+		$scope.project.assignType = 1; 
+		getprivilege(function (){
+			$scope.project.assignThreeEval = $scope.project.assignPersonText;
+			
+			$scope.threeEvalIdLsit = $scope.threeLeaderIdLsit;
+			//alert("abc:" + JSON.stringify($scope.threeEvalIdLsit) + " str:" + $scope.project.assignThreeEval);
+		});
+	}
+	//点击查询的时候从后台去取三级项目经理的列表
+	$scope.initOrganization=function(){
+		var selectModalScope=getAngularScope("myDataController");
+		
+		$scope.project.assignType = 0; 
+		 $scope.project.assignPersonText=$scope.project.assignorganization ;
+		
+		 $scope.threeLeaderIdLsit=$scope.orgazationIdLsit;
+		 selectModalScope.arrList = $scope.orgazationArrList;
+		 
+		getprivilege(function (){
+			initSetPersonData($scope.id);
+			});
+		
+		
+	}
+	$scope.initThreeEval=function(){
+		var phase  = $scope.$$phase;
+		var selectModalScope=getAngularScope("myDataController");
+		 $scope.project.assignType = 1;
+		 $scope.project.assignPersonText=$scope.project.assignThreeEval ;
+			
+		  $scope.threeLeaderIdLsit=$scope.threeEvalIdLsit  ;
+		  $scope.arrList = $scope.threeEvalArrList;
+		  selectModalScope.arrList = $scope.threeEvalArrList;
+		  console.log("arrlist");
+		 console.log($scope.arrList);
+         console.log(selectModalScope.arrList);
+			
+		
+		getprivilege(function (){
+			initSetPersonData($scope.id);
+			});
+		
 		
 	}
 	
-	//点击查询的时候从后台去取三级项目经理的列表,如果要是三级部门经理的话，去获取详细的信息
-	$scope.initThreeLeader=function(){
-		initSetPersonData($scope.id);
+	$scope.confirmSelectAssignCallback = function()
+	{
+		//orgazation
+		var selectModalScope=getAngularScope("myDataController");
 		
+		if(0==$scope.project.assignType)
+		{
+			$scope.project.assignorganization = $scope.project.assignPersonText;
+			
+			$scope.orgazationIdLsit = $scope.threeLeaderIdLsit;
+			
+			
+			
+			 $scope.orgazationArrList = selectModalScope.arrList;
+		}
+		else
+		{
+			$scope.project.assignThreeEval = $scope.project.assignPersonText;
+			
+			$scope.threeEvalIdLsit = $scope.threeLeaderIdLsit;
+			
+			$scope.threeEvalArrList = selectModalScope.arrList;
+		}
+		
+	}
+	
+	$scope.changeProjectType=function()
+	{
+		/*
+		var scope=getAngularScope("projectManagerModel");
+		//alert(scope.project.projectType);
+		var label_assgnPersion = document.getElementById("label_assgnPersion");
+		
+		if("定向项目"==scope.project.projectType)
+		{
+			label_assgnPersion.innerText="指定第三方评估:";
+			scope.project.assignPersonText="所有第三方评估"
+		}
+		else
+		{
+			label_assgnPersion.innerText="指定机构/组织:";
+		}
+		//alert(scope.project.assignPersonText);
+		*/
 	}
 	
 }
+
+
+
 /***
  * 点击上传需要绑定的函数，需要向后台提交的东西
  */
@@ -97,8 +186,6 @@ function uploadButtonSubmit(id){
 	    }
 	});
 }
-
-
 /***
  * 如果是三级部门经理登录的话，得去后台取相应的详细信息
  */
@@ -131,6 +218,7 @@ function getDetail(){
  */
 function submitCreate()
 {
+	//alert("submit");
 	var userInfo= localStorage.getItem("userInfo");
 	roleIdValue=JSON.parse(userInfo).roleIds[0];
 	
@@ -149,17 +237,25 @@ function submitCreate()
 		result.isAttach = APP_ContainAttach.attach;
 		data2= JSON.stringify(scope.fileUpload[scope.state]);
 	}
+	var threeEvalList = unique(scope.threeEvalIdLsit);
+	scope.orgazationIdLsit = unique(scope.orgazationIdLsit);
 	scope.threeLeaderIdLsit=unique(scope.threeLeaderIdLsit);
+	var data4 = {assignThreeEval:scope.project.assignThreeEval,releaseUrl:scope.project.releaseUrl};
+	//alert("data4");
+	//alert(JSON.stringify(data4));
 	var obj={	
 			"request.departleaderPublishId":publishId,
 			"request.title":scope.project.title,
 			"request.categoryId":categoryId,
 		    "request.serviceType":scope.project.projectType,
 			"request.description":scope.project.description,
-			"request.assignPersonText":scope.project.assignPersonText,
-			"request.data1":JSON.stringify(scope.threeLeaderIdLsit),//要发给后台的指定申报的三级部门列表
+			"request.assignPersonText":scope.project.assignorganization,
+			"request.data1":JSON.stringify(scope.orgazationIdLsit),//要发给后台的指定申报的三级部门列表
 			"request.data2":data2,
-			"request.data3":"0",
+			"request.data3":JSON.stringify(threeEvalList),
+			"request.data4":JSON.stringify(data4)
+			
+			
 	};
 	//console.log("发送给后台的obj");
 	console.log(JSON.stringify(obj));
@@ -205,6 +301,51 @@ function getMyProjectOptions(projectName,pageNum){
 	
 }
 
+
+
+function getprivilege(callBack)
+{
+	var scope=getAngularScope("projectManagerModel");
+	var privilegeState = scope.state;
+	//查詢第三方的權限
+	if(1==scope.project.assignType)
+	{
+		privilegeState="officerApproval";
+		//alert(2222);
+	}
+	else
+	{
+	   //alert(433333);	
+	}
+	var obj={
+			 "request.state":privilegeState
+	}
+	console.log(obj);
+	getInitDataByserver(obj,function(data){
+		console.log(data);
+		if(data.result == "0"){
+			
+			var scope=getAngularScope("projectManagerModel");
+			scope.project.dataListTittle=data.responseInfo.name;
+			//console.log($scope.dataListTittle);
+			scope.threeLeaderIdLsit=data.responseInfo.allowPersion;
+			//console.log($scope.threeLeaderIdLsit);
+			scope.project.assignPersonText=data.responseInfo.name;
+			scope.id=scope.threeLeaderIdLsit[0].id;
+			for(var i=0; i<scope.threeLeaderIdLsit.length;i++){
+				scope.threeLeaderIdLsit[i].name=data.responseInfo.name;
+			}
+			if($.isFunction(callBack))
+			{
+				callBack();
+			}
+				
+			//console.log("hhhh444");
+			//console.log($scope.id);
+		}
+	})
+}
+
 /**
  * 点击选择三级部门经理初始化数据从后台去取三级项目经理的列表
  * @param id
@@ -220,14 +361,20 @@ function initSetPersonData(id){
 	
 	getRoleUsers(obj,function(data){
 	 	if(data.result == "0"){
-	 		var scope=getAngularScope("projectManagerModel");
+	 		//console.log("查询三级部门领导444444");
+	 		//console.log(data);
+	 		var scope=getAngularScope("projectManagerModel");	 		
 	 		scope.ThreeLeaderLsit=data.responseInfo.lists;
 			scope.$applyAsync(scope.ThreeLeaderLsit);
+			
 			var childrenScope=getAngularScope("myDataController");
 			//查询出来的专家列表
 			childrenScope.dataList=scope.ThreeLeaderLsit;
 			childrenScope.$applyAsync(childrenScope.ThreeLeaderLsit);
+			//console.log("22222");
+			//console.log(childrenScope.dataList);
 			childrenScope.dataListTittle=scope.project.dataListTittle;
+			
 		}
 	 });
 }

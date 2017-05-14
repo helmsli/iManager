@@ -19,6 +19,18 @@
       #{permissionType,jdbcType=VARCHAR}, #{permissionId,jdbcType=VARCHAR}, #{extData1,jdbcType=VARCHAR}, 
       #{extData2,jdbcType=VARCHAR}, #{extData3,jdbcType=VARCHAR})
   </insert>
+  
+  <update id="updateToApplication" parameterType="com.xinwei.process.entity.DataPermission" >
+    update tb_data_permission
+    set ext_data1 = #{extData1,jdbcType=VARCHAR}
+    where category_id = #{categoryId,jdbcType=BIGINT} 
+          and data_type = #{dataType,jdbcType=VARCHAR} 
+          and data_id = #{dataId,jdbcType=VARCHAR}
+          and ext_data1='optimize' 
+          and (permission_type = '0' or permission_type = '1')
+  </update>
+  
+  
   <select id="selectAll" resultMap="BaseResultMap" >
     select data_id, category_id, data_type, permission_type, permission_id, ext_data1, 
     ext_data2, ext_data3
@@ -53,12 +65,30 @@
 	 	 <if test="dataType != null and dataType !=''">
 			 	and data_type = #{dataType,jdbcType=VARCHAR}
 	 	 </if> 
-	 	 <if test="permissionType != null and permissionType !=''">
-			 	 and permission_type = #{permissionType,jdbcType=BIGINT}
+	 	 <if test="permissionType != null and permissionType !='' and permissionRoleType!=null and permissionRoleType!=''">
+			 	 and ((permission_type = #{permissionType,jdbcType=BIGINT} and permission_id = #{permissionId,jdbcType=BIGINT}) or  (permission_type = #{permissionRoleType,jdbcType=BIGINT} and permission_id = #{permissionRoleId,jdbcType=BIGINT}))
 	 	 </if> 
-	 	 <if test="permissionId != null and permissionId !=''">
-			 	 and permission_id = #{permissionId,jdbcType=BIGINT}
+	 	 <if test="permissionType != null and permissionType !='' and (permissionRoleType==null or permissionRoleType=='')">
+			 	 and permission_type = #{permissionType,jdbcType=BIGINT} and permission_id = #{permissionId,jdbcType=BIGINT}
 	 	 </if> 
+	 	 <if test="(permissionType == null or permissionType =='') and (permissionRoleType=!null and permissionRoleType!='')">
+			 	 and permission_type = #{permissionRoleType,jdbcType=BIGINT} and permission_id = #{permissionRoleId,jdbcType=BIGINT}
+	 	 </if> 
+	 	 
+	 	 <if test="permissionType != null and permissionType !='' and dataType!=null and dataType!=''">
+			 	and data_id not in(select data_id from tb_data_permission where (category_id = #{categoryId,jdbcType=BIGINT} and data_type = #{dataType,jdbcType=VARCHAR} and permission_id = #{permissionId,jdbcType=BIGINT} and permission_type ='2'))
+	 	 </if>
+	 	 
+	 	 <if test=" 1==0 and permissionType != null and permissionType !='' and (dataType==null or dataType=='')">
+			 	and data_id not in(select data_id from tb_data_permission where (category_id = #{categoryId,jdbcType=BIGINT}  and permission_id = #{permissionId,jdbcType=BIGINT} and permission_type ='2'))
+	 	 </if>
+	 	 
+	 	 <if test="(permissionType == null or permissionType =='')">
+			 	and permission_type !='2'
+	 	 </if>
+	 	 
+	 	 
+	 	 
 	 	 <if test="extData1 != null and extData1 !=''">
 			 	and ext_data1 = #{extData1,jdbcType=VARCHAR}
 	 	 </if> 

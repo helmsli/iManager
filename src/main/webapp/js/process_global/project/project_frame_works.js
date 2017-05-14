@@ -433,8 +433,6 @@ function initProjectInfo()
 
 	
 	 var oldObject=(scope.data5).responseInfo.project;
-	 console.log(oldObject);
-	
 	 var newObject={};
 	 prepaireCondition={};
 	 for(var i in data1){
@@ -454,7 +452,6 @@ function initProjectInfo()
 	 console.log("比较一下");
 	 console.log(compareNewData);
 	 console.log(compareOldData);
-	 //时间做个特殊处理，因为后台会加上时分秒
 	 for(var i in compareNewData){
 		 if(i=="completeTime"||i=="startTime"){
 			 compareNewData[i]=compareNewData[i].split(" ")[0];
@@ -464,7 +461,6 @@ function initProjectInfo()
 		 if(compareNewData[i]!=compareOldData[i]){
 			 $("[data-datename='"+i+"']").addClass("red");
 		 }
-		 
 	 }
 	 data1=processData(data1,data2);
 	 scope.project=processData(data1,data3);

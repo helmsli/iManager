@@ -43,6 +43,15 @@ App.controller('myDataController', ['$scope', function($scope) {
 	    console.log(obj);
 	    getDepartmentReleaseDataForShenBaoList(projectName,obj);
 	}
+	$scope.initDepartmentOptimize=function(pageNum){
+		var myParm=parseQueryString();//所有的参数
+        var projectName=myParm.projectName; 
+	    var obj=null;
+	    obj = getMyProjectOptions(projectName,pageNum);
+	    console.log("任务");
+	    console.log(obj);
+	    getDepartmentReleaseDataForShenBaoList("optimize",obj);
+	}
 	
 	
 	/*
@@ -80,7 +89,20 @@ App.controller('myDataController', ['$scope', function($scope) {
 		location.href=url;
 	}
 	
+	/*
+	 * 申报经理发布的项目
+	 */
+	$scope.hrefProjectOptimize = function(publishId,complete)
+	{
+		var url="";
+		var parm=parseQueryString();
+		var projectName =parm.projectName||""; 
+		
+		url="projectOptimize.html?projectName="+projectName+"&publishId="+publishId+"&from="+from;
+		
+	   //url="departmentRelease_detail.html?projectName="+projectName+"&publishId="+publishId+"&from="+from;
+		
+		location.href=url;
+	}
+	
 }]);
-
-
-

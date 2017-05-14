@@ -4,10 +4,8 @@ function downloadProject()
 	var obj={	   
 			"request.projectId":scope.gloablParm.projectId
 	};
-	console.log(obj);
 	downloadFile(obj,function(data){
 		if(data.result == 0){
-			console.log(data);
 			var uploadResult = data.responseInfo;
 			location.href=getBasePath() + "/projectAnnex/fileDownLoad?annexName=" + uploadResult.path;
 		}

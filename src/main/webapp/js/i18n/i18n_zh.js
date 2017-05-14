@@ -35,10 +35,10 @@ var i18n={
 				projectId:"项目编号",
 				budget:"项目预算金额",
 				projectName:"项目名称",
-				projectManagerName:"项目经理",
-				leaderDepartment:"项目经理所在部门",
-				evaluateManager:"对项目经理的评价",//对项目经理的评价
-				proposalManager:"对项目经理的建议",//对项目经理建议
+				projectManagerName:"项目负责人",
+				leaderDepartment:"项目负责人所在部门",
+				evaluateManager:"对项目负责人的评价",//对项目经理的评价
+				proposalManager:"对项目负责人的建议",//对项目经理建议
 				finishVerdict:"结论",//结论
 				submitUser:"调查人",//调查人
 				submitTime:"提交时间"//提交时间

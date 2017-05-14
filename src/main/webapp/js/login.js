@@ -1,5 +1,6 @@
 $(function(){
 	$("#user_code").on("focus",function(){
+		 
 		 $("#myTest").html('');
 		 $("#user_error").html('');
 	});
@@ -111,7 +112,6 @@ App.controller('loginCtrl',["$scope",function($scope){
 							document.getElementById("pass_error").innerHTML=errInfo;	
 						}
 						$scope.toggleLoginIcon("hide");
-						console.log(data);
 					}
 				},function(e){//error callback
 					$scope.toggleLoginIcon("hide");

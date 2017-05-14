@@ -4,12 +4,12 @@
 		<thead>
 			<tr>
 				<th width="5%" data-columnName="index">序号</th>
-				<th width="15%" data-columnName="date">时间</th>
+				<th width="15%" data-columnName="date">活动时间</th>
 				<th width="20%" class="align-center" data-columnName="title">活动名称</th>
 				<th width="20%" class="align-center" data-columnName="content">活动内容</th>
 				<th width="20%" class="align-center" data-columnName="produce">产出</th>
-				<th width="10%" data-columnName="reviewTimes">评审次数</th>
-				<th width="10%" data-columnName="codeTimes">代码走读次数</th>
+				<th width="10%" data-columnName="reviewTimes">直接受益人数</th>
+				<th width="10%" data-columnName="codeTimes">间接受益人数</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -20,8 +20,8 @@
 				<td class="pre-wrap" data-columnName="title" onblur="checkThisVal(this);" needblur="false" contentEditable="true" ng-bind="data.title"></td>
 				<td class="pre-wrap" data-columnName="content" onblur="checkThisVal(this);" needblur="false" contentEditable="true" ng-bind="data.content"></td>
 				<td class="pre-wrap" data-columnName="produce" onblur="checkThisVal(this);" needblur="false" contentEditable="true" ng-bind="data.produce"></td>
-				<td class="pre-wrap"  data-columnName="reviewTimes" onblur="checkThisVal(this);" needblur="false" contentEditable="true" ng-bind="data.reviewTimes"></td>
-				<td class="pre-wrap"  data-columnName="codeTimes"  onblur="checkThisVal(this);" needblur="false" contentEditable="true" ng-bind="data.codeTimes"></td>
+				<td class="pre-wrap" data-columnName="reviewTimes" onblur="checkThisVal(this);" needblur="false" contentEditable="true" ng-bind="data.reviewTimes"></td>
+				<td class="pre-wrap" data-columnName="codeTimes"  onblur="checkThisVal(this);" needblur="false" contentEditable="true" ng-bind="data.codeTimes"></td>
 			</tr>
 		</tbody>
 	</table>
@@ -57,6 +57,3 @@
 	<!-- / .table -->
 </div>
 <!-- / .table-responsive -->
-<script type="text/javascript">
-
-</script>

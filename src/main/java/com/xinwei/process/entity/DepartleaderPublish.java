@@ -15,6 +15,21 @@ public class DepartleaderPublish {
 	public static final String DISPATCH_PROJECTMANAGER = "0";//指定项目经理申报；
 	public static final String DISPATCH_THREELEADER = "1";//指定三级部门经理申报
 	
+	public static final String DATA10_DINGXIANG = "1";
+	public static final String DATA10_SHENQING = "0";
+	
+	
+	public static final String DATA9_QUERY_KEY="data9_queryKey";
+	public static final String DATA9_ALLOW_APPLICATION = "application";
+	public static final String DATA9_NEED_optimize = "optimize";
+	
+	
+	
+	public static final String Service_type_DINGXIANG = "定向项目";
+	
+	
+	
+	
     private Long publishId;//发布ID
 
     private String title;//发布名称
@@ -43,11 +58,22 @@ public class DepartleaderPublish {
  
     private String data7;//扩展数据区7
 
+    /*
+     * 保存定向项目优化后的信息，包括谁优化的，优化的附件信息以及优化时间
+     */
     private String data8;//扩展数据区8
 
-    private String data9;//扩展数据区9
+    //是否允许申报
+    /**
+     * 0--允许申请
+     * 1--不允许申请，允许优化
+     */
+    private String data9=DATA9_ALLOW_APPLICATION;//扩展数据区9
 
-    private String data10;//扩展数据区10
+    /*
+     * 0--申请  1--定向
+     */
+    private String data10=DATA10_SHENQING;//扩展数据区10
  
     public Long getPublishId() {
 		return publishId;
@@ -59,6 +85,35 @@ public class DepartleaderPublish {
 	}
 
 
+	/**
+	 * 确定是定向项目还是申请项目。
+	 */
+	public void setData10()
+	{
+		if(Service_type_DINGXIANG.equalsIgnoreCase(this.serviceType))
+		{
+			this.setData10(this.DATA10_DINGXIANG);
+		}
+		else
+		{
+			this.setData10(this.DATA10_SHENQING);
+		}
+			
+	}
+	
+	public boolean isDingxiang()
+	{
+		boolean isDingxiang = Service_type_DINGXIANG.equalsIgnoreCase(this.serviceType);
+		if(isDingxiang)
+		{
+			return true;
+		}
+		else
+		{
+			isDingxiang = DATA10_DINGXIANG.equalsIgnoreCase(this.getData10());
+		}
+		return isDingxiang;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -197,22 +252,32 @@ public class DepartleaderPublish {
 		this.data8 = data8;
 	}
 
-
+	/**
+     * 0--允许申请
+     * 1--不允许申请，允许优化
+     */
 	public String getData9() {
 		return data9;
 	}
 
-
+	/**
+     * 0--允许申请
+     * 1--不允许申请，允许优化
+     */
 	public void setData9(String data9) {
 		this.data9 = data9;
 	}
 
-
+	/*
+     * 0--申请  1--定向
+     */
 	public String getData10() {
 		return data10;
 	}
 
-
+	/*
+     * 0--申请  1--定向
+     */
 	public void setData10(String data10) {
 		this.data10 = data10;
 	}

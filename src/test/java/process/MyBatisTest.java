@@ -1,9 +1,19 @@
 package process;
 
+import java.util.List;
+
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.xinwei.process.entity.AnnexType;
+import com.xinwei.process.service.AnnexTypeService;
+import com.xinwei.util.spring.SpringFactory;
+
 public class MyBatisTest extends TestCase {
-	/*private AnnexTypeService annexTypeService;
+	private AnnexTypeService annexTypeService;
 
 	public void before() {
 		// 使用"spring.xml"和"spring-mybatis.xml"这两个配置文件创建Spring上下文
@@ -71,5 +81,5 @@ public class MyBatisTest extends TestCase {
 				.getBean("annexTypeServiceImpl");
 
 		annexTypeService.delete(2000L);
-	}*/
+	}
 }

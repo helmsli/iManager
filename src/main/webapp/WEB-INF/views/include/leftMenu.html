@@ -3,7 +3,7 @@
     <div class="sidebar-nav" ng-init="initLeft();">
         <ul class="nav" id="side-menu"  >
         	<li ng-repeat = "menu in menuList"   
-        	    ng-show="!headerTypeShow||(headerTypeShow&&menu.expand)">
+        	    ng-show="!headerTypeShow||headerTypeShow&&menu.expand">
         	    <!-- 没有子菜单的情况 -->
         	    <a  ng-if="menu.children.length==0" 
         	        ng-href="{{server_url}}{{menu.action}}" 

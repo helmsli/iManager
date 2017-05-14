@@ -63,7 +63,6 @@ public class ProjectAnnexServiceImpl implements ProjectAnnexService {
 		// TODO Auto-generated method stub
 		return dao.updateProjectIdAndTypeId(projectId, typeId, annexId);
 	}
-
 	@Override
 	public ProjectAnnex selectByAnnexName(String annexName) {
 		return dao.selectByAnnexName(annexName);

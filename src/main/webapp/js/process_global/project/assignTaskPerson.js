@@ -35,7 +35,7 @@ App.controller('myDataController', ['$scope', '$ocLazyLoad', function($scope) {
 					//var roleId=roles[0];
 					$scope.addChecked(dataList[i].id,dataList[i].firstname);
 					//console.log("hahahhahah");
-					console.log(dataList[i].firstname);
+					//console.log(dataList[i].firstname);
 				}
 			}
 		}else{
@@ -156,6 +156,7 @@ App.controller('myDataController', ['$scope', '$ocLazyLoad', function($scope) {
 				$("#che_2").prop("checked",false);
 				$scope.showFlag=true;
 			}
+			
 			//已数据为准
 			/*if(hasId)
 			{
@@ -192,10 +193,17 @@ App.controller('myDataController', ['$scope', '$ocLazyLoad', function($scope) {
 	{
 		var parentScope=getAngularScope("projectManagerModel");
 		$('#selectedModal').modal('hide');
+		
 		var checkedList=$scope.arrList;
 		parentScope.project.assignPersonText="";
+		parentScope.threeLeaderIdLsit=[];
 		for(var i =0; i<checkedList.length ;i++)
 		{
+			//console.log("checkedList");
+			//console.log(checkedList);
+			//var roleId=checkedList[i].id;
+			//console.log("roleId")
+			//console.log(roleId);
 			var id=checkedList[i].id;
 			var obj={roleType:1,privilege:0,id:id};
 			if($scope.deletFlag==false){
@@ -203,11 +211,20 @@ App.controller('myDataController', ['$scope', '$ocLazyLoad', function($scope) {
 				$scope.deletFlag=true;
 			}
 			obj.name = checkedList[i].firstname;
+			//console.log(obj);
 			parentScope.threeLeaderIdLsit.push(obj);
 			//发送送给后台的指定三级部门经理
 			parentScope.project.assignPersonText +=checkedList[i].firstname+",";
 			
 		}
+      
+		
+		if($.isFunction(parentScope.confirmSelectAssignCallback))
+		{
+			parentScope.confirmSelectAssignCallback();
+		}
+		//console.log("测试threeLeaderIdLsit");
+		//console.log(JSON.stringify(parentScope.threeLeaderIdLsit));
 	}
 	
 	/**

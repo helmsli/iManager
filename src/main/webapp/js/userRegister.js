@@ -32,10 +32,10 @@ companyVaildOptions=[{
 						"validateRule":{"require":true}
 					},{
 						"id":"certificateType",
-						"validateRule":{"require":true}
+						"validateRule":{"require":true,"require":true}
 					},{
 						"id":"certificateId",
-						"validateRule":{"require":true,"isNumber":true}
+						"validateRule":{"require":true,"require":true}
 					},{
 						"id":"connectMan",
 						"validateRule":{"require":true}
@@ -116,7 +116,8 @@ function formateBeforSubmit(userInfo){
 function saveUserByServer(userInfo,subFlag,callBack){
 	var userInfo = formateBeforSubmit(userInfo);
 	var obj = {
-			     "request.company_name":$('#companyslist').val(),
+			     //"request.company_name":$('#companyslist').val(),
+			     "request.company_name":userInfo.company,
 				 "request.username":userInfo.username,
 				 "request.firstname":userInfo.firstname,
 				 "request.lastname":userInfo.lastname, 
@@ -127,6 +128,19 @@ function saveUserByServer(userInfo,subFlag,callBack){
 				 "request.cardtype":userInfo.cardtype,
 				 "request.cardno":userInfo.cardno,
 	};
+	var companyInfo = {};
+	companyInfo.companyName = userInfo.company;
+	var companyExist=isCompanyExist(companyInfo);
+	console.log(companyInfo.companyName);
+	//alert(companyExist);
+	//不存在
+	if(companyExist)
+	{
+		swal("单位不存在,请添加单位！");	
+		return;
+	}
+	
+	
 	if($("#datetimepicker_input").val()!=''){//生日不为空的时候才传送
 		obj["request.birthday"] = str2date($("#datetimepicker_input").val());
 	}
@@ -175,6 +189,7 @@ function addSectorByServer(companyInfo,companys,flag){
 					generateCompanyOptions(scope.companysList);
 					swal("保存成功", "", "success");
 					createCompanyFlag = true;
+					scope.userInfo.company=scope.companyInfo.companyName;
 				}else{
 					swal(getErrMsg(data.result));
 				}	
@@ -182,6 +197,7 @@ function addSectorByServer(companyInfo,companys,flag){
 				swal("保存失败");
 			});
 		}else{
+			scope.userInfo.company=scope.companyInfo.companyName;
 			$('#addCompanyModal').modal('hide');
 			swal("单位已存在！");
 		}

@@ -8,7 +8,7 @@ var APP_ContainAttach=
 };
 
 var setPerson={
-	"dispatcherMasterApproval":["指定决策委员会","所有的决策委员会"]
+	"dispatcherMasterApproval":["指定第三方评估","所有的决策委员会"]
 }	
 
 /**
@@ -184,7 +184,7 @@ var SCRIPTFile={
 	    "resultOfDepartApprovalNotPass":"评审通过",
 	    "resultOfDepartApprovalNeedModify":"修改评审材料",
 	    "officerApproval":"管理员审批",
-	    "committeeApprovalChange":"决策委员会审批变更",
-	    "departleaderApprovalChange":"部门经理审批变更"
+	    "committeeApprovalChange":"第三方机构审批变更",
+	    "departleaderApprovalChange":"政府审批变更"
 	    
 	};

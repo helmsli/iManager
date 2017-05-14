@@ -1,8 +1,17 @@
 package process;
 
+import java.util.List;
+
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.repository.Deployment;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import com.xinwei.util.spring.SpringFactory;
+
 public class ProcessTest {
 
-	/*private static RepositoryService repositoryService;
+	private static RepositoryService repositoryService;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -23,6 +32,6 @@ public class ProcessTest {
 		for(Deployment deployment: deployments){
 			repositoryService.deleteDeployment(deployment.getId(), true);
 		}
-	}*/
+	}
 
 }

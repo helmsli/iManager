@@ -12,7 +12,7 @@ public interface ProjectAnnexMapper {
     int insert(ProjectAnnex record);
 
     ProjectAnnex selectByPrimaryKey(Long annexId);
- 
+
     List<ProjectAnnex> selectAll();
 
     int updateByPrimaryKey(ProjectAnnex record);
@@ -44,5 +44,4 @@ public interface ProjectAnnexMapper {
      * @return
      */
     int updateProjectIdAndTypeId(@Param("projectId")Long projectId, @Param("typeId")Long typeId,@Param("annexId")Long annexId);
-
 }

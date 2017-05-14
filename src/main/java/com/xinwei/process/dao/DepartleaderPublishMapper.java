@@ -19,6 +19,14 @@ public interface DepartleaderPublishMapper {
     int updateByPrimaryKey(DepartleaderPublish record);
     
     /**
+     * 更新优化信息
+     * @param record
+     * @return
+     */
+    int updateOptimize(DepartleaderPublish record);
+    
+    
+    /**
      * 统计所有发布
      * @return
      */
@@ -108,6 +116,10 @@ public interface DepartleaderPublishMapper {
 	 * @param dataIdList
 	 * @return
 	 */
-	List<DepartleaderPublish> selectByIdList(@Param("idList")List<Long> idList);
+	List<DepartleaderPublish> selectByIdList(@Param("idList")List<Long> idList,@Param("data9")String data9);
+
+	
+	
+	
 
 }

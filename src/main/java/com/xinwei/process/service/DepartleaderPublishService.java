@@ -14,6 +14,12 @@ public interface DepartleaderPublishService {
 	Long save(DepartleaderPublish departleaderPublish);
 	
 	/**
+	 * 保存
+	 */
+	Long saveOptimize(DepartleaderPublish departleaderPublish);
+	
+	
+	/**
 	 * 根据Id获取发布对象
 	 * @param departleaderPublishId 
 	 * @return

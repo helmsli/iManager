@@ -155,6 +155,12 @@ public class ProjectController extends BaseController {
 			queryMap.put("permissionId", userId.toString());
 			// 从数据权限表中删除该条记录
 			dataPermissionServiceImpl.deleteByConditions(queryMap);
+			
+			//设置该用户不能申请
+			DataPermission notAllowApplication = new DataPermission();
+			notAllowApplication.setDataCanNotApplyForUser(publish.getCategoryId(), DataPermission.DATATYPE_PUBLISH, publish.getPublishId().toString(), userId.toString());
+			dataPermissionServiceImpl.save(notAllowApplication);
+			
 		}
 		// 保存项目
 		Long projectId = projectService.save(project);

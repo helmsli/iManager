@@ -260,7 +260,6 @@ public class ProjectServiceImpl implements ProjectService {
 				lotteryProjects = projectDao.selectAllByCategoryIdAndState(3L,
 						state);
 			}
-						
 		}
 		runningMap.put("coolMarsProjects", coolMarsProjects);
 		runningMap.put("camTalkProjects", camTalkProjects);
@@ -820,38 +819,48 @@ public class ProjectServiceImpl implements ProjectService {
 		// 项目需要的准备条件
 		String cpu = detail.get("CPU").toString();
 		if (StringUtils.isNotBlank(cpu)) {
-			templateProject.addCPU(cpu);
+			//templateProject.addCPU(cpu);
+			templateProject.addProjectCondition("承接单位性质",cpu);
 		} else {
-			templateProject.addCPU("");
+			templateProject.addProjectCondition("承接单位性质","");
 		}
 		// 内存
 		String memory = detail.get("memory").toString();
 		if (StringUtils.isNotBlank(memory)) {
-			templateProject.addMemory(memory);
+			//templateProject.addMemory(memory);
+			
+			templateProject.addProjectCondition("业务范围",memory);
 		} else {
-			templateProject.addMemory("");
+			templateProject.addProjectCondition("业务范围","");
 		}
 		// 带宽
 		String bandWidth = detail.get("bandWidth").toString();
 		if (StringUtils.isNotBlank(bandWidth)) {
-			templateProject.addBandwidth(bandWidth);
+			//templateProject.addBandwidth(bandWidth);
+			
+			templateProject.addProjectCondition("成立年限",bandWidth);
+			
 		} else {
-			templateProject.addBandwidth("");
+			templateProject.addProjectCondition("成立年限","");
 		}
 		// 服务器数量
 		String serverNumber = detail.get("serversNumber").toString();
 		if (StringUtils.isNotBlank(serverNumber)) {
-			templateProject.addServerNumber(serverNumber);
+			//templateProject.addServerNumber(serverNumber);
+			templateProject.addProjectCondition("场地条件",serverNumber);
+			
 		} else {
-			templateProject.addServerNumber("");
+			templateProject.addProjectCondition("场地条件","");
 		}
 
 		// 升级需要的时间
 		String upgradeTime = detail.get("UpgradeTime").toString();
 		if (StringUtils.isNotBlank(upgradeTime)) {
-			templateProject.addUpgradeTime(upgradeTime);
+			//templateProject.addUpgradeTime(upgradeTime);
+			templateProject.addProjectCondition("项目执行团队条件(对项目团队构成的要求可选填）",upgradeTime);
 		} else {
-			templateProject.addBandwidth("");
+			templateProject.addProjectCondition("项目执行团队条件(对项目团队构成的要求可选填）","");
+			
 		}
 		// 其它条件
 		String otherConditions = detail.get("otherConditions").toString();

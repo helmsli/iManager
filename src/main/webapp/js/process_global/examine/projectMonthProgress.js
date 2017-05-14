@@ -29,14 +29,15 @@ App.controller('initQuestionData', function($scope) {
 			improvementPlan:"",//改进计划
 	};
 	$scope.projectLable={
-			specialExplain:"特殊情况说明：",
+			specialExplain:"社会效果:",
 			innovation:"创新点和亮点：",
 			changeConditions:"项目变更情况：（如无变更填“无”）",
-			riskDescription:"风险说明：",
+			riskDescription:"媒体报道情况：",
 			summary:"经验总结、工作反思及遇到的困难或问题：",
 			improvementPlan:"改进计划：",
 	};
 	$scope.projectInfo.totalScoreVal=100;
+	
 	/**
 	 * 页面加载初始化
 	 * **/
@@ -158,6 +159,7 @@ function setQuestionUi(data)
 	scopeParent.$apply(function () {
 	     scopeParent.questionList=data.data.pages;
 	      });
+	
 
 	
 	
@@ -237,7 +239,7 @@ function digitInputInt(el, e) {
         }  
     }  
     return true;
-}  
+} 
 
 /**
  *静态表格事件BLUR绑定并监听输入内容
@@ -353,6 +355,12 @@ function digitInputInt(el, e) {
     }  
     return true;
 }  
+
+
+
+
+
+
 
 
 

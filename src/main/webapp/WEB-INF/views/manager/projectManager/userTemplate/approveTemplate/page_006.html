@@ -1,0 +1,70 @@
+<meta charset="UTF-8">
+<div class="table-responsive"  ng-init="initQuestionTable()">
+	<h2 class="panel-inside-title font-bold m-t-0">项目基本信息</h2>
+	<table class="table table-bordered m-b-0">
+		<tbody class="dataList" id="projectInfoTable">
+			<tr>
+				<td data-columnName="" width="10%">{{projectLable.projectId}}</td>
+				<td>{{projectInfo.projectId}}</td>
+				<td data-columnName="" width="10%">{{projectLable.budget}}</td>
+				<td >{{projectInfo.budget}}</td>
+			</tr>
+			<tr>
+				<td width="10%">{{projectLable.projectName}}</td>
+				<td colspan="3" data-columnName="projectName" >{{projectInfo.projectName}}</td>
+			</tr>
+			<tr>
+				<td data-columnName="">{{projectLable.projectManagerName}}</td>
+				<td colspan="3" data-columnName="projectManagerName" >{{projectInfo.projectManagerName}}</td>
+			</tr>
+			<tr>
+				<td data-columnName="">{{projectLable.leaderDepartment}}</td>
+				<td colspan="3" data-columnName="leaderDepartment" >{{projectInfo.leaderDepartment}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<h2 class="panel-inside-title font-bold m-t-0">调查情况得分</h2>
+	<table class="table table-bordered m-b-0" id="questionTemplateC">
+		<thead>
+			<tr>
+				<th data-columnName="index">序号</th>
+				<th data-columnName="title">内容</th>
+				<th class="align-center" data-columnName="score" data-columnType="edit" >得分</th>
+				<th data-columnName="remark" data-columnType="edit">备注</th>
+			</tr>
+		</thead>
+		<tbody class="dataList">
+			<!--tbody的class名不能为‘show’,否则表格不能自动撑开-->
+			<tr ng-repeat="data in questionList" data-id="{{$index}}">
+				<td width="5%" class="align-center">{{$index+1}}</td>
+				<td width="45%">{{data.title}}</td>
+				<td width="10%" class="pre-wrap align-center" data-columnName="answer" onblur="checkThisVal(this);"  contentEditable="true">{{data.answer}}</td>
+				<td class="pre-wrap" data-columnName="content"  onblur="checkThisVal(this);" contentEditable="true" >{{data.content}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<table class="table table-bordered m-t--1" ng-init="initQuestion2()" id="tableProjectInfo">
+		<tbody class="dataList" >
+			<tr>
+				<td data-columnName="">{{projectLable.evaluateManager}}</td>
+				<td class="tHeight pre-wrap" colspan="3" data-columnName="evaluateManager" contentEditable="true">{{projectInfo.evaluateManager}}</td>
+			</tr>
+			<tr>
+				<td data-columnName="">{{projectLable.proposalManager}}</td>
+				<td class="tHeight pre-wrap" colspan="3" data-columnName="proposalManager" contentEditable="true">{{projectInfo.proposalManager}}</td>
+			</tr>
+			<tr>
+				<td data-columnName="">{{projectLable.finishVerdict}}</td>
+				<td class="tHeight pre-wrap" colspan="3" data-columnName="finishVerdict" contentEditable="true">{{projectInfo.finishVerdict}}</td>
+			</tr>
+			<tr>
+				<td width="10%" data-columnName="">{{projectLable.submitUser}}</td>
+				<td width="40%" class="pre-wrap" data-columnName="submitUser" contentEditable="true">{{projectInfo.submitUser}}</td>
+				<td width="10%"data-columnName="">{{projectLable.submitTime}}</td>
+				<td data-columnName="submitTime" dataType="datetimepicker" data-editableType="datetimepicker" id="submitTime">{{projectInfo.submitTime}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<!-- / .table -->
+</div>
+<!-- / .table-responsive -->
