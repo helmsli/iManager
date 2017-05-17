@@ -36,6 +36,7 @@
 			.pre-wrap .innMinht{min-height:94px;margin-top:-8px;margin-right:-8px;margin-bottom:-8px;margin-left:-8px;padding:8px;}
 			.abs.tip{top:8px;}
 			.form-control-label label{margin-right:4px;}
+			.table .file-group .btn{padding:5px 12px;}
 		</style>
 	</head>
 	<body ng-controller="app">
@@ -47,11 +48,14 @@
 			<div class="menus" ng-include="'../include/leftMenu.html'"></div>
 			<div id="page-wrapper" ng-controller="reportExportCtrl">
 				<div class="panel">
+					<div class="panel-heading">
+						<h2 class="panel-title">变更项目申请</h2>
+					</div>
 					<div class="panel-body">
 						<form method="post" id="myForm" class="form-inline definewidth m20">
 							<input type="hidden" name="id" value="" />
 							<div class="form-step show">
-								<ul id="stepLi">
+								<ul id="stepLi" style="display:none;">
 									<li class="current" ng-click="chooseTypeStep(0)">项目基本情况</li>
 									<li ng-click="chooseTypeStep(1)">项目预算</li>
 									<li ng-click="chooseTypeStep(2)">项目需要的准备条件</li>
@@ -59,7 +63,7 @@
 							</div>
 							<!-- / .export-step -->
 							<div id="stepTemplate" ng-controller="EditData"  data-ng-init="initTemplate()">
-								<div class="row clearfix export export-type show" ng-include="'../include/projectTemp/createTemplate/'+templateName+'/applyBase.html'"></div>
+								<div class="row clearfix export export-type show" style="padding-top:0;" ng-include="'../include/projectTemp/createTemplate/'+templateName+'/applyBase.html'"></div>
 								<!-- <div class="row clearfix export export-type show" ng-include="'../manager/projectManager/bossRequest/createTemplate/createBase.html'"></div> -->
 								<!-- / .export-stype -->
 								<div class="row clearfix export export-template hide" ng-include="'../include/projectTemp/createTemplate/'+templateName+'/applyBudget.html'"></div>

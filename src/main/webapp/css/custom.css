@@ -2156,6 +2156,12 @@ form p:last-child {
 	margin: 0;
     padding: 0;
 }
+.checkbox-inline+.checkbox-inline,
+.radio-inline+.radio-inline {
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 10px;
+}
 
 .checkbox-inline label, 
 .radio-inline label {
@@ -4249,7 +4255,7 @@ table .select-group {
 	max-height: 18px;
 }
 
-@media (min-width:769px){
+/* @media (min-width:767px){
 	.table-responsive>.table>tbody>tr>td, 
 	.table-responsive>.table>tbody>tr>th, 
 	.table-responsive>.table>tfoot>tr>td, 
@@ -4258,7 +4264,7 @@ table .select-group {
 	.table-responsive>.table>thead>tr>th {
 		white-space: nowrap;
 	}
-}
+} */
 
 
 /* Tooltip & Popovers ========================== */
@@ -7732,10 +7738,12 @@ table .select-group {
 		display: block;
 	}
 
-	.navbar-brand {
+	.navbar-brand.manager-navbar {
+		padding-left: 10px;
 		width: auto;
 		text-indent: 0px;
 		background: none!important;
+		font-weight: normal;
 	}
 
 	.navbar-nav {

@@ -170,13 +170,16 @@ function addSectorByServer(companyInfo,companys,flag){
 			"request.companyProperty":companyInfo.companyProperty,
 			"request.certificateType":companyInfo.certificateType,
 			"request.certificateId":companyInfo.certificateId,
-			"request.registerAddress":"",
+			"request.registerAddress":companyInfo.registerAddress,
 			"request.businessAddress":"",
 			"request.linkMan":companyInfo.connectMan,
 			"request.linkTel":companyInfo.connectTel,
 			"request.email":companyInfo.conectMail,
-			"request.createPerson":companyInfo.creatMan
+			"request.createPerson":companyInfo.creatMan,
+			"request.currentStatus":"1"
 		};
+	//alert(JSON.stringify(obj));
+	
 	var createCompanyFlag=false;
 	if(flag){
 		var companyExist=isCompanyExist(companyInfo);

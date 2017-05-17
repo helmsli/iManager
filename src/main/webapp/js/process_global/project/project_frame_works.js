@@ -353,12 +353,14 @@ function initProjectInfo()
 			"request.projectId":parm.projectId
 		};
 	if(parm.bg==1){
+		console.log("********************");
 		getBgBaseInformation(obj,function(data){
 			if(data.result == 0){
 				setUIBgData(data);
 			}
 		});
 	}else{
+		console.log("########################");
 		//从后台取到数据，显示在前台as
 		getBaseInformation(obj,function(data){
 			if(data.result == 0){
@@ -498,6 +500,9 @@ function setUIData(data)
 {
 	var scope=getAngularScope("projectModel");
 	var responseInfoData=data.responseInfo;
+	scope.newApplyAttachment=JSON.parse(responseInfoData.project.projectExtInfo).newApplyAttachment;
+	scope.newApplyAttachmentShow=true;
+	console.log(scope.newApplyAttachment);
 	var project=responseInfoData.project;
 	var projectExtInfo=JSON.parse(project.projectExtInfo);
 	var projectInfo=project;
@@ -506,7 +511,7 @@ function setUIData(data)
 		project.CycleType=JSON.parse(project.cycleType)[0].value;
 		project.subcategory=JSON.parse(project.subcategory)[0].value;
 	}catch(e){
-		log(e+"initData:"+e.messageInfo);
+		console.log(e+"initData:"+e.messageInfo);
 	}
 	
 	scope.project=project;

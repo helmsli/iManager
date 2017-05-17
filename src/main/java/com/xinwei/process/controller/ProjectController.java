@@ -1,14 +1,21 @@
 package com.xinwei.process.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.runtime.ProcessInstance;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +27,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.doc.WordUtil;
+import com.google.gson.Gson;
+import com.xinwei.doc.DocReader;
+import com.xinwei.doc.vo.Contact;
+import com.xinwei.doc.vo.ProjectInfo;
 import com.xinwei.process.constant.ProjectConstants;
 import com.xinwei.process.entity.CommonBiz;
 import com.xinwei.process.entity.DataInfo;
@@ -28,6 +39,7 @@ import com.xinwei.process.entity.DepartleaderPublish;
 import com.xinwei.process.entity.Project;
 import com.xinwei.process.entity.ProjectAnnex;
 import com.xinwei.process.entity.ProjectDetailInfo;
+import com.xinwei.process.entity.ProjectExtInfo;
 import com.xinwei.process.entity.ProjectMaterial;
 import com.xinwei.process.entity.StateInfo;
 import com.xinwei.process.service.CommonBizService;
@@ -71,6 +83,10 @@ public class ProjectController extends BaseController {
 	private DataPermissionService dataPermissionServiceImpl;//数据权限服务
 	@Resource
 	private XwSysSeqService xwSysSeqService;
+	
+	@Value("${uploadPath}")
+	private String uploadPath;
+	
 	//从配置文件中读取流程中预设的人员
 	@Value("${roleId_CooMartsOfficer}")
 	private String roleId_CooMartsOfficer;// CoolMarts管理员组ID
@@ -94,39 +110,228 @@ public class ProjectController extends BaseController {
 	 */
 	@RequestMapping(value = "/create", method = { RequestMethod.GET,
 			RequestMethod.POST })
-	public @ResponseBody String create(Project project) {
-		logger.debug("CreateProject start..."+ project.toString());
+	public @ResponseBody String create(HttpServletRequest request, HttpServletResponse response,Project project) {
+		logger.debug("CreateProject start...1"+ project.toString());
 		ResultVO<Object> result = new ResultVO<>();
 		// 获取当前登录用户信息
-		User currentUser = getCurrentUser();
-		// 判断如果用户不为空
-		if (null != currentUser) {
-			// 如果为新申请项目
-			if (null == project.getProjectId()) {
-				// 创建项目申请
-				Long projectId = createNewProject(project, currentUser);
-				// 给客户端响应
-				result.setOthers("projectId", projectId);
-				logger.debug("CreateProject-->projectId: " + projectId);
+		try {
+			User currentUser = getCurrentUser();
+			//用來保存上傳文件路徑
+			String path = request.getSession().getServletContext().getRealPath(uploadPath);   
+			project.setProjectMilestone(path);
+			
+			// 判断如果用户不为空
+			if (null != currentUser) {
+				// 如果为新申请项目
+				if (null == project.getProjectId()) {
+					// 创建项目申请
+					
+					Long projectId = createNewProject(project, currentUser);
+					// 给客户端响应
+					if(projectId<0)
+					{
+						result.setResult(projectId.toString());
+					}
+					result.setOthers("projectId", projectId);
+					logger.debug("CreateProject-->projectId: " + projectId);
+					
+				} else {
+					// 修改后保存
+					logger.debug("UpdateProject --> projectId: "
+							+ project.getProjectId());
+					// 进行修改
+					modifyProject(project, result, currentUser);
+				}
 			} else {
-				// 修改后保存
-				logger.debug("UpdateProject --> projectId: "
-						+ project.getProjectId());
-				// 进行修改
-				modifyProject(project, result, currentUser);
+				// 给客户端响应
+				result.setResult(ResultVO.FAILURE);
 			}
-		} else {
-			// 给客户端响应
+		} catch (Throwable e) {
+			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 			result.setResult(ResultVO.FAILURE);
 		}
+		logger.debug(result.toString());
 		return result.toString();
 	}
 
+	  public  Date getLastMonthOfDate(Date date) {  
+	        Calendar para = Calendar.getInstance();  
+	        para.setTime(date);  
+	        para.set(Calendar.DATE, para.getActualMaximum(Calendar.DAY_OF_MONTH));  
+	        para.set(Calendar.HOUR_OF_DAY, 23);  
+	        para.set(Calendar.MINUTE, 59);  
+	        para.set(Calendar.SECOND, 59);  
+	        return para.getTime();  
+	    }  
+	  public  int getDay(Date date) {
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.setTime(date);
+	        return calendar.get(Calendar.DATE);
+	    }
+
+	  public  int getDaysOfMonth(int year, int month) {
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.set(year, month - 1, 1);
+	        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+	    }
+	    /**
+	     * 返回日期的月份，1-12,即yyyy-MM-dd中的MM
+	     *
+	     * @param date
+	     * @return
+	     */
+	    public  int getMonth(Date date) {
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.setTime(date);
+	        return calendar.get(Calendar.MONTH) + 1;
+	    }
+
+	  public  int getYear(Date date) {
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.setTime(date);
+	        return calendar.get(Calendar.YEAR);
+	    }
+	  public  int calDiffMonth(Date start,Date end){
+	        int result=0;
+	        try {
+	           
+	            int startYear=getYear(start);
+	            int startMonth=getMonth(start);
+	            int startDay=getDay(start);
+	            int endYear=getYear(end);
+	            int endMonth=getMonth(end);
+	            int endDay=getDay(end);
+	            if (startDay>endDay){ //1月17  大于 2月28
+	                if (endDay==getDaysOfMonth(getYear(new Date()),2)){   //也满足一月
+	                    result=(endYear-startYear)*12+endMonth-startMonth;
+	                }else{
+	                    result=(endYear-startYear)*12+endMonth-startMonth-1;
+	                }
+	            }else{
+	                result=(endYear-startYear)*12+endMonth-startMonth;
+	            }
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+
+	        return result;
+	    }
 	
 	/*
 	 *  创建项目申请
 	 */
 	private Long createNewProject(Project project, User currentUser) {
+		
+		
+		String strInfo = project.getProjectExtInfo();
+		logger.debug("*********************************1");
+		DocReader reader = new DocReader();
+		logger.debug("*********************************2");
+		ProjectExtInfo projectExtInfo = JsonUtil.fromJson(project.getProjectExtInfo(), ProjectExtInfo.class);
+		List<ProjectAnnex> projectAnnexs = projectExtInfo.getNewApplyAttachment();
+		if(projectAnnexs.size()==0)
+		{
+			logger.debug("####################");
+		   return ProjectConstants.PROJECT_ERROR.APPLICATION_ISNULL;	
+		}
+		logger.debug("*********************************3");
+		String srcPath = project.getProjectMilestone() + "/" +projectAnnexs.get(0).getAnnexName();
+		logger.debug("*************");
+		logger.debug(srcPath);
+		try {
+			ProjectInfo projectInfo = reader.readDoc(srcPath);
+			//ProjectInfo projectInfo= doc.testReadByDoc(srcPath,maps);
+			project.setProjectTaskDetail(JsonUtil.toJson(projectInfo));
+			project.setProjectName(projectInfo.getName());
+			projectInfo.getStartDate();
+			logger.debug("startTime:" + projectInfo.getStartDate());
+			logger.debug("endTime:" + projectInfo.getEndDate());
+	        try {
+				String startTimes[]=StringUtils.split(projectInfo.getStartDate(), "-");
+				String endTimes[] = StringUtils.split(projectInfo.getEndDate(), "-");
+				if(startTimes.length!=2||endTimes.length!=2)
+				{
+					 return ProjectConstants.PROJECT_ERROR.ProjectStartTime_ISNULL;
+				}
+				Calendar nowCalendar  = Calendar.getInstance();
+				int year = Integer.parseInt(startTimes[0]);
+				if(year<100)
+				{
+					year = 2000+year;
+				}
+			    
+				nowCalendar.set(Calendar.YEAR, year);
+			    int month = Integer.parseInt(startTimes[1]);
+			    nowCalendar.set(Calendar.MONTH, month-1 );  
+			    
+			    project.setStartTime(nowCalendar.getTime());
+				
+			    
+			    year = Integer.parseInt(endTimes[0]);
+				if(year<100)
+				{
+					year = 2000+year;
+				}
+			    
+				nowCalendar.set(Calendar.YEAR, year);
+			    month = Integer.parseInt(endTimes[1]);
+			    nowCalendar.set(Calendar.MONTH, month-1 );  
+			    
+			    project.setCompleteTime(getLastMonthOfDate(nowCalendar.getTime()));
+				
+			    
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				 return ProjectConstants.PROJECT_ERROR.ProjectStartTime_ISNULL;
+			}
+			
+			if(StringUtils.isEmpty(projectInfo.getName()))
+			{
+				return ProjectConstants.PROJECT_ERROR.ProjectName_ISNULL;
+			}
+			
+			if(StringUtils.isEmpty(projectInfo.getDeclarationUnitType()))
+			{
+				return ProjectConstants.PROJECT_ERROR.ProjectCatetory_ISNULL;
+			}
+			if(StringUtils.isEmpty(projectInfo.getDeclarationUnit()))
+			{
+				return ProjectConstants.PROJECT_ERROR.ProjectCompany_ISNULL;
+			}
+			project.setSubcategory("[{\"value\":\"" + projectInfo.getDeclarationUnitType()+"\",\"id\":\"001\"}]");
+			project.setCycleType("[{\"value\":\"" + calDiffMonth(project.getStartTime(),project.getCompleteTime())+"个月\",\"id\":\"001\"}]");
+			
+			
+			List<Contact> contacts = projectInfo.getContactList();
+			if(contacts.size()<=1)
+			{
+				return ProjectConstants.PROJECT_ERROR.ProjectContacts_ISNULL;
+			}
+			if(StringUtils.isEmpty(contacts.get(0).getMail())||StringUtils.isEmpty(contacts.get(0).getTel())||StringUtils.isEmpty(contacts.get(0).getName()))
+			{
+				return ProjectConstants.PROJECT_ERROR.ProjectContactsTelOrEmail_ISNULL;
+			}
+			if(StringUtils.isEmpty(projectInfo.getServiceField()))
+			{
+				return ProjectConstants.PROJECT_ERROR.ProjectServiceField_ISNULL;
+					
+			}
+			project.setEmail(contacts.get(0).getMail());
+			project.setTelno(contacts.get(0).getTel());			
+			project.setProjectManagerName(contacts.get(0).getName());
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.debug("LLLLLLLLLLLLLLLLLLLLLL");
+			return 0L;
+		}
+		
+		
 		// 生成项目编号
 		Long projectSeqCode = xwSysSeqService.getXwSequence(PROJECT_SEQ, 1)
 				.getStartSequence();
@@ -213,11 +418,14 @@ public class ProjectController extends BaseController {
 	/*
 	 * 修改项目
 	 */
-	private void modifyProject(Project project, ResultVO<Object> result,
+	private Long modifyProject(Project project, ResultVO<Object> result,
 			User currentUser) {
 		// 获取当前项目信息
 		Project oldProject = projectService.selectByPrimaryKey(project
 				.getProjectId());
+		
+		
+		
 		//如果项目信息不为空，且当前用户与项目申报者一致则允许修改
 		if (null != oldProject && currentUser.getId().toString()
 				.equals(oldProject.getProjectApplyPerson())) {
@@ -240,6 +448,113 @@ public class ProjectController extends BaseController {
 			// 设置发布信息
 			project.setPublishId(oldProject.getPublishId());
 			project.setPublishTitle(oldProject.getPublishTitle());
+			//从文件中读取项目信息
+			String strInfo = project.getProjectExtInfo();
+			DocReader reader = new DocReader();
+			ProjectExtInfo projectExtInfo = JsonUtil.fromJson(project.getProjectExtInfo(), ProjectExtInfo.class);
+			
+			
+			List<ProjectAnnex> projectAnnexs = projectExtInfo.getNewApplyAttachment();
+			
+			
+			if(projectAnnexs.size()==0)
+			{
+				logger.debug("####################");
+			   return ProjectConstants.PROJECT_ERROR.APPLICATION_ISNULL;	
+			}
+			
+			String srcPath = project.getProjectMilestone() + "/" +projectAnnexs.get(0).getAnnexName();
+			logger.debug("*************");
+			logger.debug(srcPath);
+			try {
+				ProjectInfo projectInfo = reader.readDoc(srcPath);
+				
+				project.setProjectTaskDetail(JsonUtil.toJson(projectInfo));
+				project.setProjectName(projectInfo.getName());
+				try {
+					String startTimes[]=StringUtils.split(projectInfo.getStartDate(), "-");
+					String endTimes[] = StringUtils.split(projectInfo.getEndDate(), "-");
+					if(startTimes.length!=2||endTimes.length!=2)
+					{
+						 return ProjectConstants.PROJECT_ERROR.ProjectStartTime_ISNULL;
+					}
+					Calendar nowCalendar  = Calendar.getInstance();
+					int year = Integer.parseInt(startTimes[0]);
+					if(year<100)
+					{
+						year = 2000+year;
+					}
+				    
+					nowCalendar.set(Calendar.YEAR, year);
+				    int month = Integer.parseInt(startTimes[1]);
+				    nowCalendar.set(Calendar.MONTH, month-1 );  
+				    
+				    project.setStartTime(nowCalendar.getTime());
+					
+				    
+				    year = Integer.parseInt(endTimes[0]);
+					if(year<100)
+					{
+						year = 2000+year;
+					}
+				    
+					nowCalendar.set(Calendar.YEAR, year);
+				    month = Integer.parseInt(endTimes[1]);
+				    nowCalendar.set(Calendar.MONTH, month-1 );  
+				    
+				    project.setCompleteTime(getLastMonthOfDate(nowCalendar.getTime()));
+					
+				    
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					 return ProjectConstants.PROJECT_ERROR.ProjectStartTime_ISNULL;
+				}
+				
+				if(StringUtils.isEmpty(projectInfo.getName()))
+				{
+					return ProjectConstants.PROJECT_ERROR.ProjectName_ISNULL;
+				}
+				
+				if(StringUtils.isEmpty(projectInfo.getDeclarationUnitType()))
+				{
+					return ProjectConstants.PROJECT_ERROR.ProjectCatetory_ISNULL;
+				}
+				if(StringUtils.isEmpty(projectInfo.getDeclarationUnit()))
+				{
+					return ProjectConstants.PROJECT_ERROR.ProjectCompany_ISNULL;
+				}
+				
+				
+				project.setSubcategory("[{\"value\":\"" + projectInfo.getDeclarationUnitType()+"\",\"id\":\"001\"}]");
+				project.setCycleType("[{\"value\":\"" + calDiffMonth(project.getStartTime(),project.getCompleteTime())+"个月\",\"id\":\"001\"}]");
+				 	
+				List<Contact> contacts = projectInfo.getContactList();
+				if(contacts.size()<=1)
+				{
+					return ProjectConstants.PROJECT_ERROR.ProjectContacts_ISNULL;
+				}
+				if(StringUtils.isEmpty(contacts.get(0).getMail())||StringUtils.isEmpty(contacts.get(0).getTel())||StringUtils.isEmpty(contacts.get(0).getName()))
+				{
+					return ProjectConstants.PROJECT_ERROR.ProjectContactsTelOrEmail_ISNULL;
+				}
+				if(StringUtils.isEmpty(projectInfo.getServiceField()))
+				{
+					return ProjectConstants.PROJECT_ERROR.ProjectServiceField_ISNULL;
+						
+				}
+				project.setEmail(contacts.get(0).getMail());
+				project.setTelno(contacts.get(0).getTel());
+				project.setProjectManagerName(contacts.get(0).getName());
+				
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.debug("LLLLLLLLLLLLLLLLLLLLLL");
+				return -255L;
+			}
+			//end 从文件读取项目信息
 			// 更新项目信息
 			projectService.update(project);
 			Map<String, Object> variables = new HashMap<String, Object>();
@@ -251,10 +566,12 @@ public class ProjectController extends BaseController {
 					mainCurrentState.getTaskId(), variables);
 			// 给客户端响应
 			result.setOthers("projectId", project.getProjectId());
+			return oldProject.getProjectId();
 		} else {
 			// 给客户端响应
 			result.setResult(ResultVO.FAILURE);
 			logger.debug("UpdateProject-->fail: Cann't get project by the projectId! ");
+			return -255L;
 		}
 	}
 	

@@ -319,8 +319,11 @@ public class ProjectAnnexController extends BaseController{
 		    		// 获取文件原始名字
 		    		originalFilename  = annex.getOriginalFilename();
 		    	}
-	    		response.setHeader("Content-disposition", "attachment; filename="  
-	    				+new String(originalFilename.getBytes(Charset.forName("UTF-8")),"ISO8859-1"));
+		    	 
+		    	//response.setHeader("charset","GKB");
+		    	//解决下载文件中文乱码的问题
+	    		response.setHeader("Content-disposition", "attachment; filename="   +  java.net.URLEncoder.encode(originalFilename, "UTF-8"));
+	    		//		+new String(originalFilename.getBytes(Charset.forName("UTF-8")),"ISO8859-1"));
 	    		response.setContentType("application/force-download");// 设置强制下载不打开
 	    		//文件上传地址
 	    		String path = request.getSession().getServletContext().getRealPath(uploadPath);   

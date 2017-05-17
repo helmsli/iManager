@@ -49,6 +49,8 @@
 		                            	<td width="20%">{{data.createTime}}</td>
 	                           			<td width="14%">
 		                                	<a href="javascript:void(0);" class="p-r-10" ng-show="data.canDeclareFlag" ng-click="declareDepartLeaderRelease(data.publishId,'complete')">申报</a>                             	
+	                            	        <a href="javascript:void(0);" class="p-r-10" ng-show="data.canDeclareFlag" ng-click="downloadAttatchment(data.publishId,data.data2)">下载申报书</a>                             	
+	                            	        
 	                            	        <a href="javascript:void(0);" class="p-r-10" ng-show="!data.canDeclareFlag" ng-click="openSeeDepartLeaderRelease(data.publishId,'complete')">查看</a>
 	                            		</td>
                						</tr>

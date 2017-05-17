@@ -67,6 +67,30 @@ App.controller('myDataController', ['$scope', function($scope) {
 		location.href=url;
 	}
 	
+	 $scope.attachDownLoad=function(annexName){
+		 var url="/projectAnnex/fileDownLoad";
+		     url= getBasePath()+url;
+		     url=url+"?request.annexName="+annexName;
+		     console.log(url);
+		    // alert(url);
+		     location.href =url;
+	  }
+	
+	$scope.downloadAttatchment = function(publishId,data2)
+	{
+		//alert(data2);
+		var objData2 = JSON.parse(data2||{});
+		
+		if(objData2 instanceof Array)
+			{
+			//alert(objData2[0].annexName);
+			$scope.attachDownLoad(objData2[0].annexName);
+			}
+		else
+			{
+			alert("没有附件可以下载");
+			}
+	}
 	/*
 	 * 申报经理发布的项目
 	 */

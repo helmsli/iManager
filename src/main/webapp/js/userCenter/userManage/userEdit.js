@@ -61,6 +61,7 @@ App.controller('addUser', function($scope){
 		$scope.formValid = new FormValid({"formId":"addorEditUser",formField:validOptions});
 		//增加单位表单校验
 		//$scope.addCompanyValid = new FormValid({"formId":"companyEdit",formField:companyVaildOptions});	
+		
 	};
 	/*显示用户信息*/
 	$scope.showUserInfo = function(){
@@ -103,6 +104,13 @@ App.controller('addUser', function($scope){
 				$scope.companysList=companysList;
 				$scope.$applyAsync($scope.companysList);
 				generateCompanyOptions($scope.companysList);
+				//alert(JSON.stringify($scope.userInfo));
+				//alert(($scope.userInfo.company_name));
+				$('#companyslist').val($scope.userInfo.company_name);
+				$("#companyslist").selectpicker('refresh');
+				$('#companyslist').selectpicker('show');
+				//alert("abads");
+				
 			}
 		},function(e){
 			console.log(e);
@@ -210,7 +218,7 @@ var userEdit = {};
 /*角色改变监听事件*/
 userEdit.roleChangeBind = function(){
 	var roleIds = $('#rolelist').val();//获取选中的roleIds
-	alert(roleIds);
+	//alert(roleIds);
 	var addUserScope = getAngularScope("addUser");
     if(roleIds==null){
     	addUserScope.permissionTree = [];

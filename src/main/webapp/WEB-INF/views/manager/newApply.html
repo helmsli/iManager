@@ -5,7 +5,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
-		<title>项目管理及信用系统</title>
+		<title>项目管理及信用系统a</title>
 		<!-- Plugin Css -->
 		<link href="../../plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 		<link href="../../plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -19,6 +19,9 @@
 		<link href="../../css/custom.css" rel="stylesheet">
 		<link href="../../css/themes/default/skin.css" rel="stylesheet" type="text/css" title="default" />
 		<style>
+		    .red{
+		    color:red;
+		    }
 			.form-step ul li { width: 33.33333333%; }
 			.export { min-height: 520px; padding-top: 15px;}
 			.rela { position: relative; }
@@ -29,13 +32,14 @@
 			.pre-wrap.focus { outline: 1px solid #1ABB9C !important; }
 			.tip { color: #A5A5A5;}
 			.red { color: red;}
-			.table .form-control-inline{display:inline-block;margin-left:5px;width:auto;}
+			.table .form-control-inline{display:inline-block;width:auto;max-width:120px;}
 			.label-tips{margin-right:5px;width:11px;height:16px;background-size:11px 16px;vertical-align:-2px;}
 			.emialChecked,.telChecked,.projectChecked{color:red;}
 			.pre-wrap .innDiv{margin-top:-8px;margin-right:-8px;margin-bottom:-8px;margin-left:-8px;padding:8px;}/* margin-top:-8px;margin-right:-8px;margin-bottom:-8px;margin-left:-8px; */
 			.pre-wrap .innMinht{min-height:94px;margin-top:-8px;margin-right:-8px;margin-bottom:-8px;margin-left:-8px;padding:8px;}
 			.abs.tip{top:8px;}
 			.form-control-label label{margin-right:4px;}
+			.table .file-group .btn{padding:5px 12px;}
 		</style>
 	</head>
 	<body ng-controller="app">
@@ -47,19 +51,22 @@
 			<div class="menus" ng-include="'../include/leftMenu.html'"></div>
 			<div id="page-wrapper" ng-controller="reportExportCtrl">
 				<div class="panel">
+					<div class="panel-heading">
+						<h2 class="panel-title">项目申报</h2>
+					</div>
 					<div class="panel-body">
 						<form method="post" id="myForm" class="form-inline definewidth m20">
 							<input type="hidden" name="id" value="" />
 							<div class="form-step show">
-								<ul id="stepLi">
-									<li class="current" ng-click="chooseTypeStep(0)">项目基本信息</li>
-									<li ng-click="chooseTypeStep(1)">项目预算</li>
-									<li ng-click="chooseTypeStep(2)">承接单位资质</li>
+								<ul id="stepLi" style="display:none;>
+									<li class="current" ng-click="chooseTypeStepNone(0)">项目基本信息</li>
+									<li ng-click="chooseTypeStepNone(1)">项目预算</li>
+									<li ng-click="chooseTypeStepNone(2)">项目申报书</li>
 								</ul>
 							</div>
 							<!-- / .export-step -->
 							<div id="stepTemplate" ng-controller="EditData"  data-ng-init="initTemplate()">
-								<div class="row clearfix export export-type show" ng-include="'../include/projectTemp/createTemplate/'+templateName+'/applyBase.html'"></div>
+								<div class="row clearfix export export-type show" style="padding-top:0;" ng-include="'../include/projectTemp/createTemplate/'+templateName+'/applyBase.html'"></div>
 								<!-- <div class="row clearfix export export-type show" ng-include="'../manager/projectManager/bossRequest/createTemplate/createBase.html'"></div> -->
 								<!-- / .export-stype -->
 								<div class="row clearfix export export-template hide" ng-include="'../include/projectTemp/createTemplate/'+templateName+'/applyBudget.html'"></div>

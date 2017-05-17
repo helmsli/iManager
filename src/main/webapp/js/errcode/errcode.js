@@ -1,5 +1,14 @@
 	var ErrCode={
 		0:"success",
+		"-1":"APPLICATION_ATTATCHMENT_IS_NULL",
+		"-2":"APROJECT_NAME_IS_NULL",
+		"-3":"PROJECT_TYPE_IS_NULL",
+		"-4":"PROJECT_TIME_IS_NULL",
+		"-5":"PROJECT_CONTACT_IS_NULL",
+		"-6":"PROJECT_CONTACT_INFO_IS_NULL",
+		"-7":"PROJECT_COMPANY_IS_NULL",
+		"-8":"PROJECT_ServiceField_ISNULL",
+		"-255":"PROJECT_INFORMATION_ERROR",
 		"10001":"USER_NAME_IS_NULL",
 		"user":"USER_NAME_IS_NULL",
 		"pass":"PASSWORD_IS_NULL",
@@ -31,5 +40,6 @@
 		"2007":"OLDPWD_ERROR",//原始密码错误
 		"2008":"STATUS_ERROR",//用户被禁用
 		"2009":"TIMEOUT",//您尚未登录或登录时间过长,请重新登录!
+		
 		"3000":"OTHER_ERROR"//其他错误
 	}

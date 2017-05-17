@@ -65,4 +65,22 @@ public interface ProjectConstants {
 		// 项目周期报告
 		static final Long MONTHLYREPORT = 6L;// 项目周期报告
 	}
+	public interface PROJECT_ERROR {
+		static final Long APPLICATION_ISNULL = -1L;// 申报书上传失败，上传的是空值
+
+		static final Long ProjectName_ISNULL = -2L;// 申报的项目名称为空
+		static final Long ProjectCatetory_ISNULL = -3L;// 申报的项目类型为空
+
+		static final Long ProjectStartTime_ISNULL = -4L;// 申报的项目开始时间或者结束时间为空
+		
+		static final Long ProjectContacts_ISNULL = -5L;//申报书联系人信息不全
+		static final Long ProjectContactsTelOrEmail_ISNULL = -6L;//申报书联系人Email或者电话为空
+		
+		static final Long ProjectCompany_ISNULL = -7L;//申报书单位为空
+		static final Long ProjectServiceField_ISNULL = -8L;//申报书单位为空
+		
+		static final Long TERMIANLREPORT = 5L;// 终期评审报告
+		// 项目周期报告
+		static final Long MONTHLYREPORT = 6L;// 项目周期报告
+	}
 }

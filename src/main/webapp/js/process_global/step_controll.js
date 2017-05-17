@@ -15,7 +15,10 @@ App.controller('reportExportCtrl',['$scope','$ocLazyLoad', function($scope, $ocL
     	next:true,
     	submit:false
     }
-
+    $scope.chooseTypeStepNone=function(step)
+    {
+    	
+    }
     $scope.chooseTypeStep=function(step)
     {
     	$scope.stepParam.currteStep=step;

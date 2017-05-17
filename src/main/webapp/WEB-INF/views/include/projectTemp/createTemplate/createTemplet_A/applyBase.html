@@ -24,46 +24,59 @@
 	            </tr>
 	        </thead> -->
 	        <tbody>
-	            <tr data-index="0">
+	            <tr data-index="0" style="display:none">
 	                <td width="15%" class="align-right"><label data-for="projectName"></label><i class="col-red font-bold m-r-5">*</i>项目名称</td>
 	                <td width="35%" class="pre-wrap" data-datename="projectName" id="taskName" data-editable="edit"></td>
-	                <!-- 创建项目申请 -->
 	                <td width="15%" class="align-right">项目负责人</td>
 	                <td width="35%" class="pre-wrap" data-datename="projectManager" ng-bind="projectManager"></td>
 	            </tr>
-	            <tr data-index="1">
+	            <tr data-index="1" style="display:none">
 	                <td class="align-right"><label data-for="startTime"></label><i class="col-red font-bold m-r-5">*</i>开始时间</td>
 	                <td id= "beginTime" data-editableType="datetimepicker" data-datename="startTime"></td>
 	                <td class="align-right"><label data-for="endTime"></label><i class="col-red font-bold m-r-5">*</i>结束时间</td>
 	                <td id= "overTime" data-editableType="datetimepicker" data-type="time" data-datename="endTime"   ></td>
 	            </tr>
-	            <tr data-index="2">
+	            <tr data-index="2" style="display:none">
 	                <td class="align-right"><label data-for="telno"></label><i class="col-red font-bold m-r-5">*</i>联系电话</td>
 	                <td class="pre-wrap" data-datename="telno" id="myNum" data-editable="edit"></td>
 	                <td class="align-right" ><label data-for="email"></label><i class="col-red font-bold m-r-5" >*</i>电子邮箱</td>
 	                <td class="pre-wrap" id="email" data-datename="email" data-editable="edit"></td>
 	            </tr>
-	            <tr data-index="3">
-	                <td width="10%" class="align-right"><label data-for="01"></label><i class="col-red font-bold m-r-5">*</i>项目周期</td>
-	                <td width="90%" data-editableType="radio" data-datename="01" id="01" data-name="project_period" colspan="3" class="project_period" ></td>
+	            <tr data-index="3" style="display:none">
+	                <td width="5%" class="align-right"><label data-for="01"></label><i class="col-red font-bold m-r-5">*</i>项目周期</td>
+	                <td width="95%" data-editableType="radio" data-datename="01" id="01" data-name="project_period" colspan="3" class="project_period" ></td>
 	            </tr>
-	            <tr data-index="4">
+	            <tr data-index="4" style="display:none">
 	                <td class="align-right"><label data-for="02"></label><i class="col-red font-bold m-r-5">*</i>项目类别</td>
 	                <td data-editableType="radio" data-datename="02" id="02" colspan="3" class="project_category" ></td>
 	            </tr>
-	            <tr data-index="5">
-	                <td class="align-right"><label data-for="taskDescribe"></label><i class="col-red font-bold m-r-5">*</i>（一）项目概述</td>
-	                <td class="pre-wrap" data-datename="taskDescribe" id="taskDescribe" data-editable="edit" colspan="3" onClick="tipHide(this)" onkeydown="inputLength(this,300)"></td>
+	            <tr data-index="5" >
+	                <td class="align-right"><label data-for="taskDescribe"></label><i class="col-red font-bold m-r-5">*</i>文件上传说明</td>
+	                <td class="pre-wrap" data-datename="taskDescribe" id="taskDescribe"  colspan="3" onClick="tipHide(this)" onkeydown="inputLength(this,300)">请按照申报书模板填写申报书，为了确保数据的正确性，请您不要修改申报书模板的格式。<br>如果不能正确提交数据，可能是由于浏览器不兼容导致的。请使用chrome或者Firefox浏览器登录系统</td>
 	            </tr>
-	            <tr data-index="6">
+	            <tr data-index="11" >
+	            	<td width="15%" class="align-right"><label data-for="01"></label><i class="col-red font-bold m-r-5">*</i>项目申报书</td>
+	            	<td width="85%" colspan="3">
+	            		<div class="file-group">
+						    <input type="text" name="fileName" id="fileName" class="form-control" placeholder="选择要上传的文件..." />
+	                   		<input type="button" value="选择文件" class="btn btn-primary"/>
+	                   		<input type="file" name="filefield" id="uploadFile" onchange="document.getElementById('fileName').value=this.value;uploadButtonSubmit('uploadFile',this)" />
+						</div>
+	            	</td>
+	            </tr>
+	            
+	            
+	            
+	            
+	            <tr data-index="6" style="display:none">
 	                <td class="align-right"><label data-for="taskbackground"></label><i class="col-red font-bold m-r-5">*</i>（二）项目背景</td>
 	                <td class="pre-wrap" data-datename="taskbackground" id="taskbackground" data-editable="edit" colspan="3" onClick="tipHide(this)"   onkeydown="inputLength(this,1000)"></td>
 	            </tr>
-	            <tr data-index="7">
+	            <tr data-index="7" style="display:none">
 	                <td class="align-right"><label data-for="taskgoal"></label><i class="col-red font-bold m-r-5">*</i>（三）项目目标</td>
 	                <td class="pre-wrap" data-datename="taskgoal" id="taskgoal" data-editable="edit" colspan="3" onClick="tipHide(this)" onkeydown="inputLength(this,100)" ></td>
 	            </tr>
-	            <tr data-index="8">
+	            <tr data-index="8" style="display:none">
 	                <td class="align-right"><label data-for="tableRuleInner"></label><i class="col-red font-bold m-r-5">*</i>（四）项目实施计划<br>及输出（主要是里程<br>碑和输出）</td>
 	                <td class="pre-wrap" colspan="3" onblur="tipShow(this)"><table id="tableRuleInner" class="table table-bordered table-striped m-b-0">
 				         <thead>
@@ -77,11 +90,11 @@
 				         </thead>
 				     </table></td>
 	            </tr>
-	            <tr data-index="9">
+	            <tr data-index="9" style="display:none">
 	                <td class="align-right"><label data-for="taskDanger"></label><i class="col-red font-bold m-r-5">*</i>（五）项目预期<br>的风险</td>
 	                <td class="pre-wrap" data-datename="taskDanger" id="taskDanger" data-editable="edit" colspan="3" onClick="tipHide(this);" onkeydown="inputLength(this,1000)" onblur="tipShow(this);"></td>
 	            </tr>
-	            <tr data-index="10">
+	            <tr data-index="10" style="display:none">
 	                <td class="align-right"><label data-for="taskcreate"></label><i class="col-red font-bold m-r-5">*</i>（六）项目创新性<br>和推广性</td>
 	                <td class="pre-wrap" data-datename="taskcreate"  id="taskcreate"  data-editable="edit" colspan="3" onClick="tipHide(this)"  onkeydown="inputLength(this,200);"></td>
 	            </tr>
@@ -91,11 +104,10 @@
 	<!-- / .table-responsive -->
 </div>
 </form>
-<div class="col-lg-12 text-right">
-    <hr />
-    <button class="btn btn-warning waves-effect m-r-8 m-w-80" ng-click="chooseStepType(1);"  ng-show="stepParam.previous">上一步</button>
-        <button class="btn btn-warning waves-effect m-r-8 m-w-80" onclick="refuse();"  ng-show="refuse.state">拒绝修改变更</button>
-    <button  id="button2" class="btn btn-success waves-effect m-r-8 m-l-8 m-w-80" ng-click="chooseStepType(0);" onClick="tableEditSave('tableEdit');tableSave('tableRuleInner');" ng-show="stepParam.next">下一步</button>
-    <button class="btn btn-primary waves-effect m-r-8 m-l-8 m-w-80" ng-click="chooseStepType(2);"  ng-show="stepParam.submit">提交</button>
+<div class="col-lg-12 p-t-15 align-center">
+    <button class="btn btn-warning waves-effect m-r-8 m-w-80 hide" ng-click="chooseStepType(1);"  ng-hide="stepParam.previous">上一步</button>
+    <button class="btn btn-warning waves-effect m-r-8 m-w-80 hide" onclick="refuse();"  ng-hide="refuse.state">拒绝修改变更</button>
+    <button  id="button2" class="btn btn-success waves-effect m-r-8 m-l-8 m-w-80 hide" ng-click="chooseStepType(0);" onClick="tableEditSave('tableEdit');tableSave('tableRuleInner');" ng-hide="stepParam.next">下一步</button>
+    <button class="btn btn-primary waves-effect m-r-8 m-l-8 m-w-80" ng-click="chooseStepType(2);" onClick="submitSimple();">提交</button>
 </div>
 <script src="../../js/process_global/createProject/applyBase.js" type="text/javascript"></script>

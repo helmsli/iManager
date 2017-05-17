@@ -50,14 +50,14 @@ function initTips(){
 	var taskDanger=$("td[data-datename='taskDanger']").children("div");
 	var taskCreate=$("td[data-datename='taskcreate']").children("div");
 	
-	taskDescribe.prepend("<p class='tip'>概述项目希望解决的问题，以及计划通过何种方式达到什么目标？300字以内 </p>");
-	taskBackground.prepend('<p class="tip">限1000字以内</p>');
+	//taskDescribe.prepend("<p class='tip'>概述项目希望解决的问题，以及计划通过何种方式达到什么目标？300字以内 </p>");
+	//taskBackground.prepend('<p class="tip">限1000字以内</p>');
 	taskGoal.prepend('<p class="tip">限100字以内</p>');
 	taskDanger.prepend('<p class="tip">1000字以内</p>');
 	taskCreate.prepend('<p class="tip">200字以内</p>');
 	
-	taskDescribe.prop("class","innMinht");
-	taskBackground.prop("class","innMinht");
+	//taskDescribe.prop("class","innMinht");
+	//taskBackground.prop("class","innMinht");
 	taskGoal.prop("class","innMinht");
 	taskDanger.prop("class","innMinht");
 	taskCreate.prop("class","innMinht");
@@ -145,6 +145,8 @@ function checkTdNameAndValue(name,obj)
 			checkFlag=checkIsEmpty(obj);
 			break;
 		case "telno":
+		case "taskDescribe":
+			
 			checkFlag=checkTelphone(obj.html());
 			break;
 		case "email":
@@ -156,7 +158,7 @@ function checkTdNameAndValue(name,obj)
 		case "project_category":
 			checkFlag=true;
 			break;
-		case "taskDescribe":
+		
 		case "taskbackground":
 		case "taskgoal":
 		case "taskDanger":

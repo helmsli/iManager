@@ -93,7 +93,6 @@ function submitCreate()
 	/*if(){
 		
 	}*/
-	alert("adfsdf");
 	var scope=getAngularScope("projectManagerModel");
 	var parm = parseQueryString();
 	var projectName=parm.projectName;

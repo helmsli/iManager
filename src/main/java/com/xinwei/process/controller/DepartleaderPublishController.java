@@ -334,48 +334,53 @@ public class DepartleaderPublishController extends BaseController {
 	@RequestMapping(value = "/getApplyList/list", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String getApplyList(Long categoryId) {
 		ResultVO<DepartleaderPublish> result = new ResultVO<>();
-		// 获取当前登录用户信息
-		User currentUser = getCurrentUser();
-		// 判断如果用户不为空
-		if (null != currentUser) {
-			// 获取当前用户ID
-			Long userId = currentUser.getId();
-			logger.debug("Current User's ID is : " + userId);
-			result.setOthers("apply", "yes");
+		try {
+			// 获取当前登录用户信息
+			User currentUser = getCurrentUser();
+			// 判断如果用户不为空
+			if (null != currentUser) {
+				// 获取当前用户ID
+				Long userId = currentUser.getId();
+				logger.debug("Current User's ID is : " + userId);
+				result.setOthers("apply", "yes");
 
-			// 根据种类ID分页获取发布列表
-			Map<String, Object> queryMap = new HashMap<String, Object>();
-			queryMap.put("categoryId", categoryId);
-			queryMap.put("dataType", DataInfo.DATATYPE_PUBLISH);
-			queryMap.put("permissionType", DataPermission.PERMISSIONTYPE_USER);
+				// 根据种类ID分页获取发布列表
+				Map<String, Object> queryMap = new HashMap<String, Object>();
+				queryMap.put("categoryId", categoryId);
+				queryMap.put("dataType", DataInfo.DATATYPE_PUBLISH);
+				queryMap.put("permissionType", DataPermission.PERMISSIONTYPE_USER);
 
-			List<Long> roles = currentUser.getRoleIds();
-			if (roles.size() > 0) {
-				StringBuilder stringRoles = new StringBuilder();
-				int rolesIndex = 0;
-				for (Long rolesid : roles) {
-					if (rolesIndex > 0) {
-						stringRoles.append(",");
+				List<Long> roles = currentUser.getRoleIds();
+				if (roles.size() > 0) {
+					StringBuilder stringRoles = new StringBuilder();
+					int rolesIndex = 0;
+					for (Long rolesid : roles) {
+						if (rolesIndex > 0) {
+							stringRoles.append(",");
+						}
+						stringRoles.append(rolesid);
 					}
-					stringRoles.append(rolesid);
+
+					queryMap.put("permissionRoleType", DataPermission.PERMISSIONTYPE_ROLE);
+					queryMap.put("permissionRoleId", stringRoles.toString());
+
 				}
 
-				queryMap.put("permissionRoleType", DataPermission.PERMISSIONTYPE_ROLE);
-				queryMap.put("permissionRoleId", stringRoles.toString());
-
+				queryMap.put("permissionId", userId.toString());
+				queryMap.put(DepartleaderPublish.DATA9_QUERY_KEY, DepartleaderPublish.DATA9_ALLOW_APPLICATION);
+				
+				Page<DepartleaderPublish> page = departleaderPublishServiceImpl.getApplyListByCategoryId(currentUser,
+						queryMap);
+				result.setPage(page);
+				result.setLists(page.getList());
+			} else {
+				logger.debug("Current user's infomation is null");
+				// 给客户端响应
+				result.setResult(ResultVO.USERNULL);
 			}
-
-			queryMap.put("permissionId", userId.toString());
-			queryMap.put(DepartleaderPublish.DATA9_QUERY_KEY, DepartleaderPublish.DATA9_ALLOW_APPLICATION);
-			
-			Page<DepartleaderPublish> page = departleaderPublishServiceImpl.getApplyListByCategoryId(currentUser,
-					queryMap);
-			result.setPage(page);
-			result.setLists(page.getList());
-		} else {
-			logger.debug("Current user's infomation is null");
-			// 给客户端响应
-			result.setResult(ResultVO.USERNULL);
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		logger.debug(result.toString());
 		return result.toString();

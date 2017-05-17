@@ -1,4 +1,6 @@
+var fileUploadNewApply=[];
 function getAllData(){
+	   
 	   var myParm=parseQueryString();//所有的参数
        var Bg=myParm.Bg;
        var dataId=myParm.dataId;
@@ -6,6 +8,7 @@ function getAllData(){
        if(changeCurrentState=="modifyChange"){
     	   Bg=2;//变更驳回修改
        }
+      
 	   var tablePostData=localStorage.getItem("tablePost");
 	   tablePostData=JSON.parse(tablePostData);
 	   var tablePostDataObj={};
@@ -29,7 +32,9 @@ function getAllData(){
 						           "taskgoal":requestEditData.taskgoal,
 						           "taskDanger":requestEditData.taskDanger,
 						           "taskcreate":requestEditData.taskcreate,
-						           "taskplan":tableRuleInnerData};
+						           "taskplan":tableRuleInnerData,
+						           "newApplyAttachment":fileUploadNewApply["newApply"]
+						           };
 	   var userInfo=localStorage.getItem("userInfo");
 	   //通过URL获取参数
 	   var parm=parseQueryString();
@@ -37,6 +42,29 @@ function getAllData(){
 	   var projectId=parm.projectId;
 	   var projectName=parm.projectName;
 	   var publishId="";
+	   
+	   if(requestProjectExtInfo.taskbackground.trim()=="")
+	   {
+		   //alert("请填写申报单位");
+		  // return;
+	   }
+	   if(requestEditData.taskName.trim()=="")
+	   {
+		   //alert("请填写项目名称");
+		   //return;
+	   }
+	   requestProjectExtInfo.taskDescribe="";
+	   if(requestProjectExtInfo.taskDescribe.trim()=="")
+	   {
+		   //alert("请填写申报金额");
+		   //return;
+	   }
+	   if(fileUploadNewApply["newApply"]==undefined)
+		{
+		  alert("请上传项目申报书");
+		  return;
+		}
+	   
 	   //若projectId不存在，则默认为""
 	   if(!projectId){
 		   projectId=""
@@ -46,13 +74,6 @@ function getAllData(){
     	   publishId=myParm.publishId;
        }
 	   //若单选为其他时取输入框中的值
-	   var radioed=requestEditData['radioed'];
-	   if(radioed['02'][0].id == "802"){
-		   radioed['02'][0].value=$("#category").val();
-	   }
-	   if(radioed['01'][0].id == "301"){
-		   radioed['01'][0].value=$("#period").val();
-	   }
 	   function getCategoryId(projectName) {
 			switch (projectName) {
 			case "coomarts":
@@ -69,7 +90,9 @@ function getAllData(){
 		}
      var categoryId= getCategoryId(projectName);
      console.log(categoryId);
-	   //走创建的
+     console.log(JSON.parse(userInfo));
+	   
+     //走创建的
 	   if(!Bg){
 		   
 		   var obj={
@@ -228,6 +251,50 @@ function clearStorageData()
 
 
 
+//点击上传需要绑定的函数，需要向后台提交的东西
+function uploadButtonSubmit(id){
+	
+	uploadFile.ajaxFileUpload({
+	    url: getBasePath()+'/projectAnnex/upload', //用于文件上传的服务器端请求地址
+	    fileElementId: id, //文件上传空间的id属性  <input type="file" id="file" name="file" />
+	    //async:true,
+	    success: function (data)
+	    {
+	    	data=JSON.parse(data);
+	    	console.log(data);
+	    	fileUploadNewApply["newApply"]= data.responseInfo.projectAnnexs;
+	    	projectAnnexs=data.responseInfo.projectAnnexs;
+	    },
+	    error: function (data, status, e)//服务器响应失败处理函数  
+	    {
+	        alert(e);
+	    }
+	});
+}
+
+var submitSimpleFlag=true;
+
+function submitSimple(){
+	
+	
+
+	if(submitSimpleFlag){
+		 tableEditSave('tableEdit');
+		 tableSave('tableRuleInner');
+		 tableSave('tableRule');
+		 tableEditSave('tablePost');
+		 getAllData();
+		 submitSimpleFlag=false;
+    }
+	else
+	{
+		
+	}
+    setTimeout(function(){
+    	submitSimpleFlag=true;
+    },1500); //点击后相隔多长时间可执行
+    
+  }
 
 
 

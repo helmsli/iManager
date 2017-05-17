@@ -8,6 +8,16 @@ var i18n={
 		"EMPTY_NAME":"姓、名不能为空",//姓、名不能为空
 		"DEPT_NAME_EXIST":"该部门名已经存在.",
 		
+		//申报书错误
+		"APPLICATION_ATTATCHMENT_IS_NULL":"申报书附件不能为空,请确保本地没有用word打开申报书，重新上传.",
+		"APROJECT_NAME_IS_NULL":"申报书中项目名称为空，请补全后重新上传项目申报书",
+		"PROJECT_TYPE_IS_NULL":"申报书中申报单位类型为空，请用粗体字或者黑体字标识正确的单位类型",
+		"PROJECT_TIME_IS_NULL":"申报书中执行周期填写错误,请重新填写",
+		"PROJECT_CONTACT_IS_NULL":"申报书中联系人信息不全，请补全联系人信息",
+		"PROJECT_CONTACT_INFO_IS_NULL":"申报书中联系人信息不全，请补全联系人信息",
+		"PROJECT_COMPANY_IS_NULL":"申报书中单位信息为空，请补全单位信息",
+		"PROJECT_ServiceField_ISNULL":"申报书中服务领域为空,请用粗体字或者黑体字标识正确的服务类型",
+		"PROJECT_INFORMATION_ERROR":"申报书中信息错误，请检查申报书信息是否正确填写",
 		"CHOOSE_ROLE":"请选择角色",//请选择角色。 
 		"MENU_COOMARTS_DATASELF":"月度监测数据",//请选择角色。 
 		"CHOOLSE_USER":"请选择用户",//请选择用户。

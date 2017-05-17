@@ -3,8 +3,8 @@
 	<!-- <div class="search-group">
 		<button id="tablePost_Save" type="button" class="btn btn-primary" onClick="tableSave('tablePost')">保存</button>
 	</div> -->
-	<div class="table-responsive m-b-0">
-		<table id="tablePost" class="table table-bordered table-striped m-b-0">
+	<div class="table-responsive m-b-0" style="display:none">
+		<table id="tablePost" class="table table-bordered table-striped m-b-0" >
 	          <tbody>  
 	           <tr data-index="11">
 	           <!--  -->
@@ -38,14 +38,17 @@
 </div>
 <div class="col-lg-12">
 	<div class="row p-t-20 p-b-5 clearfix" >
-		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 p-r-5 form-control-label" class="align-right"><label>项目计划附件</label></div>
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 p-r-5 form-control-label" class="align-right"><label>项目申报书</label></div>
 		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 p-l-5">
 			<div class="form-group">
 	               <div class="form-line">
-	                   <div class="file-group">
-						<input type="text" name="fileName" id="submitMaterialMetaphaseInput" class="form-control" placeholder="选择文件...">
+	                  <div class="file-group">
+						<!--input type="text" name="fileName" id="submitMaterialMetaphaseInput" class="form-control" placeholder="选择文件...">
 						<input type="button" value="选择文件" class="btn btn-primary">
-						<input type="file" name="file" id="submitMaterialMetaphase" onchange="fileUpload('submitMaterialMetaphase',this);">
+						<input type="file" name="file" id="submitMaterialMetaphase" onchange="fileUpload('submitMaterialMetaphase',this);"-->
+					    <input type="text" name="fileName" id="fileName" class="form-control" placeholder="选择要上传的文件..." />
+                   		<input type="button" value="选择文件" class="btn btn-primary"/>
+                   		<input type="file" name="filefield" id="uploadFile" onchange="document.getElementById('fileName').value=this.value;uploadButtonSubmit('uploadFile',this)" />
 					</div>
 	               </div>
 	           </div>

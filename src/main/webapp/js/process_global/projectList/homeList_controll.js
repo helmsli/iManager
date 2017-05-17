@@ -155,10 +155,10 @@ function getAllProjectDataListCall(data){
 		if(scope.coomartsDataList.length == 0){
 			$("#coomartsNoData").removeClass("hide");
 		}
-		if(scope.camtalkDataList.length == 0){
+		if(scope.coomartsDataList.length == 0){
 			$("#camtalkNoData").removeClass("hide");
 		}
-		if(scope.lotteryDataList.length == 0){
+		if(scope.coomartsDataList.length == 0){
 			$("#lotteryNoData").removeClass("hide");
 		}
 		console.log("****");
