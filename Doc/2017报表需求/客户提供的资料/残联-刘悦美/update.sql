@@ -1,0 +1,1 @@
+insert into tb_project_annex(annex_id,annex_name,original_filename,type_id,path,user_id,upload_time) values(1000,'monthlyReportTemplate.xls','月报表（社会组织填写）.xls',1,'monthlyReportTemplate.xls','7',NOW());
