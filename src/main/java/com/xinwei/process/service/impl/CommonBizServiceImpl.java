@@ -6,22 +6,31 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.ibatis.annotations.Param;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.xinwei.process.constant.ProjectConstants;
+import com.xinwei.process.controller.ProjectProcessController;
 import com.xinwei.process.dao.CommonBizMapper;
+import com.xinwei.process.dao.DataPermissionMapper;
 import com.xinwei.process.dao.ProjectMapper;
 import com.xinwei.process.entity.CommonBiz;
+import com.xinwei.process.entity.DepartleaderPublish;
 import com.xinwei.process.service.CommonBizService;
 import com.xinwei.security.entity.User;
 import com.xinwei.system.xwsequence.service.XwSysSeqService;
+import com.xinwei.util.ListUtil;
 import com.xinwei.util.date.DateUtil;
 import com.xinwei.util.page.Page;
 
 @Service
 public class CommonBizServiceImpl implements CommonBizService {
+	private Logger logger = LoggerFactory.getLogger(CommonBizServiceImpl.class);
+	
 	private final String COMMON_BIZ_SEQ = "common_biz_seq";// 编号
 	@Autowired
 	private CommonBizMapper commonBizDao;
@@ -31,6 +40,8 @@ public class CommonBizServiceImpl implements CommonBizService {
 	private Long roleId_projectManager;// 项目经理角色ID
 	@Value("${roleId_committee}")
 	private Long roleId_committee;// 决策委员会角色ID
+	@Resource
+	private DataPermissionMapper DataPermissionDao;
 	@Override
 	public CommonBiz selectByPrimaryKey(String dataId) {
 		return commonBizDao.selectByPrimaryKey(dataId);
@@ -125,6 +136,31 @@ public class CommonBizServiceImpl implements CommonBizService {
 		return page;
 	}
 
+	/**
+	 * 查询月报表列表
+	 */
+	@Override
+	public Page<CommonBiz> selectMonthReportList(
+			User user, Map<String, Object> map) {
+		//按照权限查询
+		Page<CommonBiz> page = new Page<CommonBiz>(
+				DataPermissionDao.countByConditions(map));
+		map.put("startRow", page.getStartRow());
+		map.put("pageSize", page.getPageSize());
+		// 查询dataPermission表，获取dataID列表
+		logger.debug(map.toString());
+		List<String> dataIdList = DataPermissionDao
+				.selectListByConditions(map);
+		
+		logger.debug(dataIdList.toString());
+		
+		if(dataIdList.size()>0)
+		{
+			page.setList(commonBizDao.selectByIdList(dataIdList));
+		}
+		return page;
+	}
+	
 	@Override
 	public void updateChangeStatusByDataId(String status,String dataId) {
 		commonBizDao.updateChangeStatusByDataId(status,dataId);
@@ -135,5 +171,14 @@ public class CommonBizServiceImpl implements CommonBizService {
 			String processInstanceId, String taskId, String dataId) {
 		commonBizDao.updateProcessInstanceAndTaskIdByDataId(processInstanceId,taskId,dataId);
 	}
+
+	@Override
+	public List<CommonBiz> selectMonthlyReportWithResult(CommonBiz commonBiz) {
+		// TODO Auto-generated method stub
+		return this.commonBizDao.selectMonthlyReportWithResult(commonBiz.getProjectName(),commonBiz.getExtStatus(),commonBiz.getExtActivitiInfo(),commonBiz.getProjectCategory());
+		
+	}
+
+	
 	
 }

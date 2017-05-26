@@ -1,0 +1,42 @@
+package com.xinwei.process.Listener;
+
+import javax.annotation.Resource;
+
+import org.activiti.engine.delegate.DelegateTask;
+import org.activiti.engine.delegate.TaskListener;
+import org.springframework.stereotype.Service;
+
+import com.xinwei.process.constant.ProjectConstants;
+import com.xinwei.process.entity.Project;
+import com.xinwei.process.entity.StateInfo;
+import com.xinwei.process.service.ProjectService;
+import com.xinwei.util.JsonUtil;
+
+@Service("reportCurrentStateListener")
+public class ReportCurrentStateListener implements TaskListener {
+	@Resource
+	private ProjectService projectService;
+	@Override
+	public void notify(DelegateTask delegateTask) {
+		
+		//获取业务key
+		String businessKey = delegateTask.getExecution()
+				.getProcessBusinessKey();// projectID
+		Long projectId = Long.valueOf(businessKey);
+		//获取项目对象
+		Project project = projectService.selectByPrimaryKey(projectId);
+		//获取项目类别
+		String categoryId =  project.getCategoryId().toString();
+		//将项目类别设置到任务表中
+		delegateTask.setCategory(categoryId);
+		//构建StateInfo对象
+		StateInfo reportCurrentStateInfo = new StateInfo();
+		reportCurrentStateInfo.setState(ProjectConstants.State.CODE_SUBMITMONTHLYREPORT);
+		reportCurrentStateInfo.setStateName(delegateTask.getName());
+		reportCurrentStateInfo.setTaskId(delegateTask.getId());
+		//更改主流程上一任务状态信息
+		String reportCurrentStateInfoJson = JsonUtil.toJson(reportCurrentStateInfo);
+		projectService.updateProjectPropertyByProjectId(ProjectService.REPORTCURRENTSTATE, reportCurrentStateInfoJson, projectId);
+	}
+}
+	

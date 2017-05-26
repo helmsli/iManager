@@ -1,0 +1,125 @@
+package com.xinwei.process.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.xinwei.process.entity.Project;
+
+public interface ProjectMapper {
+	int deleteByPrimaryKey(Long projectId);
+
+	int insert(Project record);
+
+	Project selectByPrimaryKey(Long projectId);
+
+	List<Project> selectAll();
+
+	int updateByPrimaryKey(Project record);
+
+	/**
+	 * 获取分页条数
+	 * 
+	 * @param map
+	 *            查询参数
+	 * @return
+	 */
+	Long getProjectListByUserIdCount(Map<String, Object> map);
+
+	/**
+	 * 获取分页后的数据
+	 * 
+	 * @param map
+	 *            查询参数（包含起始记录数startRow,当页记录数pageSize）
+	 * @return
+	 */
+	List<Project> getProjectListByUserId(Map<String, Object> map);
+
+	/**
+	 * 获取已结项目列表分页条数
+	 * 
+	 * @param map
+	 *            查询参数
+	 * @return
+	 */
+	Long getFinishedProjectListByUserIdCount(Map<String, Object> map);
+
+	/**
+	 * 获取已结项目列表分页后的数据
+	 * 
+	 * @param map
+	 *            查询参数（包含起始记录数startRow,当页记录数pageSize）
+	 * @return
+	 */
+	List<Project> getFinishedProjectListByUserId(Map<String, Object> map);
+
+	/**
+	 * 修改项目表项目经理自评
+	 * 
+	 * @param selfAppraise
+	 * @param projectId 项目ID
+	 */
+	int updateSelfAppraiseByProjectId(@Param("selfAppraise") String selfAppraise,@Param("projectId") Long projectId);
+	/**
+	 * 修改项目表部门经理评价
+	 * @param departLeaderAppraise 
+	 * @param projectId 项目ID
+	 */
+	int updateDepartLeaderAppraiseByProjectId(@Param("departLeaderAppraise") String departLeaderAppraise,@Param("projectId") Long projectId);
+
+	/**
+	 * 修改流程实例ID的方法
+	 * @param projectProcessInstanceId 流程实例ID 
+	 * @param projectId 项目ID
+	 */
+	void updateProcessInstanceByProjectID(@Param("projectProcessInstanceId") String projectProcessInstanceId,@Param("projectId") Long projectId);
+	/**
+	 * 修改更改流程实例ID的方法
+	 * @param projectProcessInstanceId 流程实例ID 
+	 * @param projectId 项目ID
+	 */
+	void updateChangeProcessInstanceId(@Param("changeProcessInstanceId") String changeProcessInstanceId,@Param("projectId") Long projectId);
+	/**
+	 * 修改主流程项目状态信息的方法
+	 */
+	void updateMainCurrentState(@Param("mainCurrentState") String mainCurrentState,@Param("projectId") Long projectId);
+	/**
+	 * 修改主流程上一状态信息的方法
+	 */
+	void updateMainPreviousState(@Param("mainPreviousState") String mainPreviousState,@Param("projectId") Long projectId);
+	/**
+	 * 修改更改流程当前状态信息的方法
+	 */
+	void updateChangeCurrentState(@Param("changeCurrentState") String changeCurrentState,@Param("projectId") Long projectId);
+	/**
+	 * 修改更改流程上一状态信息的方法
+	 */
+	void updateChangePreviousState(@Param("changePreviousState") String changePreviousState,@Param("projectId") Long projectId);
+	/**
+	 * 修改周期报告状态信息的方法
+	 */
+	void updateReportCurrentState(@Param("reportCurrentState") String reportCurrentState,@Param("projectId") Long projectId);
+	
+	/**
+	 * 修改项目更改数据ID
+	 */
+	void updateChangeDataId(@Param("changeDataId") String changeDataId,@Param("projectId") Long projectId);
+	
+	/**
+	 * 修改项目状态
+	 */
+	void updateState(@Param("state") String state,@Param("projectId") Long projectId);
+
+	/**
+	 * 修改项目changeDataId&changeProcessInstanceId&&changeCurrentState
+	 */
+	void updateProjectChangeByProjectId(@Param("changeDataId") String changeDataId,@Param("changeProcessInstanceId") String changeProcessInstanceId,@Param("changeCurrentState") String changeCurrentState,@Param("projectId") Long projectId);
+
+	/**
+	 * 根据ProjectId查询项目变更信息
+	 */
+	Project selectChangeInfoByProjectId(Long projectId);
+	
+	
+}

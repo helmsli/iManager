@@ -44,6 +44,8 @@ public class DepartleaderPublishController extends BaseController {
 	private Long roleId_projectManager;// 项目经理角色ID
 	@Value("${roleId_threeLevelsLeader}")
 	private Long roleId_threeLevelsLeader;// 三级部门经理角色ID
+	@Value("${roleId_departLeader}")
+	private Long roleId_departLeader;
 
 	@RequestMapping(value = "/queryPrivilege", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String queryPrivilege(String state) {

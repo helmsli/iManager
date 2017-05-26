@@ -4,7 +4,7 @@ App.controller('myDataController', ['$scope', '$ocLazyLoad', function($scope) {
 	
 	//表格标题
 	$scope.titleList = [
-			"项目编号",
+			"申报单位",
 			"项目名称",
 			"申请时间",
 			"项目状态",

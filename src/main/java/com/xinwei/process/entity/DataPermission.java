@@ -6,6 +6,11 @@ package com.xinwei.process.entity;
  */
 public class DataPermission extends DataInfo {
 	
+	public static final String DATATYPE_PUBLISH = "publish";
+	
+	public static final String DATATYPE_MonthlyReport = "submitMonthlyReport";
+	
+	
 	public static final String PERMISSIONTYPE_ROLE = "0";
 	public static final String PERMISSIONTYPE_USER = "1";
 	
@@ -26,25 +31,36 @@ public class DataPermission extends DataInfo {
 	public static final String PRIVILEGE_canReadWriteowner = "application";
 		
 	
-	//业务申请权限,用于
+	//业务申请权限,用于,对于月度报表，用于表示某一个项目
 	public static final String ExtData3_Application = "apply";
 	
 	
-	
+	/*
+	 * 0 --- 允许角色  1-- 允许用户  2-- 用户黑名单不允许访问  3 --- 角色黑名单不允许访问
+	 */
     private String permissionType;//权限类型(组、用户)
 
+    /**
+     * 对应的用户ID或者角色的ID
+     */
     private String permissionId;//权限类型对应的ID
 
     //用来归属的第三方评估机构
+    /*
+     * 
+     * 如果是Optimize，指明是第三方拥有的数据权限
+     * 对于publish，该字段具备如下含义：application : optimize:用于表示该数据是第三方拥有的数据权限 
+     * 对于月度报表，该字段含义如下：  
+     */
     private String extData1=PRIVILEGE_canReadWrite;//扩展信息
     
     
 
-    
+    //数据排序索引
     private String extData2;
 
     //权限的详细描述，比如申请全新
-    private String extData3;
+    private String extData3=ExtData3_Application;
 
     /**
      * 设置用户不能申请数据，对于用户而言，如果已经申请了数据，需要将该数据列入黑名单

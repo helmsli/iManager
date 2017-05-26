@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="global.js"></script>
+		<script src="formValid_Inf.js"></script>
+		<script src="formValid_Rule.js"></script>
+		<script src="formValid.js"></script>
+	</head>
+	<body>
+		<form action="#" method="post" id="theForm">
+		    <div >
+			    <ul>
+				    <li>
+					    <div class="errInf">
+						    <label>User Name：</label>
+						    <input type="text" name="userName" id="userName" data-error="UserName error" data-tip="Please enter the user name" />						    
+					    </div>
+					    <div class="tipInf"></div>
+				    </li>
+				    
+				    <li>
+					    <div class="errInf">
+						    <label>User Type</label>
+						    <select id="userType" name="userType" data-error="No select" data-tip=" Please select the user type">
+							    <option value="" selected="selected">select</option>
+            	                <option value="1">1</option>
+            	                <option value="2">2</option>
+            	                <option value="3">3</option>
+						    </select>						    
+					    </div>
+					    <div class="tipInf"></div>
+				    </li>
+				    
+				    <li>
+					    <div class="errInf">
+						    <label>password：</label>
+						    <input type="text" id="pwd" data-error="password error" data-tip="Please enter your password" />
+					    </div>
+					    <div class="tipInf"></div>
+				    </li>
+				    
+				    <li>
+					    <div class="errInf">
+						    <label>Email：</label>
+						    <input type="text" id="email" />						    
+					    </div>
+					    <div class="tipInf"></div>
+				    </li>
+				     
+				    <li>
+					    <div class="errInf">
+						    <label>Number：</label>
+						    <input type="text" id="myNum" data-error="Num error" data-tip="Please enter your num"/>						    
+					    </div>
+					    <div class="tipInf"></div>
+				    </li>
+				    
+				    <li>
+				    	<div class="errInf">					        
+					        <input type="checkbox" id="sing" name="hobby" value="sing" data-error="未勾选" />sing
+				    		<input type="checkbox" id="dance" name="hobby" value="dance" data-error="未勾选" />dance
+				    	</div>
+					    <div class="tipInf"></div>
+				    </li>
+				    <li>
+				    	<div class="errInf">
+				    		男:<input type="radio" name="sex" id="man" value="man"/>
+				    		女:<input type="radio" name="sex" id="woman" value="woman"/>
+				    	</div>
+				    	<div class="tipInf"></div>
+				    </li>
+				    				    
+				    <li><input type="button" id="submitBtn" value="register" ></li>
+			    </ul>
+		    </div>
+		</form>
+		<script src="getFormData.js"></script>
+	</body>
+</html>

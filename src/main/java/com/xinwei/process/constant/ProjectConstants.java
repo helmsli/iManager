@@ -7,6 +7,9 @@ package com.xinwei.process.constant;
  */
 public interface ProjectConstants {
 
+	public interface MonthlyConst{
+		static final String oldCommonBizCategory="oldMonthlyReport";
+	}
 	// 项目当前状态
 	public interface State {
 		// 项目状态名
@@ -65,6 +68,31 @@ public interface ProjectConstants {
 		// 项目周期报告
 		static final Long MONTHLYREPORT = 6L;// 项目周期报告
 	}
+	
+	//-1000到-2000
+	public interface MONTHLY_ERROR {
+		static final Long ProjectName_ISNULL = -1000L;// 申报的项目名称为空
+		static final Long ProjectCompany_ISNULL = -1001L;//申报书单位为空
+		static final Long Trainning_times_ISNULL =  -1002L;//培训次数为空
+		static final Long NotTrainning_times_ISNULL =  -1003L;//非培训的服务次数
+		static final Long MainContent_ISNULL =  -1004L;//本月主要工作内容介绍的服务次数
+		static final Long ChuDianZongjie_ISNULL =  -1005L;//触点总结（本月好的经验/问题总结，项目运作小的或大的改进、提高等让人有所触动之处
+		static final Long ZhiJieShouYIRenshu_ISNULL =  -1006L;//直接受益人数
+		static final Long ZhiJieShouYIRenCi_ISNULL =  -1007L;//直接受益人次
+		
+		static final Long JianJieShouYIRenshu_ISNULL =  -1008L;//间接受益人数
+		static final Long JianJieShouYIRenCi_ISNULL =  -1009L;//间接受益人次
+		
+		static final Long XiangMuBianGeng_ISNULL =  -1010L;//间项目变更情况（如无变更填“无”）
+		static final Long MeiTiBaoDiaoCiShu_ISNULL =  -1011L;//媒体报道次数
+		static final Long MeiTiBaoDaoLianjie_ISNULL =  -1012L;//媒体报道链接
+		static final Long GaiJinJiHua_ISNULL =  -1013L;//改进计划
+		
+		static final Long XiaYueZhongDaJihua_ISNULL =  -1014L;//下月重大活动计划
+		static final Long YueFen_ISNULL =  -1015L;//下月重大活动计划
+		static final Long Format_ERROR =  -1050L;//下月重大活动计划
+	}
+	//-1到-255
 	public interface PROJECT_ERROR {
 		static final Long APPLICATION_ISNULL = -1L;// 申报书上传失败，上传的是空值
 
@@ -78,6 +106,9 @@ public interface ProjectConstants {
 		
 		static final Long ProjectCompany_ISNULL = -7L;//申报书单位为空
 		static final Long ProjectServiceField_ISNULL = -8L;//申报书单位为空
+		
+		static final Long Project_NotExist = -9L;//项目不存在
+		static final Long Project_committee_NotExist = -10L;//没有指定第三方
 		
 		static final Long TERMIANLREPORT = 5L;// 终期评审报告
 		// 项目周期报告

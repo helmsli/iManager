@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/Authority_Repository/!svn/ver/1147/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/impl
+END
+UserServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/impl/UserServiceImpl.java
+END
+UserRoleServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/Authority_Repository/!svn/ver/1147/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/impl/UserRoleServiceImpl.java
+END
+RoleServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/Authority_Repository/!svn/ver/1147/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/impl/RoleServiceImpl.java
+END
+DepartmentServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/impl/DepartmentServiceImpl.java
+END
+MenuServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/impl/MenuServiceImpl.java
+END
+FunctionServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/impl/FunctionServiceImpl.java
+END
+RolePermissionServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/impl/RolePermissionServiceImpl.java
+END
+BusinessServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/impl/BusinessServiceImpl.java
+END

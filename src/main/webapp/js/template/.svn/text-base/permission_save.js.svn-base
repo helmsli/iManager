@@ -1,0 +1,3 @@
+var role_permission={
+	
+}

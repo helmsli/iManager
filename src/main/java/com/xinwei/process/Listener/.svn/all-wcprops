@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/Authority_Repository/!svn/ver/1279/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/Listener
+END
+ChangeCurrentStateListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/Authority_Repository/!svn/ver/1066/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/Listener/ChangeCurrentStateListener.java
+END
+ProjectCurrentStateListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/Authority_Repository/!svn/ver/1270/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/Listener/ProjectCurrentStateListener.java
+END
+ChangeEndListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/Authority_Repository/!svn/ver/1066/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/Listener/ChangeEndListener.java
+END
+ReportCurrentStateListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/Authority_Repository/!svn/ver/978/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/Listener/ReportCurrentStateListener.java
+END
+ChangePreviousStateListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/Authority_Repository/!svn/ver/1066/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/Listener/ChangePreviousStateListener.java
+END
+ProjectPreviousStateListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn/Authority_Repository/!svn/ver/1066/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/Listener/ProjectPreviousStateListener.java
+END
+ReportCompleteListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/Authority_Repository/!svn/ver/1278/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/Listener/ReportCompleteListener.java
+END
+DetermineCompleteListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/Authority_Repository/!svn/ver/787/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/Listener/DetermineCompleteListener.java
+END
+EndEventListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/Authority_Repository/!svn/ver/1279/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/Listener/EndEventListener.java
+END

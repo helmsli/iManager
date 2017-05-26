@@ -1,0 +1,14 @@
+<li ng-repeat="permission in permissionTree">
+	<label class="checkbox-inline">
+		<input type="checkbox" class="filled-in chk-col-blue"
+			   value="{{permission.id}}" id="tree_list_{{permission.type}}_{{permission.id}}"
+			   data-pid="tree_list_0_{{permission.parent_id?permission.parent_id:permission.menu_id}}" 
+			   name="tree_list_checkbox_{{permission.id}}" 
+			   data-pmid="{{permission.id}}" data-pmtype="{{permission.type}}"
+			   ng-disabled="permissionDisabled" ng-checked="permissionChecked">
+		<label for="tree_list_{{permission.type}}_{{permission.id}}">{{permission.name|translate}}</label>
+		
+	</label>
+	<ul ng-switch on="permission.children.length >0||permission.functions.length>0" ng-init="permissionTree = (permission.children.length==0?permission.functions:permission.children);" ng-include="'../include/userCenterTemp/permissionTree.html'">
+	 </ul>
+</li>

@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/process
+END
+CommitteeApprovalMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/process/CommitteeApprovalMapper.xml
+END
+CommonBizMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/Authority_Repository/!svn/ver/1253/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/process/CommonBizMapper.xml
+END
+ProjectSubcategoryMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/process/ProjectSubcategoryMapper.xml
+END
+ProjectAnnexMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/Authority_Repository/!svn/ver/1219/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/process/ProjectAnnexMapper.xml
+END
+DepartleaderApprovalMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/process/DepartleaderApprovalMapper.xml
+END
+ProjectCategoryMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/process/ProjectCategoryMapper.xml
+END
+ProjectMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/Authority_Repository/!svn/ver/1228/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/process/ProjectMapper.xml
+END
+CompanyMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/process/CompanyMapper.xml
+END
+ProjectRequirementMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/process/ProjectRequirementMapper.xml
+END
+ExpertReviewMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/process/ExpertReviewMapper.xml
+END

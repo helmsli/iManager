@@ -13,6 +13,8 @@ public interface ProjectMapper {
 	int insert(Project record);
 
 	Project selectByPrimaryKey(Long projectId);
+	
+	List<Project> selectByProjectName(String projectName);
 
 	List<Project> selectAll();
 

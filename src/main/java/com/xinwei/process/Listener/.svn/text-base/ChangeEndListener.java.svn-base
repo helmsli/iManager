@@ -1,0 +1,28 @@
+package com.xinwei.process.Listener;
+
+import javax.annotation.Resource;
+import org.activiti.engine.delegate.DelegateExecution;
+import org.activiti.engine.delegate.ExecutionListener;
+import org.springframework.stereotype.Service;
+import com.xinwei.process.constant.ChangeConstants;
+import com.xinwei.process.service.ProjectService;
+
+@Service
+public class ChangeEndListener implements ExecutionListener {
+	@Resource
+	private ProjectService projectService;
+
+	@Override
+	public void notify(DelegateExecution execution) throws Exception {
+		String businessKey = execution.getBusinessKey();// projectID
+		if (null!=businessKey) {
+			Long projectId = Long.valueOf(businessKey);
+			// 更新项目状态
+
+			projectService.updateProjectPropertyByProjectId(ProjectService.CHANGECURRENTSTATE, ChangeConstants.State.CODE_ENDEVENT, projectId);
+
+		}
+		
+	}
+
+}

@@ -65,10 +65,13 @@
 			<div id="page-wrapper" ng-controller="projectModel">
 				<div class="panel" ng-init="initModel()">
 					<div class="panel-heading">
-						<h2 class="panel-title">项目详情</h2>
-						<span class="abs pull-right-20" style="display:none;">
-							<button type="button" class="btn btn-primary waves-effect" onClick="downloadProject()" >下载</button>
-						</span>
+						<div class="row" >
+							<h2 class="panel-title col-lg-11">项目详情</h2>
+							<span class="abs pull-right-20" style="display:none;">
+								<button type="button" class="btn btn-primary waves-effect" onClick="downloadProject()" >下载</button>
+							</span>
+							<div class="col-lg-1 p-l-0" style="padding-top:1px;"><button id="searchButton"  type="button" class="btn btn-primary waves-effect" onClick="windowReload()">刷新</button></div>
+						</div>
 					</div>
 					<div class="panel-body min-height-550">
 						<div class="panel-group" id="collapseGroup">

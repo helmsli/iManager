@@ -1,0 +1,365 @@
+package com.xinwei.process.controller;
+
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.xinwei.process.constant.ChangeConstants;
+import com.xinwei.process.constant.ChangeConstants.ServiceType;
+import com.xinwei.process.entity.ApprovalResult;
+import com.xinwei.process.entity.CommonBiz;
+import com.xinwei.process.entity.Project;
+import com.xinwei.process.service.CommitteeApprovalService;
+import com.xinwei.process.service.CommonBizService;
+import com.xinwei.process.service.DepartleaderApprovalService;
+import com.xinwei.process.service.ProcessService;
+import com.xinwei.process.service.ProjectService;
+import com.xinwei.process.service.UserTaskService;
+import com.xinwei.security.entity.User;
+import com.xinwei.security.vo.ResultVO;
+import com.xinwei.util.JsonUtil;
+
+/**
+ * 项目变更控制器
+ *
+ */
+@Controller
+@RequestMapping("/changeproject")
+public class ChangeProjectController extends BaseController {//0218
+	@Resource
+	private ProjectService projectService;
+	@Resource
+	private ProcessService processServiceImpl;// 流程相关服务
+	@Resource
+	private CommonBizService commonBizService;// 变更服务
+	@Resource
+	private ProjectService projectServiceImpl;// 项目相关服务
+	@Resource
+	private DepartleaderApprovalService departleaderApprovalServiceImpl;// 部门领导审批相关服务
+	@Resource
+	private CommitteeApprovalService committeeApprovalServiceImpl;// 决策委员会审批相关服务
+	@Resource
+	private UserTaskService userTaskServiceImpl;// 用户任务相关服务
+
+	@Value("${committee}")
+	private String committee;//决策委员会人员ID
+	@Value("${departLeader}")
+	private String departLeader;//部门经理ID
+	
+	private Logger logger = LoggerFactory
+			.getLogger(ChangeProjectController.class);
+
+	/**
+	 * 保存变更(包括修改后保存)
+	 * 
+	 * @param CommonBiz
+	 * @return
+	 */
+	@RequestMapping(value = "/createChange", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String postChangeRequest(CommonBiz commonBiz) {
+		ResultVO<Object> result = new ResultVO<>();
+		String changeCurrentState = "";
+		// 根据project获取项目经理ID，仅仅该项目经理能够提取变更；
+		Project project = projectService.selectByPrimaryKey(commonBiz
+				.getProjectId());
+		User user = getCurrentUser();
+		logger.debug(user.getId() + "manager:" + project.getProjectManagerId());
+		if (user.getId().longValue() != project.getProjectManagerId()
+				.longValue()) {
+			// 构造没有权限提出变更申请
+			result.setResult(ChangeConstants.ErrorCode.NOT_AUTHORITY_CHANGE);
+			return result.toString();
+		}
+		boolean open = false;
+		if (open) {// project表中ChangeCurrentState初始创建时为空
+			changeCurrentState = project.getChangeCurrentStateFromStatusInfo();
+		}
+
+		if (!StringUtils.isBlank(changeCurrentState)
+				&& !changeCurrentState
+						.equals(ChangeConstants.State.CODE_ENDEVENT)) {
+			// 判断project表格中状态，如果状态不是"申请变更"，不允许提交；
+			result.setResult(ChangeConstants.ErrorCode.STATUS_NOT_ALLOW_CHANGE);
+			return result.toString();
+		} else {
+			// 新增
+			if (isNewChange(project)) {
+				createNewChange(commonBiz, project);
+				open=true;//第二次创建时project表中ChangeCurrentState初始创建时不为空
+			} else {// 修改
+				modifyChange(commonBiz, project);
+			}
+
+			// 响应客户端
+			result.setOthers("dataId", commonBiz.getDataId());
+			return result.toString();
+		}
+	}
+
+	/**
+	 * 
+	 * @param commonBiz
+	 * @param project
+	 * @return
+	 */
+	protected int createNewChange(CommonBiz commonBiz, Project project) {
+		// CommonBiz更新这里连得创建者，创建时间，设置状态，更改人，更改时间
+		User user = getCurrentUser();
+		commonBiz.setCreatePerson(user.getId().toString());
+		commonBiz.setCreateTime(Calendar.getInstance().getTime());
+		commonBiz.setUpdatePerson(user.getUsername());
+		commonBiz.setUpdateTime(Calendar.getInstance().getTime());
+		commonBiz
+				.setStatus(ChangeConstants.State.CODE_COMMITTEE_APPROVALCHANGE);
+		commonBiz.setServiceType(ServiceType.TYPE_XMBIANGENG);
+		// 保存变更
+		String dataId = commonBizService.save(commonBiz);
+
+		// 创建一个流程，并启动该流程实例(在启动流程实例时，将当前CommonBiz的ID作为业务key)，将流程实例ID保存到CommonBiz；
+		// 启动变更流程
+		Map<String, Object> variables = new HashMap<String, Object>();
+		
+		//指定项目经理
+		variables.put("projectManager", project.getProjectManagerId().toString());
+		//指定决策委员会
+		variables.put("committee", committee);
+		//指定部门经理
+		variables.put("departLeader", departLeader);
+		
+		variables.put(ChangeConstants.ActivitiContextKey.ChangeServiceID,
+				commonBiz.getDataId());
+		ProcessInstance processInstance = processServiceImpl.startProcess(
+				ChangeConstants.getProcessKey(project.getCategoryId()),
+				project.getProjectId().toString(),
+				commonBiz.getCreatePerson(), variables);
+
+		// 设置CommonBiz对象的流程实例ID
+		commonBiz.setProcessInstanceId(processInstance.getId());
+		commonBizService.update(commonBiz);
+
+		// 设置主项目表中的变更流程的状态
+		List<Task> currentTask = userTaskServiceImpl
+				.findActiveTaskByProcessInstanceId(processInstance.getId());
+		String state = userTaskServiceImpl.getStateByTaskDefinitionKey(currentTask
+				.get(0).getTaskDefinitionKey());
+		// 修改project表中： 项目更改数据ID&变更流程实例ID&变更的流程当前状态信息
+		projectServiceImpl.updateProjectChangeByProjectId(dataId,
+				processInstance.getId(), project
+						.makeChangeCurrentStateFromStatusInfo(state, currentTask
+								.get(0).getId(), currentTask.get(0).getName()),
+				commonBiz.getProjectId());
+		return 0;
+	}
+	
+
+	/**
+	 * 
+	 * @param commonBiz
+	 * @param project
+	 * @return
+	 */
+	protected int modifyChange(CommonBiz commonBiz, Project project) {
+		// CommonBiz更新这里连得创建者，设置状态，更改人，更改时间
+		User user = getCurrentUser();
+		commonBiz.setUpdatePerson(user.getUsername());
+		commonBiz.setUpdateTime(Calendar.getInstance().getTime());
+		// commonBiz
+		// .setStatus(ChangeConstants.State.CODE_COMMITTEE_APPROVALCHANGE);
+		// 保存变更,Update不允许修改创建人和创建时间
+		commonBizService.update(commonBiz);
+
+		// 创建一个流程，并启动该流程实例(在启动流程实例时，将当前CommonBiz的ID作为业务key)，将流程实例ID保存到CommonBiz；
+		// 启动变更流程
+		Map<String, Object> variables = new HashMap<String, Object>();
+	
+
+		// 获取老的任务，获取结果
+		List<Task> currentTask = userTaskServiceImpl
+				.findActiveTaskByProcessInstanceId(commonBiz
+						.getProcessInstanceId());
+		// 获取task对象
+		Task task = currentTask.get(0);
+		
+		
+		// 获取评审结论
+//		String stringResult = commonBiz.getResult();
+		
+//		ApprovalResult rr = new ApprovalResult();
+//		rr.setComment("同意变更");
+//		rr.setResult("pass");//同意变更或取消变更
+//		String stringResult = JsonUtil.toJson(rr);
+//		System.out.println(stringResult);
+		
+		
+		ApprovalResult rr = new ApprovalResult();
+		rr.setComment("不同意变更");
+		rr.setResult("cancel");//同意变更或取消变更
+		String stringResult = JsonUtil.toJson(rr);
+		System.out.println(stringResult);
+
+		// 设置主项目表中的变更流程的状态
+		updateProjectCurrentChangeStatus(commonBiz, project);
+		
+		ApprovalResult approvalResult = JsonUtil.fromJson(stringResult,
+				ApprovalResult.class);
+		
+//		variables.put(ChangeConstants.ActivitiContextKey.ChangeServiceID,
+//				commonBiz.getDataId());
+		
+		variables.put(task.getTaskDefinitionKey()
+				+ ChangeConstants.ActivitiContextKey.result,
+				approvalResult.getResult());
+
+		userTaskServiceImpl.completeTask(task.getId(), variables);
+		
+		//TODO  修改end状态
+
+		return 0;
+	}
+	
+	private void updateProjectCurrentChangeStatus(CommonBiz commonBiz,
+			Project project) {
+		List<Task> currentTask;
+		currentTask = userTaskServiceImpl
+				.findActiveTaskByProcessInstanceId(commonBiz
+						.getProcessInstanceId());
+
+		String state = userTaskServiceImpl.getStateByTaskDefinitionKey(currentTask
+				.get(0).getTaskDefinitionKey());
+		
+		
+		commonBiz.setStatus(project
+				.makeChangeCurrentStateFromStatusInfo(state, currentTask
+						.get(0).getId(), state));
+		
+		commonBizService.updateChangeStatusByDataId(state,commonBiz.getDataId());
+		
+		projectServiceImpl.updateProjectPropertyByProjectId(
+				ProjectService.CHANGECURRENTSTATE, project
+						.makeChangeCurrentStateFromStatusInfo(state, currentTask
+								.get(0).getId(), currentTask.get(0).getName()),
+				commonBiz.getProjectId());
+	}
+	
+
+	protected boolean isNewChange(Project project) {
+		if (StringUtils.isBlank(project.getChangeCurrentStateFromStatusInfo())
+				|| project.getChangeCurrentStateFromStatusInfo()
+						.compareToIgnoreCase(
+								ChangeConstants.State.CODE_STARTEVENT) == 0
+				|| project.getChangeCurrentStateFromStatusInfo()
+						.compareToIgnoreCase(
+								ChangeConstants.State.CODE_ENDEVENT) == 0)
+			return true;
+		return false;
+	}
+
+	/**
+	 * 决策委员会审批变更 B001 、部门经理审批变更 B002
+	 * 
+	 * @param id
+	 */
+	@RequestMapping(value = "/approvalChange", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String approvalChange(CommonBiz commonBiz) {
+		ResultVO<Object> result = new ResultVO<>();
+		// 设置主项目表中的变更流程的状态
+		List<Task> currentTask = userTaskServiceImpl
+				.findActiveTaskByProcessInstanceId(commonBiz
+						.getProcessInstanceId());
+		// 获取task对象
+		Task task = currentTask.get(0);
+		// 设置部门经理审批变更流程变量
+		Map<String, Object> variables = new HashMap<String, Object>();
+		// 获取评审结论
+//		String stringResult = commonBiz.getResult();
+		
+		ApprovalResult rr = new ApprovalResult();
+		rr.setComment("请修改完成时间");
+		rr.setResult("needmodify");//pass/cancel
+		String stringResult = JsonUtil.toJson(rr);
+		System.out.println(stringResult);
+
+		ApprovalResult approvalResult = JsonUtil.fromJson(stringResult,
+				ApprovalResult.class);
+		variables.put(task.getTaskDefinitionKey()
+				+ ChangeConstants.ActivitiContextKey.result,
+				approvalResult.getResult());
+
+		//更新二个表的变更状态
+		String state = updateChangeStatusProperty(commonBiz);
+		
+		userTaskServiceImpl.completeTask(task.getId(), variables);
+//
+		logger.debug("决策委员会或者部门经理审批变更前的状态:" + state);
+		
+		return result.toString();
+	}
+
+	private String updateChangeStatusProperty(CommonBiz commonBiz) {
+		List<Task> currentTask;
+		Task task;
+		currentTask = userTaskServiceImpl
+				.findActiveTaskByProcessInstanceId(commonBiz
+						.getProcessInstanceId());
+		task = currentTask.get(0);
+		
+		String state = userTaskServiceImpl.getStateByTaskDefinitionKey(currentTask
+				.get(0).getTaskDefinitionKey());
+		
+		//更新项目表中变更状态					
+		Project project = projectService.selectByPrimaryKey(commonBiz
+				.getProjectId());
+		
+		commonBiz.setStatus(project
+				.makeChangeCurrentStateFromStatusInfo(state, currentTask
+						.get(0).getId(), state));
+		
+		commonBizService.updateChangeStatusByDataId(state,commonBiz.getDataId());
+		
+		projectServiceImpl.updateProjectPropertyByProjectId(
+				ProjectService.CHANGECURRENTSTATE, project
+						.makeChangeCurrentStateFromStatusInfo(state, currentTask
+								.get(0).getId(), state),
+				commonBiz.getProjectId());
+		return state;
+	}
+	
+	
+	/**
+	 * 根据projectId查询CommonBiz对象
+	 * 
+	 * @param projectId
+	 *            项目ID
+	 * @return
+	 */
+	@RequestMapping(value = "/getCommonBizByProjectId", method = {
+			RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String getCommonBizByProjectId(Long projectId) {
+		ResultVO<Project> resultVO = new ResultVO<Project>();
+		try {
+			CommonBiz commonBiz = commonBizService
+					.getCommonBizByProjectId(projectId);
+			resultVO.setOthers("commonBiz", commonBiz);
+		} catch (Exception e) {
+			resultVO.setResult(resultVO.FAILURE);
+			e.printStackTrace();
+		}
+		return resultVO.toString();
+	}
+}

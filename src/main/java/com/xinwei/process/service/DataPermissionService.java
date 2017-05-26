@@ -14,6 +14,9 @@ public interface DataPermissionService {
 	 */
 	int save(DataPermission record);
 
+	
+	List<DataPermission> selectByConditions(Map<String, Object> queryMap);
+	
 	/**
 	 * 获取所有
 	 * @return

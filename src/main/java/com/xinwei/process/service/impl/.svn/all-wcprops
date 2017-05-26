@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/impl
+END
+CommonBizServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/Authority_Repository/!svn/ver/1251/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/impl/CommonBizServiceImpl.java
+END
+ProcessServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/Authority_Repository/!svn/ver/977/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/impl/ProcessServiceImpl.java
+END
+ProjectSubcategoryServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/impl/ProjectSubcategoryServiceImpl.java
+END
+UserAndGroupServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/Authority_Repository/!svn/ver/1148/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/impl/UserAndGroupServiceImpl.java
+END
+ProjectAnnexServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/Authority_Repository/!svn/ver/1067/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/impl/ProjectAnnexServiceImpl.java
+END
+DepartleaderApprovalServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 153
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/impl/DepartleaderApprovalServiceImpl.java
+END
+UserTaskServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/Authority_Repository/!svn/ver/1114/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/impl/UserTaskServiceImpl.java
+END
+ProjectCategoryServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/impl/ProjectCategoryServiceImpl.java
+END
+ProjectServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/Authority_Repository/!svn/ver/1226/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/impl/ProjectServiceImpl.java
+END
+CompanyServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/impl/CompanyServiceImpl.java
+END
+ProjectRequirementServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/impl/ProjectRequirementServiceImpl.java
+END
+ExpertReviewServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/impl/ExpertReviewServiceImpl.java
+END
+CommitteeApprovalServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/impl/CommitteeApprovalServiceImpl.java
+END

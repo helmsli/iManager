@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -50,6 +51,11 @@ public class DepartleaderPublishServiceImpl implements
 	private XwSysSeqService xwSysSeqService;
 	@Resource
 	private ProjectService projectService;//项目服务
+	
+	
+	@Value("${roleId_departLeader}")
+	private Long roleId_departLeader;// 项目经理角色ID
+	
 	
 	private final String PUBLISH_SEQ = "departleader_publish_seq";//部门经理发布编号
 	private Logger logger = LoggerFactory.getLogger(DepartleaderPublishServiceImpl.class);
@@ -262,17 +268,24 @@ public class DepartleaderPublishServiceImpl implements
 				dataPermission.setDataType(DataInfo.DATATYPE_PUBLISH);
 				dataPermission.setCategoryId(publish.getCategoryId());
 				dataPermission.setPermissionType(DataPermission.PERMISSIONTYPE_ROLE);
-				dataPermission.setPermissionId(roleId.toString());
-				
-				if(publish.isDingxiang())
-				{
-					dataPermission.setPrivilegeThrreeEval();
-				}
+				dataPermission.setPermissionId(roleId.toString());		
 				
 				DataPermissionDao.insert(dataPermission);
 			}
 			
 		}
+		//增加部门经理和的权限 roleId_departLeader
+		{
+			List<Long> userIdList = new ArrayList<Long>();
+			List<Long> roleIdList = new ArrayList<Long>();
+			for(AssignPerson assignPerson : threeEvalList){
+			//如果指定为角色
+			roleIdList.add(roleId_departLeader);
+					
+			}
+		}
+		
+		
 		
 		//增加第三方数据查询和监管；
 		if (null != threeEvalList && !threeEvalList.isEmpty()) {

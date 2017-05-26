@@ -1,0 +1,102 @@
+package com.xinwei.process.service.impl;
+
+import java.util.List;
+import java.util.Map;
+import javax.annotation.Resource;
+import org.activiti.engine.HistoryService;
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import com.xinwei.process.service.ProcessService;
+/**
+ * 流程相关服务
+ */
+@Service
+public class ProcessServiceImpl implements ProcessService {
+	
+	@Resource
+	private RuntimeService runtimeService;//activiti运行时服务
+	@Resource
+	private IdentityService identityService; //activiti用户、组服务
+	@Resource
+	private HistoryService historyService;// 与历史数据（历史表）相关的Service
+	
+	private Logger logger = LoggerFactory.getLogger(ProcessServiceImpl.class);
+	
+	@Override
+	public ProcessInstance startProcess(String processDefinitionKey,String bussinessKey,String userId, Map<String,Object> variables){
+		
+		//设置启动流程的人员Id
+		identityService.setAuthenticatedUserId(userId);
+		
+		//启动一个流程实例
+		ProcessInstance processInstance = runtimeService
+				.startProcessInstanceByKey(processDefinitionKey,bussinessKey,variables);
+		return processInstance;
+	}
+
+	@Override
+	public ProcessInstance getProcessInstance(String processInstanceId) {
+		ProcessInstance processInstance = runtimeService
+	    		.createProcessInstanceQuery()
+	    		.processInstanceId(processInstanceId)
+	    		.singleResult();
+		return processInstance;
+	}
+
+	@Override
+	public HistoricProcessInstance findHistoryProcessInstance(
+			String processInstanceId) {
+		   HistoricProcessInstance hpi = historyService
+	              .createHistoricProcessInstanceQuery()// 创建历史流程实例查询
+	              .processInstanceId(processInstanceId)// 使用流程实例ID查询
+	              .orderByProcessInstanceStartTime().asc()
+	              .singleResult();
+		 
+	       logger.debug(hpi.getId() + "    " + hpi.getProcessDefinitionId() + "    " + hpi.getStartTime() + "    "
+	                + hpi.getEndTime() + "     " + hpi.getDurationInMillis());
+	       return hpi;
+	}
+
+	@Override
+	public List<HistoricActivityInstance> findHistoryActiviti(
+			String processInstanceId) {
+		List<HistoricActivityInstance> list = historyService
+                .createHistoricActivityInstanceQuery()// 创建历史活动实例的查询
+                .processInstanceId(processInstanceId)//
+                .orderByHistoricActivityInstanceStartTime().asc()
+                .list();
+  
+	    return list;
+	}
+
+	@Override
+	public List<HistoricTaskInstance> findHistoryTask(String processInstanceId) {
+		List<HistoricTaskInstance> list = historyService
+	            .createHistoricTaskInstanceQuery()// 创建历史任务实例查询
+	            .processInstanceId(processInstanceId)
+	            .taskDeleteReason("completed")
+	            .orderByHistoricTaskInstanceStartTime().asc()
+	            .list();
+		 return list;
+	}
+
+	@Override
+	public List<HistoricVariableInstance> findHistoryProcessVariables(
+			String processInstanceId) {
+		List<HistoricVariableInstance> list = historyService
+                .createHistoricVariableInstanceQuery()// 创建一个历史的流程变量查询对象
+                .processInstanceId(processInstanceId)//
+                .list();
+        
+        return list;
+	}
+	
+}

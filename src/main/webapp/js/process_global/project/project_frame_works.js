@@ -50,6 +50,7 @@ function initMainControll()
 	var state= getProjectState();
 	var templatePath=getApproveFilePath(state);
 	initScriptFile(state);
+	//查询流程信息
 	initViewModel();
 	initJzdcFilePath();
 	if(!parm.seeState)
@@ -352,6 +353,7 @@ function initProjectInfo()
 	var obj={
 			"request.projectId":parm.projectId
 		};
+	//查询项目变更信息
 	if(parm.bg==1){
 		console.log("********************");
 		getBgBaseInformation(obj,function(data){
@@ -359,6 +361,7 @@ function initProjectInfo()
 				setUIBgData(data);
 			}
 		});
+	//查询项目信息
 	}else{
 		console.log("########################");
 		//从后台取到数据，显示在前台as
@@ -467,6 +470,26 @@ function initProjectInfo()
 	 data1=processData(data1,data2);
 	 scope.project=processData(data1,data3);
 		var projectExtInfo=JSON.parse(scope.project.projectExtInfo);
+		
+		//填写申报单位信息
+		try{
+			//console.log(JSON.stringify(dataLists[i]));
+			//console.log("***************：" +dataLists[i].projectTaskDetail );
+			var projectdetail=JSON.parse(scope.project.projectTaskDetail);
+			
+			
+			if(projectdetail){
+				scope.project.project_detail=projectdetail;
+				//console.log("***************0000:"+ dataLists[i].project_detail.declarationUnit);
+				
+			    
+			}   	
+		}
+		catch(err)
+		  {
+		  //在这里处理错误
+		  }
+		
 		try{
 			scope.project.CycleType=JSON.parse(scope.project.cycleType)[0].value;
 			scope.project.subcategory=JSON.parse(scope.project.subcategory)[0].value;
@@ -513,6 +536,25 @@ function setUIData(data)
 	}catch(e){
 		console.log(e+"initData:"+e.messageInfo);
 	}
+	//获取项目扩展信息，来自申报书
+	try{
+		//console.log(JSON.stringify(dataLists[i]));
+		//console.log("***************：" +dataLists[i].projectTaskDetail );
+		var projectdetail=JSON.parse(projectInfo.projectTaskDetail);
+		
+		
+		if(projectdetail){
+			project.project_detail=projectdetail;
+			//console.log("***************0000:"+ dataLists[i].project_detail.declarationUnit);
+			
+		    
+		}   	
+	}
+	catch(err)
+	  {
+	  //在这里处理错误
+	  }
+	
 	
 	scope.project=project;
 	var projectTaskDetail=project.projectTaskDetail;

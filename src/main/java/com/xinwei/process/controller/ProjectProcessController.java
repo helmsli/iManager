@@ -1,11 +1,15 @@
 package com.xinwei.process.controller;
 
+import java.io.Console;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.lang.reflect.Type;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.RuntimeService;
@@ -17,6 +21,7 @@ import org.activiti.engine.task.TaskInfo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,19 +31,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tk.mybatis.mapper.util.StringUtil;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.xinwei.excel.ExcelType;
 import com.xinwei.process.constant.ApprovedConstants;
 import com.xinwei.process.constant.ChangeConstants;
 import com.xinwei.process.constant.ProjectConstants;
+import com.xinwei.process.dao.DataPermissionMapper;
 import com.xinwei.process.entity.ApprovalResult;
 import com.xinwei.process.entity.AssignPerson;
 import com.xinwei.process.entity.CommitteeApproval;
 import com.xinwei.process.entity.CommonBiz;
 import com.xinwei.process.entity.CycleTime;
+import com.xinwei.process.entity.DataInfo;
+import com.xinwei.process.entity.DataPermission;
 import com.xinwei.process.entity.DepartleaderApproval;
 import com.xinwei.process.entity.DepartleaderPublish;
 import com.xinwei.process.entity.ExpertReview;
 import com.xinwei.process.entity.Project;
+import com.xinwei.process.entity.ProjectAnnex;
 import com.xinwei.process.entity.ThreeleaderApplication;
 import com.xinwei.process.entity.UserTask;
 import com.xinwei.process.service.CommitteeApprovalService;
@@ -52,6 +64,8 @@ import com.xinwei.process.service.ProjectService;
 import com.xinwei.process.service.TaskDefKeyNameService;
 import com.xinwei.process.service.ThreeleaderApplicationService;
 import com.xinwei.process.service.UserTaskService;
+import com.xinwei.report.month.MonthlyReportReader;
+import com.xinwei.report.month.process.ProgressReport;
 import com.xinwei.security.entity.User;
 import com.xinwei.security.service.UserRoleService;
 import com.xinwei.security.vo.ResultVO;
@@ -95,6 +109,21 @@ public class ProjectProcessController extends BaseController{
 	private TaskDefKeyNameService taskDefKeyNameServiceImpl;// 根据TaskDefinitionKey获取任务状态名服务
 	@Resource
 	private UserRoleService userRoleServiceImpl; // 用户组服务
+	
+	@Resource
+	private DataPermissionMapper DataPermissionDao;
+	
+	@Value("${roleId_departLeader}")
+	private Long roleId_departLeader;// 项目经理角色ID
+	
+	@Value("${roleId_committee}")
+	private Long roleId_committee;// 项目经理角色ID
+	
+  
+
+	@Value("${uploadPath}")
+	private String uploadPath; 
+	private Gson gson = new Gson();
 	/**
 	 * 获取某个用户的所有待办任务列表
 	 * @param userId
@@ -201,7 +230,8 @@ public class ProjectProcessController extends BaseController{
 			RequestMethod.POST })
 	public @ResponseBody String claim(String taskId, String userId) {
 		logger.debug("Claim --> userId: " + userId + ", taskId: "+ taskId);
-		userTaskServiceImpl.claimTask(taskId, userId);
+		userTaskServiceImpl.claimTask(taskId, userId);	
+		
 		return new ResultVO<>().toString();
 	}
 	
@@ -311,6 +341,457 @@ public class ProjectProcessController extends BaseController{
 		logger.debug("InputMasterGrade --> result: "+ result.getResult());
 		return result.toString();
 	}
+   
+	protected long checkMonthlyReport(List<ProgressReport> progressReports)
+	{
+		
+		ProgressReport progressReport = progressReports.get(0);
+		//名称
+		if(StringUtils.isEmpty(progressReport.getName()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.ProjectName_ISNULL;
+		}
+		//月份
+		if(StringUtils.isEmpty(progressReport.getMonth()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.YueFen_ISNULL;
+		}
+		else
+		{
+			int month=0;
+			try {
+				month = Integer.parseInt(progressReport.getMonth());
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return ProjectConstants.MONTHLY_ERROR.YueFen_ISNULL;
+			}
+			if(month<1 || month>12)
+			{
+				return ProjectConstants.MONTHLY_ERROR.YueFen_ISNULL;
+			}
+		}
+		//
+		
+		if(StringUtils.isEmpty(progressReport.getCharge()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.ProjectCompany_ISNULL;
+		}
+		if(StringUtils.isEmpty(progressReport.getMeetingNumber()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.Trainning_times_ISNULL;
+		}
+		if(StringUtils.isEmpty(progressReport.getOtherManagement()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.NotTrainning_times_ISNULL;
+		}
+		if(StringUtils.isEmpty(progressReport.getMajorIssues()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.ChuDianZongjie_ISNULL;
+		}
+		
+		if(StringUtils.isEmpty(progressReport.getReviewTimes()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.ZhiJieShouYIRenshu_ISNULL;
+		}
+		if(StringUtils.isEmpty(progressReport.getDocOutputNumber()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.ZhiJieShouYIRenCi_ISNULL;
+		}
+		
+		if(StringUtils.isEmpty(progressReport.getCodeReviewTimes()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.JianJieShouYIRenshu_ISNULL;
+		}
+		if(StringUtils.isEmpty(progressReport.getVersionOutputNumber()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.JianJieShouYIRenCi_ISNULL;
+		}
+		if(StringUtils.isEmpty(progressReport.getReviewTimes()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.ZhiJieShouYIRenshu_ISNULL;
+		}
+		
+		
+		if(StringUtils.isEmpty(progressReport.getChange()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.XiangMuBianGeng_ISNULL;
+		}
+		if(StringUtils.isEmpty(progressReport.getVersionUpgrade()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.MeiTiBaoDiaoCiShu_ISNULL;
+		}
+		
+		if(!StringUtils.isEmpty(progressReport.getVersionUpgrade())&& StringUtils.isEmpty(progressReport.getUpdateProblemTracking()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.MeiTiBaoDaoLianjie_ISNULL;
+		}
+		if(StringUtils.isEmpty(progressReport.getImprovementPlan()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.GaiJinJiHua_ISNULL;
+		}
+		if(StringUtils.isEmpty(progressReport.getNextMonthPlan()))
+		{
+			return ProjectConstants.MONTHLY_ERROR.XiaYueZhongDaJihua_ISNULL;
+		}
+		
+		
+		
+		if(progressReport.getProgressList().size()==0)
+		{
+			return ProjectConstants.MONTHLY_ERROR.MainContent_ISNULL;
+		}
+		
+		
+		
+		
+		return Integer.parseInt(ResultVO.SUCCESS);
+	}
+	
+	@RequestMapping(value = "/preViewMonthlyReport",produces = "text/html;charset=UTF-8",method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String preViewMonthlyReport(HttpServletRequest request, HttpServletResponse response,CommonBiz commonBiz) {
+		logger.debug("preViewMonthlyReport -->:" + commonBiz.toString());
+		ResultVO<Object> result = new ResultVO<>();
+		//获取当前登录用户信息
+		User currentUser = getCurrentUser();
+		//判断如果当前用户不为空，并且业务数据对象不为空
+		try {
+			if(null != currentUser && null != commonBiz){
+				//读取excel信息进行校验
+				MonthlyReportReader monthlyReportReader = new MonthlyReportReader();
+				List<ProjectAnnex> monthlyReports = JsonUtil.fromJson(commonBiz.getData1(),  new TypeToken<List<ProjectAnnex>>() {  
+			    }.getType());
+				
+				List<ProjectAnnex> monthlyReportAttatchments = JsonUtil.fromJson(commonBiz.getData2(),new TypeToken<List<ProjectAnnex>>() {  
+			    }.getType());
+				
+				String path = request.getSession().getServletContext().getRealPath(uploadPath);
+				//new File(path,monthlyReports.get(0).getAnnexName());
+				String monthlyReportfilePath =path + "/" + monthlyReports.get(0).getAnnexName();
+				logger.debug("monthly path:"+ monthlyReportfilePath);
+				List<ProgressReport> monthlyReportContent=null;
+				try {
+					monthlyReportContent= monthlyReportReader.getMonthlyProcessReport( monthlyReportfilePath,ExcelType.XLS);
+				    logger.debug(monthlyReportContent.toString());
+				    long checkResult = checkMonthlyReport(monthlyReportContent);
+				    if(checkResult!=Integer.parseInt(ResultVO.SUCCESS))
+				    {
+				    	result.setResult(String.valueOf(checkResult));
+				    	return result.toString();
+				    }
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					result.setResult(String.valueOf(ProjectConstants.MONTHLY_ERROR.Format_ERROR));
+					return result.toString();
+					
+					
+				}
+				//当前用户ID
+				String userId = currentUser.getId().toString();
+				logger.debug("currentUser's userid is : " + userId);
+				//根据项目名称获取项目的信息
+				List<Project> projectS = this.projectService.selectByProjectName(commonBiz.getProjectName());
+				Project project = null;
+				if (projectS.size()>0) {
+					 project = projectS.get(0);
+					logger.debug(project.toString());	
+					//设置项目信息
+							// 设置项目ID
+					commonBiz.setProjectId(project.getProjectId());
+							// 设置项目类别
+					commonBiz.setProjectCategory(project.getCategoryId().toString());
+							// 设置项目名称
+					commonBiz.setProjectName(project.getProjectName());
+				}
+				else
+				{
+					commonBiz.setProjectId(00000000L);
+				
+					
+					//项目名称
+					commonBiz.setProjectName(monthlyReportContent.get(0).getName());
+					//项目不存在
+					result.setResult(ProjectConstants.PROJECT_ERROR.Project_NotExist.toString());
+					logger.debug(result.toString());
+					
+					
+					//return result.toString();
+				}
+				commonBiz.setData3(gson.toJson(monthlyReportContent));
+					
+				
+				
+				 logger.debug(gson.toJson(monthlyReportContent));
+				 logger.debug(monthlyReportContent.toString());
+						// 设置类型
+					
+						// 设置创建者
+				commonBiz.setCreatePerson(userId);
+						// 设置创建者姓名
+				commonBiz.setCreatePersonName(currentUser.getFirstname());
+						// 设置流程实例Id
+				commonBiz.setProcessInstanceId("0");
+			    // 设置业务归属
+				commonBiz.setServiceOwner(currentUser.getId().toString());
+				
+				// 保存业务对象
+						result.setResult(ResultVO.SUCCESS);
+			            result.setOthers("commonbiz", commonBiz);
+				} else {
+					//任务对象为空
+					result.setResult(ResultVO.FAILURE);
+				}
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result.setResult(ResultVO.FAILURE);
+		}
+			
+		logger.debug("preViewMonthlyReport --> result: "+ result.getResult());
+		return result.toString();
+	}
+	
+	/**
+	 * 根据发布ID或者第三方的权限；
+	 * @param publisherId
+	 * @return
+	 */
+	protected List<DataPermission> getCommitteeByPublisheid(Long categoryId,Long publisherId)
+	{
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+		queryMap.put("categoryId", categoryId);
+		queryMap.put("dataType", DataInfo.DATATYPE_PUBLISH);
+		queryMap.put("dataId", publisherId);
+		queryMap.put("extData1", DataPermission.PRIVILEGE_ThreeEval);
+		queryMap.put("startRow",0);
+		queryMap.put("pageSize", 1000);
+		return DataPermissionDao.selectByConditions(queryMap);
+	}
+	
+	
+	/**
+	 * 通用用户任务办理接口
+	 * @param commonBiz 通用业务对象
+	 * @return
+	 */		
+	@RequestMapping(value = "/submitMonthlyReport",produces = "text/html;charset=UTF-8",method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String submitMonthlyReport(HttpServletRequest request, HttpServletResponse response,CommonBiz commonBiz) {
+		logger.debug("submitMonthlyReport -->:" + commonBiz.toString());
+		ResultVO<Object> result = new ResultVO<>();
+		//获取当前登录用户信息
+		try {
+			User currentUser = getCurrentUser();
+			//判断如果当前用户不为空，并且业务数据对象不为空
+			if(null != currentUser && null != commonBiz){
+				//读取excel信息进行校验
+				MonthlyReportReader monthlyReportReader = new MonthlyReportReader();
+				List<ProjectAnnex> monthlyReports = JsonUtil.fromJson(commonBiz.getData1(),  new TypeToken<List<ProjectAnnex>>() {  
+			    }.getType());
+				
+				List<ProjectAnnex> monthlyReportAttatchments = JsonUtil.fromJson(commonBiz.getData2(),new TypeToken<List<ProjectAnnex>>() {  
+			    }.getType());
+				
+				String path = request.getSession().getServletContext().getRealPath(uploadPath);
+				//new File(path,monthlyReports.get(0).getAnnexName());
+				String monthlyReportfilePath =path + "/" + monthlyReports.get(0).getAnnexName();
+				logger.debug("monthly path:"+ monthlyReportfilePath);
+				List<ProgressReport> monthlyReportContent=null;
+				try {
+					monthlyReportContent= monthlyReportReader.getMonthlyProcessReport( monthlyReportfilePath,ExcelType.XLS);
+				    logger.debug(monthlyReportContent.toString());
+				    long checkResult = checkMonthlyReport(monthlyReportContent);
+				    if(checkResult!=Integer.parseInt(ResultVO.SUCCESS))
+				    {
+				    	result.setResult(String.valueOf(checkResult));
+				    	logger.debug(result.toString());
+				    	return result.toString();
+				    }
+		             //设置机构名称
+				    commonBiz.setExtActivitiInfo(monthlyReportContent.get(0).getCharge().trim());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					result.setResult(String.valueOf(ProjectConstants.MONTHLY_ERROR.Format_ERROR));
+					return result.toString();
+				}
+				//当前用户ID
+				String userId = currentUser.getId().toString();
+				logger.debug("currentUser's userid is : " + userId);
+				//根据项目名称获取项目的信息
+				List<Project> projectS = this.projectService.selectByProjectName(commonBiz.getProjectName());
+				Project project = null;
+				if (projectS.size()>0) {
+					 project = projectS.get(0);
+					logger.debug(project.toString());	
+					//设置项目信息
+							// 设置项目ID
+					commonBiz.setProjectId(project.getProjectId());
+							// 设置项目类别
+					commonBiz.setProjectCategory(project.getCategoryId().toString());
+							// 设置项目名称
+					commonBiz.setProjectName(project.getProjectName().trim());
+				}
+				else
+				{
+					commonBiz.setProjectId(00000000L);
+				
+					
+					//项目名称
+					commonBiz.setProjectName(monthlyReportContent.get(0).getName().trim());
+					//项目不存在
+					result.setResult(ProjectConstants.PROJECT_ERROR.Project_NotExist.toString());
+					logger.debug(result.toString());
+					
+					
+					//return result.toString();
+				}
+				
+				commonBiz.setData3(gson.toJson(monthlyReportContent));
+				commonBiz.setExtStatus(monthlyReportContent.get(0).getMonth().trim());	
+				
+				
+				 logger.debug(gson.toJson(monthlyReportContent));
+				 logger.debug(monthlyReportContent.toString());
+						// 设置类型
+					
+						// 设置创建者
+				commonBiz.setCreatePerson(userId);
+						// 设置创建者姓名
+				commonBiz.setCreatePersonName(currentUser.getFirstname());
+						// 设置流程实例Id
+				commonBiz.setProcessInstanceId("0");
+			    // 设置业务归属
+				commonBiz.setServiceOwner(currentUser.getId().toString());
+				
+				//先更新
+				CommonBiz oldCommonBiz = new CommonBiz();
+				oldCommonBiz.setProjectName(commonBiz.getProjectName());
+				oldCommonBiz.setProjectCategory(commonBiz.getProjectCategory());
+				//设置机构名
+				oldCommonBiz.setExtActivitiInfo(commonBiz.getExtActivitiInfo());
+				//设置月份
+				oldCommonBiz.setExtStatus(commonBiz.getExtStatus());
+				List<CommonBiz> oldCommonBizs =  CommonBizServiceImpl.selectMonthlyReportWithResult(oldCommonBiz);
+				// 保存业务对象
+				String dataId = "";
+				logger.debug("*********" + oldCommonBizs.size());
+				if(oldCommonBizs==null || oldCommonBizs.size()==0)
+				{
+				 dataId = CommonBizServiceImpl.save(commonBiz);
+				}
+				else
+				{
+					dataId = oldCommonBizs.get(0).getDataId();
+					commonBiz.setDataId(dataId);
+					commonBiz.setCreateTime(new Date());
+					CommonBizServiceImpl.update(commonBiz);
+				}
+				//设置数据权限
+				//设置自己的权限
+				StringBuilder sortKey = new StringBuilder();
+				sortKey.append(monthlyReportContent.get(0).getName());
+				sortKey.append("");
+				sortKey.append(monthlyReportContent.get(0).getCharge());
+				sortKey.append("");
+				if(monthlyReportContent.get(0).getMonth().trim().length()<2)
+				{
+					sortKey.append("0");
+					
+				}
+				sortKey.append(monthlyReportContent.get(0).getMonth().trim());
+				
+				DataPermission dataPermission = new DataPermission();
+				dataPermission.setDataId(dataId);
+				dataPermission.setDataType(DataPermission.DATATYPE_MonthlyReport);
+				dataPermission.setCategoryId(Long.parseLong(commonBiz.getProjectCategory()));
+				dataPermission.setPermissionType(DataPermission.PERMISSIONTYPE_USER);
+				dataPermission.setPermissionId(currentUser.getId().toString());
+				//排序
+				dataPermission.setExtData2(sortKey.toString());
+				if (projectS.size()>0)
+				{
+					dataPermission.setExtData3(project.getProjectId().toString());
+				}
+				this.DataPermissionDao.insert(dataPermission);
+				
+				
+				
+				//设置第三方权限
+				if (projectS.size()>0) 
+				{
+					List<DataPermission> threeDataPermissions = getCommitteeByPublisheid(project.getCategoryId(),project.getPublishId());
+					if(threeDataPermissions.size()<=0)
+					{
+						//项目不存在
+						result.setResult(ProjectConstants.PROJECT_ERROR.Project_committee_NotExist.toString());
+						return result.toString();
+ 
+					}
+					for(DataPermission dataPermissionThree:threeDataPermissions)
+					{
+						dataPermissionThree.setDataId(dataId);
+						dataPermissionThree.setDataType(DataPermission.DATATYPE_MonthlyReport);
+						dataPermissionThree.setPrivilegeThrreeEval();			
+						dataPermission.setExtData3(project.getProjectId().toString());
+						dataPermission.setExtData2(sortKey.toString());
+						DataPermissionDao.insert(dataPermission);
+						
+					}
+				}
+				//设置所有第三方的权限
+				else
+				{
+					dataPermission.setDataId(dataId);
+					dataPermission.setDataType(DataPermission.DATATYPE_MonthlyReport);
+					dataPermission.setCategoryId(Long.parseLong(commonBiz.getProjectCategory()));
+					dataPermission.setPermissionType(DataPermission.PERMISSIONTYPE_ROLE);
+					dataPermission.setPermissionId(this.roleId_committee.toString());
+					dataPermission.setExtData2(sortKey.toString());
+					if (projectS.size()>0)
+					{
+						dataPermission.setExtData3(project.getProjectId().toString());
+					}
+					DataPermissionDao.insert(dataPermission);
+						
+				}
+			    //设置部门经理权限
+				dataPermission.setDataId(dataId);
+				dataPermission.setDataType(DataPermission.DATATYPE_MonthlyReport);
+				dataPermission.setCategoryId(Long.parseLong(commonBiz.getProjectCategory()));
+				dataPermission.setPermissionType(DataPermission.PERMISSIONTYPE_ROLE);
+				dataPermission.setPermissionId(this.roleId_departLeader.toString());
+				dataPermission.setExtData2(sortKey.toString());
+				if (projectS.size()>0)
+				{
+					dataPermission.setExtData3(project.getProjectId().toString());
+				}
+				DataPermissionDao.insert(dataPermission);
+				result.setResult(ResultVO.SUCCESS);
+
+				} else {
+					//任务对象为空
+					result.setResult(ResultVO.FAILURE);
+				}
+		} catch (JsonSyntaxException e) {
+			// TODO Auto-generated catch block
+			//任务对象为空
+			result.setResult(ResultVO.FAILURE);
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			//任务对象为空
+			result.setResult(ResultVO.FAILURE);
+		}
+			
+		logger.debug("submitMonthlyReport --> result: "+ result.getResult());
+		return result.toString();
+	}
+	
+	
 	
 	/**
 	 * 通用用户任务办理接口
@@ -345,7 +826,12 @@ public class ProjectProcessController extends BaseController{
 					// 根据任务获取项目信息
 					Long projectId = getDataIdByProcessInstanceId(task
 							.getProcessInstanceId());
+					
+					logger.debug("********************projectId:"+projectId );
+					
 					Project project = projectService.selectByPrimaryKey(projectId);
+					logger.debug(project.toString());
+					
 					if (null != project) {
 						//设置项目信息
 						// 设置项目ID

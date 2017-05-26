@@ -28,6 +28,13 @@ public class DataPermissionServiceImpl implements DataPermissionService {
 	}
 
 	@Override
+	public
+	List<DataPermission> selectByConditions(Map<String, Object> queryMap)
+	{
+		return dataPermissionMapper.selectByConditions(queryMap);
+	}
+	
+	@Override
 	public void deleteByConditions(Map<String, Object> queryMap) {
 		dataPermissionMapper.deleteByConditions(queryMap);
 		

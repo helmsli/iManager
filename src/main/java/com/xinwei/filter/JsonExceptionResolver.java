@@ -28,6 +28,7 @@ public class JsonExceptionResolver extends AbstractHandlerExceptionResolver {
 	protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
 			Exception ex) {
 		try {
+			ex.printStackTrace();
 			logger.error(ex.getMessage());
 			ex.printStackTrace();
 			if(ex instanceof AuthorizationException){

@@ -428,6 +428,23 @@ function getCoomartsAllProjectSeeListCall(data){
 			if(mainCurrentState){
 				dataLists[i].stateName=mainCurrentState.stateName;
 			}
+				try{
+				//console.log(JSON.stringify(dataLists[i]));
+				//console.log("***************：" +dataLists[i].projectTaskDetail );
+				var projectdetail=JSON.parse(dataLists[i].projectTaskDetail);
+				
+				
+				if(projectdetail){
+					dataLists[i].project_detail=projectdetail;
+					//console.log("***************0000:"+ dataLists[i].project_detail.declarationUnit);
+					
+				    
+				}   	
+			}
+			catch(err)
+			  {
+			  //在这里处理错误
+			  }
 		}
 		scope.dataLists=dataLists;
 		var pageInfo=data.responseInfo.page;
@@ -468,6 +485,23 @@ function getCoomartsAllProjectMarchSeeListCall(data){
 			if(mainCurrentState){
 				dataLists[i].stateName=mainCurrentState.stateName;
 			}
+			try{
+				//console.log(JSON.stringify(dataLists[i]));
+				//console.log("***************：" +dataLists[i].projectTaskDetail );
+				var projectdetail=JSON.parse(dataLists[i].projectTaskDetail);
+				
+				
+				if(projectdetail){
+					dataLists[i].project_detail=projectdetail;
+					//console.log("***************0000:"+ dataLists[i].project_detail.declarationUnit);
+					
+				    
+				}   	
+			}
+			catch(err)
+			  {
+			  //在这里处理错误
+			  }
 		}
 		scope.dataLists=dataLists;
 		var pageInfo=data.responseInfo.page;

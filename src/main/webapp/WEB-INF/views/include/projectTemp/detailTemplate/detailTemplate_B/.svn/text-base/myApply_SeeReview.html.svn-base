@@ -1,0 +1,112 @@
+<meta charset="UTF-8">
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="designatedExpert" btn-permission="Approve:expert" >
+	<div class="row p-t-5 p-b-5 clearfix" id="reviewExpertTableState"  ng-show="SetExpertFlag">
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left" >指定评审专家：</div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 p-l-5">
+			<div class="table-responsive m-b-0">
+	 			<table class="table table-striped table-bordered table-hover m-b-0"  id="reviewExpertTable">
+			        <thead>
+			        	<tr >
+			           		<th width="5%">序号</th>
+			           		<th width="85%" data-columnType="edit" data-columnName="postName">评审专家</th>
+			           		<th width="10%" data-columnType="operate" id="addEdit">编辑</th>
+			           </tr>
+			        </thead>
+			    </table>
+		   </div>
+		</div>
+	</div>
+</div>
+<!-- / .col-12 -->
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="expertScoring" btn-permission="Approve:scoring" >
+	<div class="row p-t-5 p-b-5 clearfix" ng-show="ExpertScoreFlag">
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left">评审专家打分：</div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 p-l-5">
+			<div class="table-responsive m-b-0">
+ 				<table class="table table-striped table-bordered table-hover m-b-0">
+       				<thead>
+			        	<tr>
+			           		<th width="10%">评审专家</th>
+			           		<th width="80%">评审专家打分</th>
+			           </tr>
+			        </thead>
+			        <tbody><!--tbody的class名不能为‘show’,否则表格不能自动撑开-->
+			       		<tr ng-repeat="experts in expertList">
+			            	<td ng-bind="experts.postName"></td>
+			            	<td>
+			            		<div class="radio" >
+	                         		<div class="radio-inline" ng-repeat="score in experts.expertScoreList" >
+	                         			<input value="{{score}}" name="group_{{$parent.$index}}" type="radio" class="with-gap radio-col-blue one" id="radio_{{$parent.$index}}_{{$index}}" ng-model="experts.expertScore" />
+	                             		<label for="radio_{{$parent.$index}}_{{$index}}">{{score}}分</label>
+	                         		</div>
+	                         	</div>
+			            	</td>
+						</tr>
+        			</tbody>
+    			</table>
+   			</div>
+		</div>
+	</div>
+</div>
+<!-- / .col-12 -->
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="decisionCommittee" btn-permission="Approve:committee">
+	<div class="row p-t-5 p-b-5 clearfix" ng-show="setCommiteeFlag">
+    	<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left">决策委员会意见：</div>
+    	<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 p-l-5">
+   			<ul class="margin-0 padding-0 hide">
+    			<li><span class="font-bold col-red">不同意</span><span class="p-l-10">同意通过申请</span><span class="p-l-10">2017-01-08</span></li>
+     		</ul>
+      		<div class="form-group">
+				<div class="form-line">
+					<div class="radio">
+	              		<div class="radio-inline">
+	              			<input name="group1" type="radio" class="with-gap radio-col-blue" value="同意" id="radio_1" ng-model="suggestion.suggestionFlag"/>
+	                  		<label for="radio_1">同意</label>
+	              		</div>
+	             		<div class="radio-inline">
+	             			<input name="group1" type="radio" class="with-gap radio-col-blue" value="不同意" id="radio_2" ng-model="suggestion.suggestionFlag"/>
+	                 		<label for="radio_2">不同意</label>
+	             		</div>
+	               </div>
+				</div>
+			</div>
+  			<div class="form-group m-b-0">
+            	<div class="form-line">
+                     <textarea rows="4" id="caucus" class="form-control no-resize" placeholder="请输入您的评审意见..." ng-model="suggestion.suggestionDescription"></textarea>
+                 </div>
+            </div>
+    	</div>
+   </div>
+</div>
+<!-- / .col-12 -->
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="divisionManager" btn-permission="Approve:manager">
+	<div class="row p-t-5 p-b-5 clearfix" ng-show="setDepartFlag">
+	<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left">部门经理审批意见：</div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 p-l-5">
+			<ul class="margin-0 padding-0 hide">
+				<li><span class="font-bold col-red">不同意</span><span class="p-l-10">不同意申请</span><span class="p-l-10">2017-01-08</span></li>
+			</ul>
+			<div class="form-group">
+				<div class="form-line">
+					<div class="radio" >
+						<div class="radio-inline" >
+							<input name="group2" type="radio" class="with-gap radio-col-blue" value="同意" id="radio_3" ng-model="managerSuggestion.suggestionFlag" />
+							<label for="radio_3">同意</label>
+						</div>
+						<div class="radio-inline">
+							<input name="group2" type="radio" class="with-gap radio-col-blue" value="不同意" id="radio_4" ng-model="managerSuggestion.suggestionFlag"/>
+							<label for="radio_4">不同意</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group m-b-0">
+				<div class="form-line">
+					<textarea rows="4" class="form-control no-resize" id="departComment" placeholder="请输入您的评审意见..." ng-model="managerSuggestion.suggestionDescription"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- / .col-12 -->
+<script src="../../js/process_global/coomarts/createProject/myApplySeeReview.js" type="text/javascript"></script>

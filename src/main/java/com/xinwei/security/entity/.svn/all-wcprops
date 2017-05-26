@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/entity
+END
+UserRole.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/entity/UserRole.java
+END
+Role.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/entity/Role.java
+END
+Department.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/entity/Department.java
+END
+Menu.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/entity/Menu.java
+END
+Function.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/entity/Function.java
+END
+UserPermission.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/entity/UserPermission.java
+END
+IdEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/entity/IdEntity.java
+END
+RolePermission.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/entity/RolePermission.java
+END
+Business.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/entity/Business.java
+END
+User.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/entity/User.java
+END

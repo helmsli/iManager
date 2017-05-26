@@ -1,0 +1,151 @@
+/***
+ * 请求我的项目参数
+ * 
+ * **/
+function getMyProjectOptions(projectName,pageNum) {
+	var obj = null;
+	pageNum = pageNum||1;
+	var categoryId = 1,  pageSize = 10, userId = "";
+	var userInfo=localStorage.getItem("userInfo");
+	userId=JSON.parse(userInfo).uid;
+	var parm = parseQueryString();
+	var projectId = parm.projectId;
+	switch (projectName) {
+	case "cooMarts":
+		categoryId = 1;
+		break;
+	case "camTalk":
+		categoryId = 2;
+		break;
+	case "lottery":
+		categoryId = 3;
+		break;
+	}
+	obj = {
+		"request.projectId": projectId,	
+		"request.userId" : userId,
+		"request.categoryId" : categoryId,
+		"page.pageNum" : pageNum,
+		"page.pageSize" : pageSize
+	};
+	return obj;
+}
+
+
+
+/***
+ * 我的申请项目中根据参数请求不同的数据接口
+ * 
+ * **/
+function getMyApplyDataList(projectName,obj)
+{
+	projectName=projectName.toLowerCase();
+	switch(projectName)
+	{
+		case "coomarts":
+		case "camtalk":
+		case "lottery":
+			getCooMartsApplyListByServer(obj,getCooMartsApplyListCall);
+			break;
+		case "camtalk":
+			getCamTalkApplyListByServer(obj,getCamTalkApplyListCall);
+		    break;
+		case "lottery":
+			getLotteryApplyListByServer(obj,getLotteryApplyListCall);
+		   break;
+	}
+}
+
+/***
+ * 我的申请已完成项目中根据参数请求不同的数据接口
+ * 
+ * **/
+function getUserFinishedTasklist(projectName,obj)
+{
+	projectName=projectName.toLowerCase();
+	switch(projectName)
+	{
+		case "coomarts":
+		case "camtalk":
+		case "lottery":
+			getCooMartsFinishedListByServer(obj,getCooMartsFinishedListCall);
+			break;
+		case "camtalk":
+			getCamTalkFinishedListByServer(obj,getCamTalkFinishedListCall);
+		    break;
+		case "lottery":
+			getLotteryFinishedListByServer(obj,getLotteryFinishedListCall);
+		   break;
+	}
+}
+
+/***
+ * 我的代办任务中根据参数请求不同的数据接口
+ * 
+ * **/
+function getMyAgentTaskDataList(projectName,obj)
+{
+	projectName=projectName.toLowerCase();
+	switch(projectName)
+	{
+	case "coomarts":
+	case "camtalk":
+	case "lottery":
+		getCooMartsAgentTaskListByServer(obj,getCooMartsAgentTaskListCall);
+		break;
+	case "camtalk":
+		getCamTalkAgentTaskListByServer(obj,getCamTalkAgentTaskListCall);
+	    break;
+	case "lottery":
+		getLotteryAgentTaskListByServer(obj,getLotteryAgentTaskListCall);
+	   break;
+	}
+}
+/***
+ * 我的代办任务中已完成根据参数请求不同的数据接口
+ * 
+ * **/
+function getMyAgentTaskFinishedDataList(projectName,obj)
+{
+	projectName=projectName.toLowerCase();
+	switch(projectName)
+	{
+	case "coomarts":
+	case "camtalk":
+	case "lottery":
+		getCooMartsAgentTaskFinishedListByServer(obj,getCooMartsAgentFinishedTaskListCall);
+		break;
+	case "camtalk":
+		getCamTalkAgentTaskFinishedListByServer(obj,getCamTalkAgentFinishedTaskListCall);
+	    break;
+	case "lottery":
+		getLotteryAgentTaskFinishedListByServer(obj,getLotteryAgentFinishedTaskListCall);
+	   break;
+	}
+}
+/***
+ * 我的申请修改项目根据参数请求不同的数据接口
+ * 
+ * **/
+function getMyApplyEditDataInfo(projectName,obj)
+{
+	projectName=projectName.toLowerCase();
+	switch(projectName)
+	{
+		case "coomarts":
+		case "camtalk":
+		case "lottery":
+			console.log("getMyApplyEditDataInfo的obj");
+			console.log(obj);
+			
+			getMyApplycoomartsEditDataInfoByServer(obj,getMyApplycoomartsEditDataInfoCall);
+			break;
+		case "camtalk":
+			getMyApplycamtalkEditDataInfoByServer(obj,getMyApplycamtalkEditDataInfoCall);
+		    break;
+		case "lottery":
+			getMyApplylotteryEditDataInfoByServer(obj,getMyApplylotteryEditDataInfoCall);
+		   break;
+	}
+}
+

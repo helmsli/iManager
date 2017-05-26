@@ -1,0 +1,27 @@
+<meta charset="UTF-8">
+<div class="modal-dialog" ng-controller="addRole">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">添加角色</h4>
+        </div>
+        <div class="modal-body">       	
+        	<form action="#" method="post" id="theForm" class="form-custom">
+				<div class="form-group">
+					<div><!-- 校验信息添加时候有错误，为了兼容校验信息显示位置的错误（见formValid.js第365行，表单校验的灵活性有待推敲），添加此div，呵呵哒~ -->
+						<label class="form-label">角色名称</label>
+						<input type="text" class="form-control" id="roleName" ng-model="role.name" name="name" id="name" maxlength="20" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="form-label">备注</label>
+					<textarea class="form-control" ng-model="role.disc"></textarea>
+				</div>
+			</form>     	
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success  m-r-8" ng-click="editRole(role.id)">确认</button>
+            <button type="button" class="btn btn-primary  m-l-8" data-dismiss="modal">取消</button>
+        </div>
+    </div>
+</div>

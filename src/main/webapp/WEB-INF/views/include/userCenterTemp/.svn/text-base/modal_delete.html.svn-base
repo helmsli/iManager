@@ -1,0 +1,16 @@
+<meta charset="UTF-8">
+<div class="modal-dialog modal-sm" ng-controller="deleteCtrl">
+    <div class="modal-content">
+        <div class="modal-header">
+        	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">删除用户</h4>
+        </div>
+        <div class="modal-body">
+          	<p class="align-center">确认删除该用户吗？</p>
+        </div>
+        <div class="modal-footer align-center">
+        	<button type="button" class="btn btn-success m-r-8 m-w-80 waves-effect" data-dismiss="modal" ng-click="deleteUser()">确定</button>
+            <button type="button" class="btn btn-primary m-l-8 m-w-80 waves-effect" data-dismiss="modal">取消</button>
+        </div>
+    </div>
+</div>

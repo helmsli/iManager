@@ -157,6 +157,12 @@ public class ProjectServiceImpl implements ProjectService {
 		return projectDao.selectByPrimaryKey(project_id);
 	}
 
+	
+	@Override
+	public List<Project> selectByProjectName(String projectName) {
+		return projectDao.selectByProjectName(projectName);
+	}
+	
 	public Page<Project> getProjectListByUserId(Map<String, Object> map) {
 		Page<Project> page = new Page<Project>(
 				projectDao.getProjectListByUserIdCount(map));

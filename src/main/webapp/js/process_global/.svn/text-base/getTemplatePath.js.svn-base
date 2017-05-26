@@ -1,0 +1,69 @@
+//创建申请项目的模板路径
+function getTempletPath(projectName)
+{
+	var temPath="";
+	projectName=projectName.toLowerCase();
+	switch(projectName)
+	{
+	case "coomarts":
+	    temPath="createTemplet_A";
+	    break;
+	case "camtalk":
+	    temPath="createTemplet_B"
+	    break;
+	case "lottery":
+	    temPath="createTemplet_C"
+	    break;
+	
+	}
+   return temPath;
+}
+//查看项目详细信息的模板路径
+function getDetailTempletPath(projectName)
+{
+	var temPath="";
+	projectName=projectName.toLowerCase();
+	switch(projectName)
+	{
+	case "coomarts":
+	    temPath="detailTemplate_A";
+	    break;
+	case "camtalk":
+	     temPath="detailTemplate_B"
+	     break;
+	case "lottery":
+	     temPath="detailTemplate_C"
+	     break;
+	
+	}
+   return temPath;
+}
+
+/**
+ * 请求调查问题模板
+ * **/
+function getQuestionTemplatePath(projectName)
+{
+	var temPath="";
+	projectName=projectName.toLowerCase();
+	switch(projectName)
+	{
+	case "coomarts":
+	    temPath="question_C.html";
+	    break;
+	case "camtalk":
+	     temPath="question_B.html"
+	     break;
+	case "lottery":
+	     temPath="question_C.html"
+	     break;
+	}
+   return temPath;
+	
+}
+
+
+
+
+
+

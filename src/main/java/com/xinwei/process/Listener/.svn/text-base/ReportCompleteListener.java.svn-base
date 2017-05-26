@@ -1,0 +1,34 @@
+package com.xinwei.process.Listener;
+
+import javax.annotation.Resource;
+import org.activiti.engine.delegate.DelegateTask;
+import org.activiti.engine.delegate.TaskListener;
+import org.springframework.stereotype.Service;
+import com.xinwei.process.constant.ProjectConstants;
+import com.xinwei.process.entity.StateInfo;
+import com.xinwei.process.service.ProjectService;
+import com.xinwei.util.JsonUtil;
+
+@Service
+public class ReportCompleteListener implements TaskListener {
+	@Resource
+	private ProjectService projectService;
+
+	@Override
+	public void notify(DelegateTask delegateTask) {
+		//获取业务key
+		String businessKey = delegateTask.getExecution()
+				.getProcessBusinessKey();// projectID
+		if (null!=businessKey) {
+			Long projectId = Long.valueOf(businessKey);
+			//构建StateInfo对象
+			StateInfo reportCurrentStateInfo = new StateInfo();
+			reportCurrentStateInfo.setState(ProjectConstants.State.CODE_END);
+			reportCurrentStateInfo.setStateName(delegateTask.getName());
+			reportCurrentStateInfo.setTaskId(delegateTask.getId());
+			String reportCurrentStateInfoJson = JsonUtil.toJson(reportCurrentStateInfo);
+			// 更新周期性报告状态
+			projectService.updateProjectPropertyByProjectId(ProjectService.REPORTCURRENTSTATE, reportCurrentStateInfoJson, projectId);
+		}
+	}
+}

@@ -1,0 +1,26 @@
+<meta charset="UTF-8">
+<div class="modal-dialog" ng-controller="resetPwdCon">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">重置密码</h4>
+        </div>
+        <div class="modal-body">       	
+        	<form action="#" method="post" id="resetPwdForm" class="form-custom">
+				<div class="form-group">
+					<label class="form-label">新密码：</label>
+					<input type="password" class="form-control" ng-model="user.newPassword" name="newPassword" id="newPassword"   data-error="新密码输入有误" data-tip="请输入新密码" />
+				</div>
+				<!-- / User Name -->
+				<div class="form-group">
+					<label class="form-label">确认新密码:</label>
+					<input type="password" class="form-control" ng-model="user.rePassword" name="rePassword" id="rePassword"   data-error="重复新密码不正确" data-tip="请重新输入新密码"  />
+				</div>
+			</form>     	
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" ng-click="toResetPwd();" data-permission="UserManage:resetpassword">提交</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+        </div>
+    </div>
+</div>

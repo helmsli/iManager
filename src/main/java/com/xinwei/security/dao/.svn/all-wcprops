@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/dao
+END
+BusinessDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/dao/BusinessDao.java
+END
+UserDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/dao/UserDao.java
+END
+UserRoleDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/dao/UserRoleDao.java
+END
+RoleDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/dao/RoleDao.java
+END
+DepartmentDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/dao/DepartmentDao.java
+END
+MenuDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/dao/MenuDao.java
+END
+FunctionDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/dao/FunctionDao.java
+END
+RolePermissionDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/dao/RolePermissionDao.java
+END

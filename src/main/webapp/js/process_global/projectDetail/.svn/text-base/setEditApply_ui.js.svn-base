@@ -1,0 +1,104 @@
+/***
+ * 我申请的项目修改的渲染界面(coomarts项目)
+ * 
+ * **/
+ function getMyApplycoomartsEditDataInfoCall(data){
+	 var scope=getAngularScope("EditData");
+		if(data.result == 0){
+			//获取项目信息、额外信息
+			var project=data.responseInfo.poject;
+			var projectExtInfo=JSON.parse(project.projectExtInfo)[0];
+			//项目基本情况-对应页面组件
+			var startTime=project.startTime;
+			var endTime=project.completeTime; 
+			var cycleType=project.cycleType;
+			var category=project.subcategory;
+			//使用原生给项目概述、项目背景、项目目标、项目预期的风险、项目创新性及推广性进行赋值
+			var taskDescribe=projectExtInfo.taskDescribe;
+			var taskbackground=projectExtInfo.taskbackground;
+			var taskgoal=projectExtInfo.taskgoal;
+			var taskDanger=projectExtInfo.taskDanger;
+			var taskcreate=projectExtInfo.taskcreate;
+			
+			//项目基本情况
+			scope.ProjectId=project.projectId;	
+			scope.ProjectApplyTime=project.projectApplyTime;
+			scope.StateName=project.stateName;
+			scope.projectManagerId=project.projectManagerId;
+			scope.telno=project.telno;
+			scope.email=project.email;
+			//使用原生给项目概述、项目背景、项目目标、项目预期的风险、项目创新性及推广性进行赋值
+			scope.taskDescribe=taskDescribe;
+			scope.taskbackground=taskbackground;
+			scope.taskgoal=taskgoal;
+			scope.taskDanger=taskDanger;
+			scope.taskcreate=taskcreate;
+			//项目名称 、项目负责人、 联系电话、 电子邮箱
+			document.getElementById('taskName').innerHTML=project.projectName;
+			document.getElementById('myNum').innerHTML=scope.telno;
+			document.getElementById('email').innerHTML=scope.email;
+			
+			//项目概述、项目背景、项目目标、项目预期的风险、项目创新性及推广性
+			// 获取所有的P元素
+		    $(".tip").remove();
+		    document.getElementById('taskDescribe').innerHTML=taskDescribe;
+		    document.getElementById('taskbackground').innerHTML=taskbackground;
+		    document.getElementById('taskgoal').innerHTML=taskgoal;
+		    document.getElementById('taskDanger').innerHTML=taskDanger;
+		    document.getElementById('taskcreate').innerHTML=taskcreate;
+		
+			//日期转换-开始时间、结束时间  
+			dataFormat(startTime,true);
+			dataFormat(endTime,false);
+			//项目周期、项目类型
+			getRadioChecked(cycleType,"projectCycle");
+			getRadioChecked(category,"projectCategory");
+			//项目实施计划及输出、项目预算、项目成员岗位要求
+			 var tableRuleInner= JSON.parse(projectExtInfo.taskplan);
+			 var tableRule=JSON.parse(data.responseInfo.poject.projectCosts)
+			 var tablePost=JSON.parse(data.responseInfo.poject.projectTaskDetail);
+			tableEditContext("tableRuleInner",tableRuleInner);
+			tableEditContext("tableRule",tableRule);
+			tableEditContext("tablePost",tablePost);
+
+			console.log(tableRuleInner);
+			console.log(tableRuleInner.length);
+			/*
+			//处理变成列list
+			function dynamicFormList(ListName,LineName){
+				for(var i=0;i++;i<ListVlue.length){
+					//LineName[i].columnName
+				}
+			}*/
+	//修改取得的老数据（变更之前的）
+			var oldInfo={
+					projectName:project.projectName,
+					telno:scope.telno,
+					email:scope.email,
+					taskDescribe:taskDescribe,
+					taskbackground:taskbackground,
+					taskgoal:taskgoal,
+					taskDanger:taskDanger,
+					taskcreate:taskcreate,
+					projectCycle:scope.projectCycle,
+					projectCategory:scope.projectCategory,
+					startTime:scope.startTime,
+					endTime:scope.endTime,
+					tableRuleInner:tableRuleInner,
+					tableRule:tableRule,
+					tablePost:tablePost
+			}
+			var newInfo=oldInfo;
+			scope.oldInfo=oldInfo;
+			scope.newInfo=newInfo;
+			//进入修改页面就进行判断，数据全有则可以提交，数据不是全有则提交置灰
+			valid();
+			
+			
+		}
+ 
+	 
+ }
+ 
+
+ 

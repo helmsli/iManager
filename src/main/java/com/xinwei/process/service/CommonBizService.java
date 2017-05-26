@@ -9,6 +9,15 @@ import com.xinwei.util.page.Page;
 
 public interface CommonBizService {
 
+	
+	
+	/**
+	 * 根据机构名称，项目名称和月份查询记录
+	 * @param commonBiz
+	 * @return
+	 */
+	List<CommonBiz> selectMonthlyReportWithResult(CommonBiz commonBiz);
+	
 	/**
 	 * 获取所有
 	 */
@@ -87,6 +96,15 @@ public interface CommonBizService {
 	 * @return
 	 */
 	Page<CommonBiz> selectByCategoryServiceTypeAndProjectName(User user,
+			Map<String, Object> map);
+
+	/** 
+	 * 根据项目类别和业务类型,当前用户，项目名(参数可选)进行分页查询
+	 * @param user 当前用户信息
+	 * @param map
+	 * @return
+	 */
+	Page<CommonBiz> selectMonthReportList(User user,
 			Map<String, Object> map);
 
 }

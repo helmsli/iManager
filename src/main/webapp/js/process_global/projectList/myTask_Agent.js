@@ -38,7 +38,7 @@ App.controller('myDataController', ['$scope', function($scope) {
 		console.log(projectNameTittle);
 		var parm=parseQueryString();
 		var projectName =parm.projectName||""; 
-		url="projectMonthProgress.html?projectName="+projectName+"&projectId="+projectId+"&taskId="+stateTaskId+"&state="+state+"&projectNameTittle="+encodeURI(projectNameTittle)+"&from="+from;
+		url="projectMonthProgressAttach.html?projectName="+projectName+"&projectId="+projectId+"&taskId="+stateTaskId+"&state="+state+"&projectNameTittle="+encodeURI(projectNameTittle)+"&from="+from;
 		location.href=url;
 	}
 	//提交周期监测

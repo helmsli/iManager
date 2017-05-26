@@ -3,7 +3,8 @@
  * xinwei JavaScript Library
  * Copyright (c) 2017
  * @jeatStone
- * v0.0.0.2 
+ * v0.0.0.3 
+ * last modify:2017/05/23 增加异常处理; jeastone
  * 增加了兼容处理
  */
 (function(w){
@@ -85,8 +86,10 @@
 		var frameId = 'WUI_UploadFrame_' + fileElementId;
 		var formId = 'WUI_UploadForm_' + fileElementId;
 		var iframe = document.getElementById(frameId);
-		form.action=postPath;
+		var time=new Date();
+		form.action=postPath+"?time="+time.getTime();
 		form.target=frameId;
+		
 		var responseInfo={};
 		 try 
 			{				
@@ -96,7 +99,12 @@
 				{
 					responseInfo.responseText = iframe.contentWindow.document.body?iframe.contentWindow.document.body.innerHTML:null;
 				 	responseInfo.responseXML = iframe.contentWindow.document.XMLDocument?iframe.contentWindow.document.XMLDocument:io.contentWindow.document;
-					options.success(responseInfo.responseText);
+					try{
+						var JSONparse=JSON.parse(responseInfo.responseText);
+						options.success(responseInfo.responseText);
+					}catch(e){
+						options.error(options, responseInfo, null, e);
+					}
 				}
 			}else if(iframe.contentDocument)
 			{

@@ -1,4 +1,56 @@
 var i18n={
+		"Monthly_ProjectName_ISNULL":"项目名称为空",
+		"Monthly_ProjectCompany_ISNULL":"机构名称为空",
+		"Trainning_times_ISNULL":"培训次数为空",
+		"NotTrainning_times_ISNULL":"非培训的服务次数",
+		"Trainning_times_ISNULL":"培训次数为空",
+		"MainContent_ISNULL":"本月主要工作内容介绍为空",
+		
+		/*
+		 * 
+		 * "-1000":"Monthly_ProjectName_ISNULL",
+		"-1001":"Monthly_ProjectCompany_ISNULL",
+		"-1002":"Trainning_times_ISNULL",
+		"-1003":"NotTrainning_times_ISNULL",
+	    "-1004":"MainContent_ISNULL",
+	    "-1005":"ChuDianZongjie_ISNULL",
+	    
+	    "-1006":"ZhiJieShouYIRenshu_ISNULL",
+	    "-1007":"ZhiJieShouYIRenCi_ISNULL",
+	    "-1008":"JianJieShouYIRenshu_ISNULL",
+	    "-1009":"JianJieShouYIRenCi_ISNULL",
+	    	
+	    "-1010":"XiangMuBianGeng_ISNULL",
+	    "-1011":"MeiTiBaoDiaoCiShu_ISNULL",
+	    
+	    "-1012":"MeiTiBaoDaoLianjie_ISNULL",
+	    "-1013":"GaiJinJiHua_ISNULL",
+	    
+	    "-1014":"XiaYueZhongDaJihua_ISNULL",
+	    "-1015":"YueFen_ISNULL",
+	    "-1050":"YueFen_ISNULL",
+		 * static final Long ProjectName_ISNULL = -1000L;// 申报的项目名称为空
+		static final Long ProjectCompany_ISNULL = -1001L;//申报书单位为空
+		static final Long Trainning_times_ISNULL =  -1002L;//培训次数为空
+		static final Long NotTrainning_times_ISNULL =  -1003L;//非培训的服务次数
+		static final Long MainContent_ISNULL =  -1004L;//本月主要工作内容介绍的服务次数
+		static final Long ChuDianZongjie_ISNULL =  -1005L;//触点总结（本月好的经验/问题总结，项目运作小的或大的改进、提高等让人有所触动之处
+		static final Long ZhiJieShouYIRenshu_ISNULL =  -1006L;//直接受益人数
+		static final Long ZhiJieShouYIRenCi_ISNULL =  -1007L;//直接受益人次
+		
+		static final Long JianJieShouYIRenshu_ISNULL =  -1008L;//间接受益人数
+		static final Long JianJieShouYIRenCi_ISNULL =  -1009L;//间接受益人次
+		
+		static final Long XiangMuBianGeng_ISNULL =  -1010L;//间项目变更情况（如无变更填“无”）
+		static final Long MeiTiBaoDiaoCiShu_ISNULL =  -1011L;//媒体报道次数
+		static final Long MeiTiBaoDaoLianjie_ISNULL =  -1012L;//媒体报道链接
+		static final Long GaiJinJiHua_ISNULL =  -1013L;//改进计划
+		
+		static final Long XiaYueZhongDaJihua_ISNULL =  -1014L;//下月重大活动计划
+		static final Long YueFen_ISNULL =  -1015L;//下月重大活动计划
+		static final Long Format_ERROR =  -1050L;//下月重大活动计划
+		 */
+		
 		"USER_NAME_IS_NULL":"请输入用户名",
 		"PASSWORD_IS_NULL":"请输入密码",
 		"EMPTY_ROLE":"角色名不能为空",//角色名不能为空。 
@@ -11,6 +63,17 @@ var i18n={
 		"CHOOSE_ROLE":"请选择角色",//请选择角色。 
 		"CHOOLSE_USER":"请选择用户",//请选择用户。
 		"NO_EDIT_ROLE":"不能修改角色",//不能修改角色。 
+		//申报书错误
+		"APPLICATION_ATTATCHMENT_IS_NULL":"申报书附件不能为空,请确保本地没有用word打开申报书，重新上传.",
+		"APROJECT_NAME_IS_NULL":"申报书中项目名称为空，请补全后重新上传项目申报书",
+		"PROJECT_TYPE_IS_NULL":"申报书中申报单位类型为空，请用粗体字或者黑体字标识正确的单位类型",
+		"PROJECT_TIME_IS_NULL":"申报书中执行周期填写错误,请重新填写",
+		"PROJECT_CONTACT_IS_NULL":"申报书中联系人信息不全，请补全联系人信息",
+		"PROJECT_CONTACT_INFO_IS_NULL":"申报书中联系人信息不全，请补全联系人信息",
+		"PROJECT_COMPANY_IS_NULL":"申报书中单位信息为空，请补全单位信息",
+		"PROJECT_ServiceField_ISNULL":"申报书中服务领域为空,请用粗体字或者黑体字标识正确的服务类型",
+		"PROJECT_INFORMATION_ERROR":"申报书中信息错误，请检查申报书信息是否正确填写",
+		
 		"ADMIN_LOCK":"不能操作超级管理员",
 		"CHOOSE_DATA":"请选择数据",
 		"CHOOSE_DEPT":"亲选择部门",

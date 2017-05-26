@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/Authority_Repository/!svn/ver/829/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/include/userCenterTemp
+END
+addRoleUsers.html
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/Authority_Repository/!svn/ver/829/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/include/userCenterTemp/addRoleUsers.html
+END
+resetPwd.html
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/Authority_Repository/!svn/ver/829/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/include/userCenterTemp/resetPwd.html
+END
+modal_delete.html
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/Authority_Repository/!svn/ver/829/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/include/userCenterTemp/modal_delete.html
+END
+modal_edit.html
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/Authority_Repository/!svn/ver/829/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/include/userCenterTemp/modal_edit.html
+END
+user_search.html
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/Authority_Repository/!svn/ver/829/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/include/userCenterTemp/user_search.html
+END
+addUser.html
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/Authority_Repository/!svn/ver/829/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/include/userCenterTemp/addUser.html
+END
+permissionTree.html
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/Authority_Repository/!svn/ver/829/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/include/userCenterTemp/permissionTree.html
+END
+addRole.html
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/Authority_Repository/!svn/ver/829/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/include/userCenterTemp/addRole.html
+END
+rolePermissionTree.html
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn/Authority_Repository/!svn/ver/829/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/include/userCenterTemp/rolePermissionTree.html
+END

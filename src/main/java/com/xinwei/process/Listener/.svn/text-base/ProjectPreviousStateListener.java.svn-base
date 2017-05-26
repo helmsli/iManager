@@ -1,0 +1,42 @@
+package com.xinwei.process.Listener;
+
+import javax.annotation.Resource;
+import org.activiti.engine.delegate.DelegateTask;
+import org.activiti.engine.delegate.TaskListener;
+import org.springframework.stereotype.Service;
+import com.xinwei.process.entity.Project;
+import com.xinwei.process.entity.StateInfo;
+import com.xinwei.process.service.ProjectService;
+import com.xinwei.process.service.UserTaskService;
+import com.xinwei.util.JsonUtil;
+
+@Service("projectPreviousStateListener")
+public class ProjectPreviousStateListener implements TaskListener {
+	@Resource
+	private ProjectService projectService;
+	@Resource
+	private UserTaskService userTaskServiceImpl;
+	@Override
+	public void notify(DelegateTask delegateTask) {
+		//设置项目当前taskId
+		String taskId=delegateTask.getId();
+		//查询当前任务名称，设置项目当前状态
+		String taskName = delegateTask.getName();
+		//获取业务key
+		String businessKey = delegateTask.getExecution()
+				.getProcessBusinessKey();// projectID
+		Long projectId = Long.valueOf(businessKey);
+		//获取项目对象
+		Project project = projectService.selectByPrimaryKey(projectId);
+		String state = userTaskServiceImpl.getStateByTaskDefinitionKey(delegateTask.getTaskDefinitionKey());
+		//构建StateInfo对象
+		StateInfo previousStateInfo = new StateInfo();
+		previousStateInfo.setState(state);
+		previousStateInfo.setStateName(taskName);
+		previousStateInfo.setTaskId(taskId);
+		//更改主流程上一任务状态信息
+		String previousStateJson = JsonUtil.toJson(previousStateInfo);
+		projectService.updateProjectPropertyByProjectId(ProjectService.MAINPREVIOUSSTATE, previousStateJson, projectId);
+	}
+}
+	

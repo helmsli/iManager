@@ -110,6 +110,18 @@
       where data_id = #{dataId,jdbcType=VARCHAR}
   </update>
   
+  <select id="selectMonthlyReportWithResult" resultMap="BaseResultMap" >
+    select data_id, project_category, project_id, project_name, service_type, create_person, 
+    create_person_name, create_time, update_person, update_time, result, service_owner, 
+    process_instance_id, task_id, ext_activiti_info, status, ext_status, data2, data3, 
+    data4, data5, data6, data7, data8, data9, data10, data1
+    from tb_common_biz
+    where project_name = #{projectName,jdbcType=VARCHAR} and 
+            ext_status = #{extStatus,jdbcType=VARCHAR} and 
+            ext_activiti_info = #{extActivitiInfo,jdbcType=VARCHAR} and 
+            project_category  = #{projectCategory,jdbcType=VARCHAR}
+  </select> 
+  
   <update id="updateApprovalChangeByDataId" parameterType="com.xinwei.process.entity.CommonBiz" >
     update tb_common_biz
     set update_person = #{updatePerson,jdbcType=VARCHAR},
@@ -126,6 +138,20 @@
     where data_id = #{dataId,jdbcType=VARCHAR}
   </update>
   
+  <select id="selectByIdList" resultMap="BaseResultMap" >
+    select data_id, project_category, project_id, project_name, service_type, create_person, 
+    create_person_name, create_time, update_person, update_time, result, service_owner, 
+    process_instance_id, task_id, ext_activiti_info, status, ext_status, data2, data3, 
+    data4, data5, data6, data7, data8, data9, data10, data1
+    from tb_common_biz
+    where data_id in (
+  	  	<foreach collection="idList" item="dataId" separator="," >
+				#{dataId}
+	 	</foreach>
+	 )
+	 order by project_id desc,create_time desc
+     
+  </select>
   
   <select id="selectByProjectIdAndStatus" resultMap="BaseResultMap" >
     select data_id, project_category, project_id, project_name, service_type, create_person, create_person_name,create_time, 
@@ -135,6 +161,9 @@
     from tb_common_biz
     where project_id = #{projectId,jdbcType=BIGINT} and  status = #{status,jdbcType=VARCHAR}
   </select>
+  
+ 
+  
   
   <select id="selectByProjectId" resultMap="BaseResultMap" >
     select data_id, project_category, project_id, project_name, service_type, create_person, create_person_name,create_time, 
@@ -163,6 +192,11 @@
     where project_category = #{projectCategory,jdbcType=BIGINT} 
     and service_type in ('submitMonthlyReport','submitMonthlyCheck')
   </select>
+  
+ 
+  
+  
+  
   <select id="selectMonthReportAndCheck" resultMap="BaseResultMap" >
     select data_id, project_category, project_id, project_name, service_type, create_person, create_person_name,create_time, 
     update_person, update_time, result

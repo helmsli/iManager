@@ -1,0 +1,113 @@
+package com.xinwei.process.Listener;
+
+import javax.annotation.Resource;
+import org.activiti.engine.delegate.DelegateTask;
+import org.activiti.engine.delegate.TaskListener;
+import org.springframework.stereotype.Service;
+import com.xinwei.process.constant.ChangeConstants;
+import com.xinwei.process.constant.ProjectConstants;
+import com.xinwei.process.entity.Project;
+import com.xinwei.process.entity.StateInfo;
+import com.xinwei.process.service.ProjectService;
+import com.xinwei.util.JsonUtil;
+
+@Service("projectCurrentStateListener")
+public class ProjectCurrentStateListener implements TaskListener {
+	@Resource
+	private ProjectService projectService;
+
+	@Override
+	public void notify(DelegateTask delegateTask) {
+		//获取任务的taskId
+		String taskId=delegateTask.getId();
+		//获取任务的定义Id 
+		String taskDefinitionKey = delegateTask.getTaskDefinitionKey();
+		//查询当前任务名称，设置项目当前状态
+		String taskName = delegateTask.getName();
+		//获取业务key
+		String businessKey = delegateTask.getExecution()
+				.getProcessBusinessKey();// projectID
+		Long projectId = Long.valueOf(businessKey);
+		//获取项目对象
+		Project project = projectService.selectByPrimaryKey(projectId);
+		//获取项目类别
+		String categoryId =  project.getCategoryId().toString();
+		//将项目类别设置到任务表中
+		delegateTask.setCategory(categoryId);
+		String state = null;
+		if (taskDefinitionKey.equals(ProjectConstants.State.DISPATCHERMASTERAPPROVAL.trim())) {
+			state = ProjectConstants.State.CODE_DISPATCHERMASTERAPPROVAL;
+			
+		} else if (taskDefinitionKey.equals(ProjectConstants.State.INPUTMASTERGRADE.trim())) {
+			state = ProjectConstants.State.CODE_INPUTMASTERGRADE;
+		} else if (taskDefinitionKey.equals(ProjectConstants.State.COMMITTEEAPPROVAL.trim())) {
+			state = ProjectConstants.State.CODE_COMMITTEEAPPROVAL;
+		} else if (taskDefinitionKey
+				.equals(ProjectConstants.State.DEPARTLEADERAPPROVAL.trim())) {
+			state = ProjectConstants.State.CODE_DEPARTLEADERAPPROVAL;
+		} else if (taskDefinitionKey.equals(ProjectConstants.State.PMMODIFYMATERIAL.trim())) {
+			state = ProjectConstants.State.CODE_PMMODIFYMATERIAL;
+		} else if (taskDefinitionKey.equals(ProjectConstants.State.JZDC.trim())) {
+			state = ProjectConstants.State.CODE_JZDC;
+		} else if (taskDefinitionKey
+				.equals(ProjectConstants.State.PMSUBMITMIDMATERIAL.trim())) {
+			state = ProjectConstants.State.CODE_PMSUBMITMIDMATERIAL;
+		} else if (taskDefinitionKey
+				.equals(ProjectConstants.State.DISPATCHERMIDMASTER.trim())) {
+			state = ProjectConstants.State.CODE_DISPATCHERMIDMASTER;
+		} else if (taskDefinitionKey.equals(ProjectConstants.State.MIDAPPROVALREPORT.trim())) {
+			state = ProjectConstants.State.CODE_MIDAPPROVALREPORT;
+		} else if (taskDefinitionKey.equals(ProjectConstants.State.INPUTMIDGRADE.trim())) {
+			state = ProjectConstants.State.CODE_INPUTMIDGRADE;
+		} else if (taskDefinitionKey
+				.equals(ProjectConstants.State.MIDCOMMITTEEAPPROVAL.trim())) {
+			state = ProjectConstants.State.CODE_MIDCOMMITTEEAPPROVAL;
+		} else if (taskDefinitionKey
+				.equals(ProjectConstants.State.DEPARTLEADERMIDAPPROVAL.trim())) {
+			state = ProjectConstants.State.CODE_DEPARTLEADERMIDAPPROVAL;
+		} else if (taskDefinitionKey
+				.equals(ProjectConstants.State.PMSUBMITENDMATERIAL.trim())) {
+			state = ProjectConstants.State.CODE_PMSUBMITENDMATERIAL;
+		} else if (taskDefinitionKey
+				.equals(ProjectConstants.State.DISPATCHERENDMASTER.trim())) {
+			state = ProjectConstants.State.CODE_DISPATCHERENDMASTER;
+		} else if (taskDefinitionKey.equals(ProjectConstants.State.ENDAPPROVALREPORT.trim())) {
+			state = ProjectConstants.State.CODE_ENDAPPROVALREPORT;
+		} else if (taskDefinitionKey.equals(ProjectConstants.State.INPUTENDGRADE.trim())) {
+			state = ProjectConstants.State.CODE_INPUTENDGRADE;
+		} else if (taskDefinitionKey
+				.equals(ProjectConstants.State.COMMITTEEENDAPPROVAL.trim())) {
+			state = ProjectConstants.State.CODE_COMMITTEEENDAPPROVAL;
+		} else if (taskDefinitionKey
+				.equals(ProjectConstants.State.DEPARTLEADERENDAPPROVAL.trim())) {
+			state = ProjectConstants.State.CODE_DEPARTLEADERENDAPPROVAL;
+		} else if (taskDefinitionKey
+				.equals(ProjectConstants.State.SUBMITMONTHLYREPORT.trim())) {
+			state = ProjectConstants.State.CODE_SUBMITMONTHLYREPORT;
+		} else if (taskDefinitionKey.equals(ProjectConstants.State.PMSELFCONCLUSION.trim())) {
+			state = ProjectConstants.State.CODE_PMSELFCONCLUSION;
+		} else if (taskDefinitionKey
+				.equals(ProjectConstants.State.DEPARTLEADERCONCLUSION.trim())) {
+			state = ProjectConstants.State.CODE_DEPARTLEADERCONCLUSION;
+		} else if (taskDefinitionKey
+				.equals(ChangeConstants.State.COMMITTEEAPPROVALCHANGE.trim())) {
+			state = ChangeConstants.State.CODE_COMMITTEE_APPROVALCHANGE;
+		} else if (taskDefinitionKey.equals(ChangeConstants.State.DEPARTLEADERAPPROVALCHANGE.trim())) {
+			state = ChangeConstants.State.CODE_DEPARTLEADER_APPROVALCHANGE;
+		} else if (taskDefinitionKey
+				.equals(ChangeConstants.State.MODIFYCHANGE.trim())) {
+			state = ChangeConstants.State.CODE_MODIFYCHANGE;
+		}else{
+			state = null;	
+		}
+		//构建StateInfo对象
+		StateInfo currentStateInfo = new StateInfo();
+		currentStateInfo.setState(state);
+		currentStateInfo.setStateName(taskName);
+		currentStateInfo.setTaskId(taskId);
+		//更改主流程当前任务状态信息
+		String currentStateInfoJson = JsonUtil.toJson(currentStateInfo);
+		projectService.updateProjectPropertyByProjectId(ProjectService.MAINCURRENTSTATE, currentStateInfoJson, projectId);
+	}
+}
+	

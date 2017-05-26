@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/security
+END
+BusinessMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/security/BusinessMapper.xml
+END
+UserMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/security/UserMapper.xml
+END
+UserRoleMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/security/UserRoleMapper.xml
+END
+RoleMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/security/RoleMapper.xml
+END
+DepartmentMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/security/DepartmentMapper.xml
+END
+MenuMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/security/MenuMapper.xml
+END
+FunctionMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/security/FunctionMapper.xml
+END
+RolePermissionMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/resources/mapper/mysql/security/RolePermissionMapper.xml
+END

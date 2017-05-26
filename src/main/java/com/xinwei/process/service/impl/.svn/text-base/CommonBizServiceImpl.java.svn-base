@@ -1,0 +1,114 @@
+package com.xinwei.process.service.impl;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.xinwei.process.dao.CommonBizMapper;
+import com.xinwei.process.dao.ProjectMapper;
+import com.xinwei.process.entity.CommonBiz;
+import com.xinwei.process.entity.Project;
+import com.xinwei.process.service.CommonBizService;
+import com.xinwei.system.xwsequence.service.XwSysSeqService;
+import com.xinwei.util.date.DateUtil;
+import com.xinwei.util.page.Page;
+
+@Service
+public class CommonBizServiceImpl implements CommonBizService {
+	private final String COMMON_BIZ_SEQ = "common_biz_seq";// 编号
+	@Autowired
+	private CommonBizMapper commonBizDao;
+	@Autowired
+	private ProjectMapper projectDao;
+
+	@Override
+	public CommonBiz selectByPrimaryKey(String dataId) {
+		return commonBizDao.selectByPrimaryKey(dataId);
+	}
+
+	@Resource
+	private XwSysSeqService xwSysSeqService;
+
+	@Override
+	public String save(CommonBiz commonBiz) {
+		// 生成项目编号
+		Long commnonBizSeqCode = xwSysSeqService.getXwSequence(COMMON_BIZ_SEQ, 1)
+				.getStartSequence();
+		String dataId = DateUtil.DateToString(new Date(), "yyyyMMddHHmmss")+commnonBizSeqCode;
+		commonBiz.setDataId(dataId);
+		commonBiz.setCreateTime(new Date());
+		commonBizDao.insert(commonBiz);
+		return commonBiz.getDataId();
+	}
+
+	@Override
+	public void delete(String dataId) {
+		commonBizDao.deleteByPrimaryKey(dataId);
+	}
+
+	@Override
+	public void update(CommonBiz commonBiz) {
+		commonBizDao.updateByPrimaryKey(commonBiz);
+	}
+
+	@Override
+	public List<CommonBiz> selectByProjectIdAndStatus(Long projectId,
+			String status) {
+		return commonBizDao.selectByProjectIdAndStatus(projectId, status);
+	}
+
+	@Override
+	public List<CommonBiz> selectByProjectIdAndServiceType(Long projectId,
+			String serviceType) {
+		return commonBizDao.selectByProjectIdAndServiceType(projectId, serviceType);
+	}
+	
+	@Override
+	public List<CommonBiz> selectAll() {
+		return commonBizDao.selectAll();
+	}
+
+	// 更新审批结果、变更状态，更新人和更新时间
+	@Override
+	public void updateApprovalChangeByDataId(CommonBiz commonBiz) {
+		commonBizDao.updateApprovalChangeByDataId(commonBiz);
+	}
+   
+	//根据projectId查询CommonBiz对象
+	@Override
+	public CommonBiz getCommonBizByProjectId(Long projectId) {
+		String dataId=""; 
+		CommonBiz commonBiz = null;
+		Project selectChangeInfoByProjectId = projectDao.selectChangeInfoByProjectId(projectId);
+		if (selectChangeInfoByProjectId!=null) {
+			dataId  = selectChangeInfoByProjectId.getChangeDataId();
+		}
+		if(StringUtils.isNotEmpty(dataId)){
+			commonBiz = commonBizDao.selectByPrimaryKey(dataId);
+		}
+		return commonBiz;
+	}
+
+	@Override
+	public Page<CommonBiz> selectByProjectCategoryAndServiceType(
+			Map<String, Object> map) {
+		Page<CommonBiz> page = new Page<CommonBiz>(commonBizDao.countByProjectCategoryAndServiceType(map));
+		map.put("startRow", page.getStartRow());
+		map.put("pageSize", page.getPageSize());
+		page.setList(commonBizDao.selectByProjectCategoryAndServiceType(map));
+		return page;
+	}
+
+	@Override
+	public void updateChangeStatusByDataId(String status,String dataId) {
+		commonBizDao.updateChangeStatusByDataId(status,dataId);
+	}
+	
+	
+}

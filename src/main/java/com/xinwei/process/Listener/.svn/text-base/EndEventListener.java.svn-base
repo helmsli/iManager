@@ -1,0 +1,43 @@
+package com.xinwei.process.Listener;
+
+import javax.annotation.Resource;
+
+import org.activiti.engine.delegate.DelegateExecution;
+import org.activiti.engine.delegate.ExecutionListener;
+import org.springframework.stereotype.Service;
+
+import com.xinwei.process.constant.ProjectConstants;
+import com.xinwei.process.entity.StateInfo;
+import com.xinwei.process.service.ProjectService;
+import com.xinwei.util.JsonUtil;
+
+@Service
+public class EndEventListener implements ExecutionListener {
+	@Resource
+	private ProjectService projectService;
+
+	@Override
+	public void notify(DelegateExecution execution) throws Exception {
+		String businessKey = execution.getBusinessKey();// projectID
+		if (null != businessKey) {
+			Long projectId = Long.valueOf(businessKey);
+			// 更新项目状态
+			projectService.updateProjectPropertyByProjectId(
+					ProjectService.STATTE, ProjectConstants.State.CODE_END,
+					projectId);
+			// 构建StateInfo对象
+			StateInfo currentStateInfo = new StateInfo();
+			currentStateInfo.setState(ProjectConstants.State.CODE_END);
+			currentStateInfo.setStateName(ProjectConstants.State.ENDEVENT);
+			currentStateInfo.setTaskId(null);
+			// 更改主流程当前任务状态信息
+			String currentStateInfoJson = JsonUtil.toJson(currentStateInfo);
+			projectService.updateProjectPropertyByProjectId(
+					ProjectService.MAINCURRENTSTATE, currentStateInfoJson,
+					projectId);
+
+		}
+
+	}
+
+}

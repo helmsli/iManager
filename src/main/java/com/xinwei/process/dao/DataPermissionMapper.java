@@ -31,6 +31,10 @@ public interface DataPermissionMapper {
 	 */
 	List<String> selectListByConditions(Map<String, Object> queryMap);
 	
+	List<DataPermission> selectByConditions(Map<String, Object> queryMap);
+	
+	
+	
 	  /**
      * 更新优化信息
      * @param record

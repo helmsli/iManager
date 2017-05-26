@@ -339,7 +339,7 @@ function getDataMonitorDataList(projectName,obj)
  * 数据监测列表--初始化
  * getDataMonitorListByServer
  * **/
-function getDataMonitorInitDataList(projectName,obj)
+function getDataMonthlyData(projectName,obj)
 {
 	projectName=projectName.toLowerCase();
 	switch(projectName)
@@ -347,7 +347,7 @@ function getDataMonitorInitDataList(projectName,obj)
 	case "coomarts":
 	case "camtalk":
 	case "lottery":
-		getCooMartsDataMonitorInitListByServer(obj,getCooMartsDataMonitorListCall);
+		getDataMonthlyReportByServer(obj,getCooMartsDataMonitorListCall);
 		break;
 	case "camtalk":
 		getCamtalkDataMonitorInitListByServer(obj,getCamtalksDataMonitorListCall);

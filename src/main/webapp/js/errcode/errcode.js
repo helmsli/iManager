@@ -9,6 +9,32 @@
 		"-7":"PROJECT_COMPANY_IS_NULL",
 		"-8":"PROJECT_ServiceField_ISNULL",
 		"-255":"PROJECT_INFORMATION_ERROR",
+		
+		//月报表
+		"-1000":"Monthly_ProjectName_ISNULL",
+		"-1001":"Monthly_ProjectCompany_ISNULL",
+		"-1002":"Trainning_times_ISNULL",
+		"-1003":"NotTrainning_times_ISNULL",
+	    "-1004":"MainContent_ISNULL",
+	    "-1005":"ChuDianZongjie_ISNULL",
+	    
+	    "-1006":"ZhiJieShouYIRenshu_ISNULL",
+	    "-1007":"ZhiJieShouYIRenCi_ISNULL",
+	    "-1008":"JianJieShouYIRenshu_ISNULL",
+	    "-1009":"JianJieShouYIRenCi_ISNULL",
+	    	
+	    "-1010":"XiangMuBianGeng_ISNULL",
+	    "-1011":"MeiTiBaoDiaoCiShu_ISNULL",
+	    
+	    "-1012":"MeiTiBaoDaoLianjie_ISNULL",
+	    "-1013":"GaiJinJiHua_ISNULL",
+	    
+	    "-1014":"XiaYueZhongDaJihua_ISNULL",
+	    "-1015":"YueFen_ISNULL",
+	    "-1050":"YueFen_ISNULL",
+	    
+	    
+			
 		"10001":"USER_NAME_IS_NULL",
 		"user":"USER_NAME_IS_NULL",
 		"pass":"PASSWORD_IS_NULL",

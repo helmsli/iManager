@@ -93,8 +93,8 @@ function getAllProjectDataList(obj){
 //返回前10条数据列表
 function setTopData(name,topName){
 	var length=name.length;
-	if(length>10||length==10){
-		for(var i=0;i<10;i++){
+	if(length>5||length==5){
+		for(var i=0;i<5;i++){
 			topName[i]=name[i];
 		}
 	}else{
@@ -125,32 +125,95 @@ function getAllProjectDataListCall(data){
 		var  coomartsLength=scope.coomartsTopList.length;
 		var  camtalkLength=scope.camtalkTopList.length;
 		var  lotteryLength=scope.lotteryTopList.length;
-		if(coomartsLength>=10){
+		if(coomartsLength>=5){
 			scope.moreFlag.coomartsMore=true;
 		}
-		if(camtalkLength>=10){
+		if(camtalkLength>=5){
 			scope.moreFlag.camTalkMore=true;
 		}
-		if(lotteryLength>=10){
+		if(lotteryLength>=5){
 			scope.moreFlag.lotteryMore=true;
 		}
+	//	console.log("**********************************");
 		for(var i in coomartsDataList){
 			var coomartsState=JSON.parse(coomartsDataList[i].mainCurrentState);
 			if(coomartsState){
 				coomartsDataList[i].state=coomartsState.state;
 			}
+			try{
+			//	console.log(JSON.stringify(coomartsDataList[i]));
+			//	console.log("***************：" +coomartsDataList[i].projectTaskDetail );
+				var projectdetail=JSON.parse(coomartsDataList[i].projectTaskDetail);
+				
+				
+				if(projectdetail){
+					coomartsDataList[i].project_detail=projectdetail;
+				//	console.log("***************0000:"+ dataLists[i].project_detail.declarationUnit);
+				    
+				}   	
+			}
+			catch(err)
+			  {
+			  //在这里处理错误
+				console.log("**************************");
+			  }
 		}
+		setTimeout(function () {
+			try{
+			var scope=getAngularScope("myDataController");
+			scope.$apply(function () {
+				scope.coomartsDataList=coomartsDataList;
+			      });
+			}
+			catch(err)
+			{
+				console.log("*****#################*****");
+			}
+		  }, 1000); 
+		
 		for(var i in camtalkDataList){
 			var camtalkState=JSON.parse(camtalkDataList[i].mainCurrentState);
 			if(camtalkState){
 				camtalkDataList[i].state=camtalkState.state;
 			}
+			try{
+				//console.log(JSON.stringify(dataLists[i]));
+				//console.log("***************：" +dataLists[i].projectTaskDetail );
+				var projectdetail=JSON.parse(camtalkDataList[i].projectTaskDetail);
+				
+				
+				if(projectdetail){
+					camtalkDataList[i].project_detail=projectdetail;
+					//console.log("***************0000:"+ dataLists[i].project_detail.declarationUnit);
+				    
+				}   	
+			}
+			catch(err)
+			  {
+			  //在这里处理错误
+			  }
 		}
 		for(var i in lotteryDataList){
 			var lotteryState=JSON.parse(lotteryDataList[i].mainCurrentState);
 			if(lotteryState){
 				lotteryDataList[i].state=lotteryState.state;
 			}
+			try{
+				//console.log(JSON.stringify(dataLists[i]));
+				//console.log("***************：" +dataLists[i].projectTaskDetail );
+				var projectdetail=JSON.parse(lotteryDataList[i].projectTaskDetail);
+				
+				
+				if(projectdetail){
+					lotteryDataList[i].project_detail=projectdetail;
+					//console.log("***************0000:"+ dataLists[i].project_detail.declarationUnit);
+				    
+				}   	
+			}
+			catch(err)
+			  {
+			  //在这里处理错误
+			  }
 		}
 		if(scope.coomartsDataList.length == 0){
 			$("#coomartsNoData").removeClass("hide");
@@ -163,6 +226,7 @@ function getAllProjectDataListCall(data){
 		}
 		console.log("****");
 		console.log(scope.camtalkDataList);
+		
 	}	
 }
 

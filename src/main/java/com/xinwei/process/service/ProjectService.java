@@ -27,6 +27,7 @@ public interface ProjectService{
 	 */
 	List<Project> selectAll();
 	
+	public List<Project> selectByProjectName(String projectName);
 	
 	/**
 	 * 获取ById

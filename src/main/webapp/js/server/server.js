@@ -24,6 +24,11 @@ function login(obj,callback,errorback) {
     requestAjax(options);
 }
 
+function windowReload()
+{
+	//alert("aad");
+	location.reload(true);
+}
 
 
 /**   ------------------------------------------------用户模块 ---start----------------------------------- **/
@@ -2764,10 +2769,10 @@ function getCooMartsDataMonitorListByServer(obj,callBack)
 /*
  * 初始化查询数据监测列表--决策委员会月度监测列表、项目经理周期报告列表(coomarts)
  * */
-function getCooMartsDataMonitorInitListByServer(obj,callBack)
+function getDataMonthlyReportByServer(obj,callBack)
 {
 	var options ={
-	        "url":"/commonbiz/getByCatetgoryAndServiceType/list",
+	        "url":"/commonbiz/getMonthlyReport/list",
 	        "data": obj,
 	        callBack: function(data) {
 	            callBack(data);
@@ -2823,6 +2828,8 @@ function bgSuggestionByServer(obj,callBack){
  */
 function completeTask(result,obj,callBack){
 	 
+	
+	
 	var resultStr = JSON.stringify(result);
 	obj.result = resultStr;
 	var options ={

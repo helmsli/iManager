@@ -1,0 +1,55 @@
+package com.xinwei.process.service;
+
+import java.util.List;
+import java.util.Map;
+
+import com.xinwei.process.entity.CommonBiz;
+import com.xinwei.util.page.Page;
+
+public interface CommonBizService{
+	
+	/**
+	 * 获取所有
+	 */
+	List<CommonBiz> selectAll();
+	
+	
+	/**
+	 * 获取ById
+	 */
+	CommonBiz selectByPrimaryKey(String dataId);
+
+	/**
+	 * 保存
+	 */
+	String save(CommonBiz commonBiz);
+
+	/**
+	 * 删除
+	 */
+	void delete(String dataId);
+	
+	/**
+	 * 修改
+	 */
+	void update(CommonBiz commonBiz);
+	
+	 //根据项目标识和更新状态进行查询
+    List<CommonBiz> selectByProjectIdAndStatus(Long projectId, String status);
+
+    //根据项目ID和业务类型查询
+    List<CommonBiz> selectByProjectIdAndServiceType(Long projectId, String serviceType);
+    
+    //根据项目类别和业务类型进行分页查询
+    Page<CommonBiz> selectByProjectCategoryAndServiceType(Map<String, Object> map);
+    
+    //更新审批结果、变更状态，更新人和更新时间 
+    void updateApprovalChangeByDataId(CommonBiz commonBiz);
+    
+    //更新变更状态status
+  	void updateChangeStatusByDataId(String status,String dataId);
+    //根据projectId查询CommonBiz对象
+    CommonBiz getCommonBizByProjectId(Long projectId);
+    
+    
+}

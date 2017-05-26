@@ -43,7 +43,7 @@
   </delete>
   
   <select id="countByConditions" resultType="java.lang.Long">
-    select count(1)
+    select count(distinct data_id)
     from tb_data_permission
     where 1=1 <include refid="queryConditions" />
   </select>
@@ -52,8 +52,18 @@
     select distinct data_id
     from tb_data_permission
     where 1=1 <include refid="queryConditions" />
+    order by ext_data2 desc
     limit #{startRow},#{pageSize}
   </select>
+  
+  <select id="selectByConditions" resultMap="BaseResultMap">
+    select data_id, category_id, data_type, permission_type, permission_id, ext_data1, 
+    ext_data2, ext_data3
+    from tb_data_permission
+    where 1=1 <include refid="queryConditions" />
+    limit #{startRow},#{pageSize}
+  </select>
+  
   
   <sql id="queryConditions">
    	     <if test="categoryId != null and categoryId !=0">

@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service
+END
+ProcessService.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/ProcessService.java
+END
+ProjectSubcategoryService.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/ProjectSubcategoryService.java
+END
+UserAndGroupService.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/UserAndGroupService.java
+END
+ProjectAnnexService.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/Authority_Repository/!svn/ver/1067/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/ProjectAnnexService.java
+END
+DepartleaderApprovalService.java
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/DepartleaderApprovalService.java
+END
+UserTaskService.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/Authority_Repository/!svn/ver/1067/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/UserTaskService.java
+END
+ProjectCategoryService.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/ProjectCategoryService.java
+END
+ProjectService.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/Authority_Repository/!svn/ver/1227/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/ProjectService.java
+END
+CompanyService.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/CompanyService.java
+END
+ProjectRequirementService.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/ProjectRequirementService.java
+END
+ExpertReviewService.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/ExpertReviewService.java
+END
+MonthlyReportTimerTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/MonthlyReportTimerTask.java
+END
+CommitteeApprovalService.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/CommitteeApprovalService.java
+END
+CommonBizService.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/Authority_Repository/!svn/ver/1252/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/service/CommonBizService.java
+END

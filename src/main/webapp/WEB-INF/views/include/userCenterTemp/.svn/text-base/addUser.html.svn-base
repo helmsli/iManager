@@ -1,0 +1,196 @@
+<meta charset="UTF-8">
+<form action="#" method="post" id="addorEditUser" class="form-horizontal" ng-init="initAddUser()">
+	<div class="row clearfix">
+        <div class="col-sm-4 col-xs-4 form-control-label r-chk-rad">
+            <label for="username"><span style="color:#ff0000;">*</span>账号名称：</label>
+        </div>
+        <div class="col-sm-5 col-xs-8">
+            <div class="form-group">
+                <div class="form-line">
+                	<input type="text"  maxlength="20"  class="form-control" ng-model="userInfo.username" name="userInfo.username" id="username"   />
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="row clearfix">
+        <div class="col-sm-4 col-xs-4 form-control-label r-chk-rad">
+            <label for="firtname"><span style="color:#ff0000;">*</span>姓名：</label>
+        </div>
+        <!-- <div class="col-sm-5 col-xs-8" ng-show="(lang=='en-US')">						
+			<div class="col-md-4 firstname-col">
+				<div class="row clearfix">
+	                    <div class="form-group">
+	                        <div class="form-line">
+	                             <input type="text" class="form-control" ng-model="userInfo.firstname" name="userInfo.firstname" id="firstname" data-error="请输入名字" data-tip="请输入名字" />
+	                        </div>
+	                    </div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="row clearfix">
+	                    <div class="form-group">
+	                        <div class="form-line">
+	                            <input type="text" class="form-control" ng-model="userInfo.lastname" name="userInfo.lastname" id="lastname"  />
+	                        </div>
+	                   </div>
+				</div>
+			</div>
+		</div> -->
+		<div class="col-sm-5 col-xs-8" ng-show="(lang=='zh-CN')">						
+             <div class="form-group">
+                 <div class="form-line">
+                      <input type="text" class="form-control"  maxlength="20" ng-model="userInfo.firstname" name="userInfo.firstname" id="firstname" data-error="请输入名字" data-tip="请输入名字" />
+                 </div>
+             </div>
+		</div>
+	</div>
+	
+	<div class="row clearfix">
+        <div class="col-sm-4 col-xs-4 form-control-label  r-chk-rad">
+            <label for="rolelist"><span style="color:#ff0000;">*</span>性别：</label>
+        </div>
+        <div class="col-sm-5 col-xs-8">
+            <div class="form-group">
+                <div class="form-line">
+                	<div class="radio">
+                		<div class="radio-inline">
+                			<input class="with-gap radio-col-blue"  name="radio" id="man" ng-model="userInfo.sex" ng-init="userInfo.sex=0" value="0" type="radio"  checked="true">
+                        	<label for="man">男</label>
+                		</div>
+                		<div class="radio-inline">
+                			<input class="with-gap radio-col-blue" name="radio" id="woman" ng-model="userInfo.sex" value="1" type="radio">
+                        	<label for="woman">女</label>
+                		</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	
+	<div class="row clearfix">
+        <div class="col-sm-4 col-xs-4 form-control-label  r-chk-rad">
+            <label for="rolelist"><span style="color:#ff0000;">*</span>选择角色：</label>
+        </div>
+        <div class="col-sm-5 col-xs-8">
+            <div class="form-group">
+                <div class="form-line">
+                	<select id="rolelist" name="roleIds" class="selectpicker show-tick form-control" multiple data-live-search="false" data-error="必须选择至少一个角色" data-tip="请选择角色" onchange="userEdit.roleChangeBind();">
+                		
+	            	</select>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<div class="row clearfix" ng-show="addFlag">
+        <div class="col-sm-4 col-xs-4 form-control-label  r-chk-rad">
+            <label for="rolelist"><span style="color:#ff0000;">*</span>密码：</label>
+        </div>
+        <div class="col-sm-5 col-xs-8">
+            <div class="form-group">
+                <div class="form-line">
+                	<input type="password"  maxlength="15" class="form-control" ng-model="userInfo.password" name="userInfo.password" id="password"  />
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row clearfix" ng-show="addFlag">
+        <div class="col-sm-4 col-xs-4 form-control-label  r-chk-rad">
+            <label for="rolelist"><span style="color:#ff0000;">*</span>确认密码：</label>
+        </div>
+        <div class="col-sm-5 col-xs-8">
+            <div class="form-group">
+                <div class="form-line">
+                	<input type="password" class="form-control" maxlength="15" ng-model="userInfo.confirmpwd" name="userInfo.confirmpwd" id="confirmpwd" data-error="确认密码不正确" data-tip="请重新输入密码" />
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row clearfix">
+        <div class="col-sm-4 col-xs-4 form-control-label  r-chk-rad">
+            <label for="rolelist"><span style="color:#ff0000;">*</span>电话号码：</label>
+        </div>
+        <div class="col-sm-5 col-xs-8">
+            <div class="form-group">
+                <div class="form-line">
+                	<input  type="text" maxlength="32" class="form-control" ng-model="userInfo.phone" name="userInfo.phone" id="phone"  data-error="必须填写电话号码" data-tip="请输入电话号码"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-sm-4 col-xs-4 form-control-label  r-chk-rad">
+            <label for="rolelist">出生日期：</label>
+        </div>
+        <div class="col-sm-5 col-xs-8">
+            <div class="form-group">
+                <div class="form-line">
+                	<div id="datetimepicker" class="input-append date" >
+				        <input id="datetimepicker_input" type="text" class="form-control" readonly="readonly" name="userInfo.birthday" ng-model="userInfo.birthday">
+				        <span class="add-on">
+				          <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="fa fa-calendar"></i>
+				        </span>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        
+    <div class="row clearfix">
+        <div class="col-sm-4 col-xs-4 form-control-label  r-chk-rad">
+            <label for="rolelist">邮箱：</label>
+        </div>
+        <div class="col-sm-5 col-xs-8">
+            <div class="form-group">
+                <div class="form-line">
+                	<input type="email" maxlength="32" class="form-control" ng-model="userInfo.email" name="userInfo.email" id="email"  />
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row clearfix">
+        <div class="col-sm-4 col-xs-4 form-control-label  r-chk-rad">
+            <label for="idType">证件类型：</label>
+        </div>
+        <div class="col-sm-5 col-xs-8">
+            <div class="form-group">
+                <div class="form-line">
+                	<select id="idType" name="userInfo.cardtype"  ng-model="userInfo.cardtype"  class="selectpicker show-tick form-control" data-live-search="false">
+				          <option value="0" selected="selected">身份证</option>
+	                      <option value="1">护照</option>
+		            </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row clearfix">
+        <div class="col-sm-4 col-xs-4 form-control-label  r-chk-rad">
+            <label for="cardno">证件号码：</label>
+        </div>
+        <div class="col-sm-5 col-xs-8">
+            <div class="form-group">
+                <div class="form-line">
+                	<input id="cardno" type="text" maxlength="32" class="form-control" ng-model="userInfo.cardno" name="userInfo.cardno"  />
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</form>
+<script>
+	$(function () {
+	    $('#rolelist').selectpicker();
+	    $('#idType').selectpicker();
+	    $('#datetimepicker').datetimepicker({
+	   	 	endDate:new Date(),//最大值选今天
+         	pickTime:false,//屏蔽小时分秒面板
+	    	collapse: true
+	    });
+	});
+</script>

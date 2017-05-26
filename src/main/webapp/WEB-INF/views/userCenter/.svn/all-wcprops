@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/Authority_Repository/!svn/ver/1261/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/userCenter
+END
+userManage_edit.html
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/Authority_Repository/!svn/ver/840/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/userCenter/userManage_edit.html
+END
+companyManage.html
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/Authority_Repository/!svn/ver/1261/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/userCenter/companyManage.html
+END
+userManage.html
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/Authority_Repository/!svn/ver/840/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/userCenter/userManage.html
+END
+password_modify.html
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/Authority_Repository/!svn/ver/840/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/userCenter/password_modify.html
+END
+passwordModify.html
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/Authority_Repository/!svn/ver/840/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/userCenter/passwordModify.html
+END
+roleManage.html
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/Authority_Repository/!svn/ver/840/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/userCenter/roleManage.html
+END
+userInfo.html
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/Authority_Repository/!svn/ver/828/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/userCenter/userInfo.html
+END
+company_edit.html
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/Authority_Repository/!svn/ver/1261/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/userCenter/company_edit.html
+END

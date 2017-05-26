@@ -1,0 +1,58 @@
+package com.xinwei.process.Listener;
+
+import javax.annotation.Resource;
+
+import org.activiti.engine.delegate.DelegateTask;
+import org.activiti.engine.delegate.TaskListener;
+import org.springframework.stereotype.Service;
+
+import com.xinwei.process.constant.ChangeConstants;
+import com.xinwei.process.constant.ProjectConstants;
+import com.xinwei.process.entity.Project;
+import com.xinwei.process.entity.StateInfo;
+import com.xinwei.process.service.ProjectService;
+import com.xinwei.util.JsonUtil;
+
+@Service("changeCurrentStateListener")
+public class ChangeCurrentStateListener implements TaskListener {
+	@Resource
+	private ProjectService projectService;
+
+	@Override
+	public void notify(DelegateTask delegateTask) {
+		//获取当前任务的taskId
+		String taskId=delegateTask.getId();
+		//获取当前任务的定义Id
+		String taskDefinitionId = delegateTask.getTaskDefinitionKey();
+		//查询当前任务名称，设置项目当前状态
+		String taskName = delegateTask.getName();
+		//获取业务key
+		String businessKey = delegateTask.getExecution()
+				.getProcessBusinessKey();// CommonBizduiID
+		Long projectId = Long.valueOf(businessKey);
+		//获取项目对象
+		Project project = projectService.selectByPrimaryKey(projectId);
+		//获取项目类别
+		String categoryId =  project.getCategoryId().toString();
+		//将项目类别设置到任务表中
+		delegateTask.setCategory(categoryId);
+		
+		String state = null;
+		if (taskDefinitionId.equals(ChangeConstants.State.COMMITTEEAPPROVALCHANGE)) {
+			state = ChangeConstants.State.CODE_COMMITTEE_APPROVALCHANGE;
+		} else if (taskDefinitionId.equals(ChangeConstants.State.DEPARTLEADERAPPROVALCHANGE)) {
+			state = ChangeConstants.State.CODE_DEPARTLEADER_APPROVALCHANGE;
+		} else  {
+			state = ChangeConstants.State.CODE_MODIFYCHANGE;
+		}
+		//构建StateInfo对象
+		StateInfo changeCurrentStateInfo = new StateInfo();
+		changeCurrentStateInfo.setState(state);
+		changeCurrentStateInfo.setStateName(taskName);
+		changeCurrentStateInfo.setTaskId(taskId);
+		//更改流程当前任务状态信息
+		String changeCurrentStateInfoJson = JsonUtil.toJson(changeCurrentStateInfo);
+		projectService.updateProjectPropertyByProjectId(ProjectService.CHANGECURRENTSTATE, changeCurrentStateInfoJson, projectId);
+	}
+}
+	

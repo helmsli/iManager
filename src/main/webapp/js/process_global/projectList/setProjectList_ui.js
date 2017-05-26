@@ -470,6 +470,33 @@ function getCoomartsAllProjectMarchSeeListCall(data){
 			if(mainCurrentState){
 				dataLists[i].stateName=mainCurrentState.stateName;
 			}
+			try{
+				//console.log(JSON.stringify(dataLists[i]));
+				//console.log("***************：" +dataLists[i].projectTaskDetail );
+				var projectdetail=JSON.parse(dataLists[i].projectTaskDetail);
+				
+				
+				if(projectdetail){
+					dataLists[i].project_detail=projectdetail;
+					//console.log("***************0000:"+ dataLists[i].project_detail.declarationUnit);
+					
+				    
+				}   	
+			}
+			catch(err)
+			  {
+			  //在这里处理错误
+			  }
+			/*
+		     * 
+			var project_detail = JSON.parse(dataLists[i].project_task_detail);
+			
+		     * 	if(projectdetail){
+				dataLists[i].project_detail=projectdetail;
+			}
+			console.log("***************");
+			console.log(dataLists[i].project_task_detail);
+		     */
 		}
 		scope.dataLists=dataLists;
 		var pageInfo=data.responseInfo.page;
@@ -692,7 +719,7 @@ function getCooMartsProjectManagerDeclareListCall(data){
  * 
  * **/
 function getCooMartsDataMonitorListCall(data){
-	//console.log(data);
+	console.log(data);
 	var scope=getAngularScope("myDataController");
 	//分页
 	if(data.result == 0){
@@ -716,8 +743,41 @@ function getCooMartsDataMonitorListCall(data){
 		    	scope.flag = false;
 		    }
 		}
+		
+		//todo:monthly
+		 for(var i in dataLists)
+		{
+			 try{
+			 if(dataLists[i].data1!="")
+			{
+				 dataLists[i].monthlyReportFile =   JSON.parse(dataLists[i].data1);
+			}
+			 if(dataLists[i].data2!=""){
+				 dataLists[i].monthlyReportAttatchment=JSON.parse(dataLists[i].data2);
+			 }
+			 else
+			{
+				 dataLists[i].monthlyReportAttatchment="";
+			}
+			 	 if(dataLists[i].data3!="")
+			 	{
+				 dataLists[i].reportDetail =JSON.parse(dataLists[i].data3);
+				 dataLists[i].reportDetail = dataLists[i].reportDetail[0];
+				 if(dataLists[i].reportDetail.hasOwnProperty("progressList"))
+				 {	 
+					 //dataLists[i].reportDetail.progressList = JSON.parse(dataLists[i].reportDetail.progressList);
+				  }
+			 	}
+				
+			  
+			}
+			 catch(err)
+			 {
+				 console.log(err);
+			 }
+		}
 		scope.dataList=dataLists;
-		//console.log(scope.dataList);
+		console.log(scope.dataList);
 		scope.$applyAsync(scope.dataList);
 	}else{
 		$("#tabNoData").removeClass("hide");

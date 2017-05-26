@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity
+END
+ProjectAnnex.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/Authority_Repository/!svn/ver/1067/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity/ProjectAnnex.java
+END
+DepartleaderApproval.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity/DepartleaderApproval.java
+END
+UserTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/Authority_Repository/!svn/ver/1115/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity/UserTask.java
+END
+ApprovalResult.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/Authority_Repository/!svn/ver/1031/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity/ApprovalResult.java
+END
+ProjectCategory.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity/ProjectCategory.java
+END
+ProjectDetailInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity/ProjectDetailInfo.java
+END
+Project.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/Authority_Repository/!svn/ver/1225/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity/Project.java
+END
+Company.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity/Company.java
+END
+ProjectRequirement.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity/ProjectRequirement.java
+END
+ExpertReview.java
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity/ExpertReview.java
+END
+CommitteeApproval.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity/CommitteeApproval.java
+END
+StateInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/Authority_Repository/!svn/ver/976/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity/StateInfo.java
+END
+CommonBiz.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/Authority_Repository/!svn/ver/1000/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity/CommonBiz.java
+END
+ProjectSubcategory.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/entity/ProjectSubcategory.java
+END

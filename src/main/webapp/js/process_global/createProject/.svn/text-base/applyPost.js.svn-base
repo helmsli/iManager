@@ -1,0 +1,5 @@
+$(function () {	
+   //可编辑规则表格初始化
+	init("tablePost",setTfootCall);
+	//$("#tablePost tfoot").hide();
+});

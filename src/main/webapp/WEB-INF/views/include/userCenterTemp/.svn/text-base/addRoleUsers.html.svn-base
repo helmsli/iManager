@@ -1,0 +1,64 @@
+<meta charset="UTF-8">
+<div class="modal-dialog" ng-controller="addRoleUsers">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">给角色添加用户</h4>
+        </div>
+        <div class="modal-body">       	
+        	<div class="row">
+				<div class="col-lg-12">
+					<div class="table-responsive">
+						<table  class="table table-striped table-bordered table-hover">
+								<thead>
+									<tr>
+										<th><label class="checkbox-inline">
+										<input type="checkbox" id="che_2" ng-click="checkAllUsers($event)" class="filled-in chk-col-blue" /><label for="che_2"></label></label></th>
+										<th ng-repeat="i in titleList" class="text-center">{{i}}</th>
+									</tr>
+								</thead>
+								<tbody id="userBox"><!--tbody的class名不能为‘show’,否则表格不能自动撑开-->
+									<tr  ng-repeat="data in userList">
+										<td><label class="checkbox-inline"><input id="{{data.username}}"  type="checkbox" value="{{data.id}}" class="filled-in chk-col-blue" /><label for="{{data.username}}"></label></label></td>
+										<td class="col-lg-5">{{data.username}}</td>
+										<td class="col-lg-7">{{data.phone}}</td>
+									</tr>
+								</tbody>
+						</table>
+						<!-- / .table -->
+						</div>
+					<!-- / .table-responsive -->
+					<div class="table-tips show">
+						<div class="hide">
+							<span class="error-block">
+								<i class="fa fa-exclamation-triangle"></i>
+								对不起，没有查询到您需要的数据!
+							</span>
+						</div>
+						<div class="ng-hide" ng-show="list.length==0">
+							<span class="error-block">
+								<i class="fa fa-exclamation-triangle"></i>
+								暂无相关数据！
+							</span>
+						</div>
+					</div>
+					<!-- / .table-tips -->
+				</div>
+				<!-- / .col-lg-12 -->
+			</div>
+			<!-- / .row -->
+			<div class="row show">
+				<div class="col-lg-6">
+					<div class="checkAll-group">
+						<span class="checkbox-inline"><input type="checkbox" id="che_3" class="filled-in chk-col-blue"  ng-click="checkAllUsers($event)" /><label for="che_3">全选</label></span>
+					</div>
+				</div>
+			</div>
+			<!-- / .row -->	
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" ng-click="addUsers()">确认</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+        </div>
+    </div>
+</div>

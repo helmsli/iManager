@@ -107,6 +107,19 @@
     from tb_project
     where project_id = #{projectId,jdbcType=BIGINT}
   </select>
+  
+  <select id="selectByProjectName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select project_id, project_name, project_manager_id, project_manager_name, category_id, 
+    subcategory, cycle_type, main_current_state, main_previous_state, change_current_state, 
+    change_previous_state, change_data_id, report_current_state, project_process_instance_id, 
+    change_process_instance_id, project_ext_info, project_task_detail, self_appraise, 
+    depart_leader_appraise, project_costs, start_time, complete_time, project_apply_time, 
+    project_apply_person, telno, email, project_milestone, publish_id, publish_title, 
+    state
+    from tb_project
+    where project_id = #{projectName,jdbcType=BIGINT}
+  </select>
+  
   <select id="selectAll" resultMap="BaseResultMap" >
     select project_id, project_name, project_manager_id, project_manager_name, category_id, 
     subcategory, cycle_type, main_current_state, main_previous_state, change_current_state, 
@@ -126,9 +139,10 @@
   </select>
   
   <select id="selectAllByCategoryIdAndState" resultMap="BaseResultMap" >
-    select project_id, project_name,main_current_state
+    select project_id, project_name,main_current_state,project_task_detail
     from tb_project
     where category_id = #{categoryId} and  state = #{state} 
+    order by project_apply_time desc
   </select>
   
   <select id="countByCategoryIdAndState" resultType="java.lang.Long" >
@@ -140,7 +154,9 @@
   <select id="getByCategoryIdAndState" resultMap="BaseResultMap" useCache="true">
     select * from tb_project 
     where category_id = #{categoryId} and state = #{state} 
+    order by project_apply_time desc    
     limit #{startRow},#{pageSize}
+     
   </select>
   
   <select id="selectAllByProjectManagerIdCategoryIdAndState" resultMap="BaseResultMap" >

@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/dao
+END
+CommitteeApprovalMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/dao/CommitteeApprovalMapper.java
+END
+CommonBizMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/Authority_Repository/!svn/ver/1250/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/dao/CommonBizMapper.java
+END
+ProjectSubcategoryMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/dao/ProjectSubcategoryMapper.java
+END
+ProjectAnnexMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/Authority_Repository/!svn/ver/1067/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/dao/ProjectAnnexMapper.java
+END
+DepartleaderApprovalMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/dao/DepartleaderApprovalMapper.java
+END
+ProjectCategoryMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/dao/ProjectCategoryMapper.java
+END
+ProjectMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/Authority_Repository/!svn/ver/1224/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/dao/ProjectMapper.java
+END
+CompanyMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/dao/CompanyMapper.java
+END
+ProjectRequirementMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/dao/ProjectRequirementMapper.java
+END
+ExpertReviewMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/process/dao/ExpertReviewMapper.java
+END

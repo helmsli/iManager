@@ -1,0 +1,6 @@
+$(function () {	
+   //可编辑规则表格初始化
+   init("tableRule",setTfootCall);
+   
+  // $("#tableRule tfoot").hide();
+});

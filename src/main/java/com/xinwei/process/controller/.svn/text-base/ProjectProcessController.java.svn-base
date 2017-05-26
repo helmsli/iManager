@@ -1,0 +1,583 @@
+package com.xinwei.process.controller;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.xinwei.process.constant.ProjectConstants;
+import com.xinwei.process.entity.CommitteeApproval;
+import com.xinwei.process.entity.CommonBiz;
+import com.xinwei.process.entity.DepartleaderApproval;
+import com.xinwei.process.entity.ExpertReview;
+import com.xinwei.process.entity.Project;
+import com.xinwei.process.entity.StateInfo;
+import com.xinwei.process.entity.UserTask;
+import com.xinwei.process.service.CommitteeApprovalService;
+import com.xinwei.process.service.CommonBizService;
+import com.xinwei.process.service.DepartleaderApprovalService;
+import com.xinwei.process.service.ExpertReviewService;
+import com.xinwei.process.service.ProcessService;
+import com.xinwei.process.service.ProjectAnnexService;
+import com.xinwei.process.service.ProjectService;
+import com.xinwei.process.service.UserTaskService;
+import com.xinwei.security.entity.User;
+import com.xinwei.security.vo.ResultVO;
+import com.xinwei.util.JsonUtil;
+import com.xinwei.util.page.Page;
+
+/**
+ * 项目流程控制器
+ *
+ */
+@Controller
+@RequestMapping("/task")
+public class ProjectProcessController extends BaseController{
+
+	private Logger logger = LoggerFactory.getLogger(ProjectProcessController.class);
+	@Resource
+	private RuntimeService runtimeService;// 流程运行时相关服务
+	@Resource
+	private ProjectService projectService;// 项目相关服务
+	@Resource
+	private ProcessService processServiceImpl;// 流程相关服务
+	@Resource
+	private UserTaskService userTaskServiceImpl;// 用户任务相关服务
+	@Resource
+	private ExpertReviewService expertReviewServiceImpl;// 项目评审相关服务
+	@Resource
+	private DepartleaderApprovalService departleaderApprovalServiceImpl;// 部门领导审批相关服务
+	@Resource
+	private CommitteeApprovalService CommitteeApprovalServiceImpl;// 决策委员会审批相关服务
+	@Resource
+	private ProjectAnnexService projectAnnexServiceImpl;// 项目评审相关服务
+	@Resource
+	private CommonBizService CommonBizServiceImpl;//通用的业务数据服务
+	
+	@RequestMapping(value = "/tasklist/list", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String getTaskList(String categoryId, String userId) {
+		logger.debug("GetTaskList--> userId: " + userId + ", categoryId: "+ categoryId);
+		Long count = userTaskServiceImpl.countTasksByUidAndCategoryId(userId, categoryId);
+		Page<UserTask> page = new Page<UserTask>(count);
+		int startRow = page.getStartRow();
+		int pageSize = page.getPageSize();
+		List<Task> taskList = userTaskServiceImpl.getTaskListByUidAndCategoryId(userId, categoryId, startRow, pageSize);
+		List<UserTask> userTaskList = new ArrayList<UserTask>();
+		//构造UserTask对象列表
+		for(Task task: taskList){
+			Long projectId=new Long(0);
+			try {
+				projectId = Long.parseLong(getProjectIdByProcessInstanceId(task.getProcessInstanceId()));
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				continue;
+			}
+			Project project = projectService.selectByPrimaryKey(projectId);
+			if (null != project) {
+				//构造UserTask对象
+				UserTask userTask = buildUserTaskByTask(task, project);
+				userTaskList.add(userTask);
+			}
+		}
+		page.setList(userTaskList);
+		
+		ResultVO<UserTask> resultVO = new ResultVO<UserTask>();
+		resultVO.setPage(page); 
+		resultVO.setOthers("taskList",page.getList());
+		logger.debug("GetTaskList-->result: "+resultVO.getResult());
+		return resultVO.toString();
+	}
+
+	@RequestMapping(value = "/finishedTasklist/list", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String getFinishedTaskList(String categoryId,
+			String userId) {
+		logger.debug("GetFinishedTaskList--> userId: " + userId + ", categoryId: "+ categoryId);
+		Long count = userTaskServiceImpl.countHistoryTasksByUidAndCategoryId(userId, categoryId);
+		Page<UserTask> page = new Page<UserTask>(count);
+		int startRow = page.getStartRow();
+		int pageSize = page.getPageSize();
+		List<HistoricTaskInstance> historicTaskList = userTaskServiceImpl.getHistoryTasksByUidAndCategoryId(userId, categoryId, startRow, pageSize);
+		List<UserTask> userTaskList = new ArrayList<UserTask>();
+		//构造UserTask对象列表
+		for(HistoricTaskInstance historicTask: historicTaskList){
+			Long projectId = Long.parseLong(getProjectIdByProcessInstanceId(historicTask.getProcessInstanceId()));
+			Project project = projectService.selectByPrimaryKey(projectId);
+			if (null != project) {
+				//构造UserTask对象
+				UserTask userTask = buildUserTaskByHistoricTask(historicTask, project);
+				userTaskList.add(userTask);
+			}
+		}
+		page.setList(userTaskList);
+		
+		ResultVO<UserTask> resultVO = new ResultVO<UserTask>();
+		resultVO.setPage(page); 
+		resultVO.setOthers("taskList",page.getList());
+		logger.debug("GetFinishedTaskList-->result: "+resultVO.getResult());
+		return resultVO.toString();
+	}
+
+	/**
+	 * 签收任务
+	 * 
+	 * @param taskId
+	 *            任务id
+	 * @param userId
+	 *            用户id
+	 * @return
+	 */
+	@RequestMapping(value = "/claim", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String claim(String taskId, String userId) {
+		logger.debug("Claim --> userId: " + userId + ", taskId: "+ taskId);
+		userTaskServiceImpl.claimTask(taskId, userId);
+		return new ResultVO<>().toString();
+	}
+
+	/**
+	 * 管理人员指定评审专家
+	 * 
+	 * @param taskId
+	 *            任务Id
+	 * @param expertReview
+	 *            专家评审记录
+	 * @return 专家评审记录ID
+	 */
+	@RequestMapping(value = "/dispatcherMaster", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String dispatcherMaster(ExpertReview expertReview,
+			String taskId) {
+		logger.debug("DispatcherMaster --> taskId: "+ taskId);
+		ResultVO<Object> result = new ResultVO<>();
+		//获取任务对象
+		Task task = userTaskServiceImpl.getTask(taskId);
+		if(null != task){
+			
+			String projectId = getProjectIdByProcessInstanceId(task.getProcessInstanceId());
+			// 设置项目ID
+			expertReview.setProjectId(Long.parseLong(projectId));
+			// 设置评审阶段
+			String stage = "";
+			if (ProjectConstants.State.DISPATCHERMASTERAPPROVAL.equals(task.getTaskDefinitionKey())) {
+				stage = ProjectConstants.Stage.BEGIN;
+			} else if (ProjectConstants.State.DISPATCHERMIDMASTER.equals(task.getTaskDefinitionKey())) {
+				stage = ProjectConstants.Stage.MIDDLE;
+			} else {
+				stage = ProjectConstants.Stage.LAST;
+			}
+			expertReview.setStage(stage);
+			// 设置专家打分
+			expertReview.setExpertScore("");
+			// 保存评审专家列表
+			Long recordId = expertReviewServiceImpl.save(expertReview);
+			// 完成任务
+			Map<String, Object> variables = new HashMap<String, Object>();
+			userTaskServiceImpl.completeTask(taskId, variables);
+			result.setOthers("recordId", recordId);
+		}else{
+			result.setResult(ResultVO.FAILURE);
+		}
+		logger.debug("DispatcherMaster --> result: "+ result.getResult());
+		return result.toString();
+	}
+
+	/**
+	 * 预加载评审记录（管理人员录入专家评分预操作）
+	 * 
+	 * @param projectId
+	 *            项目ID
+	 */
+	@RequestMapping("/preloadExpertReview")
+	public @ResponseBody String getExpertReview(
+			@RequestParam(value = "projectId", required = false) Long projectId) {
+		ExpertReview expertReview = null;
+		if (projectId != null) {
+			// 根据项目ID和项目当前状态查询当前评审记录
+			List<ExpertReview> expertReviews = expertReviewServiceImpl
+					.getExpertReviewByProjectId(projectId);
+			// 获取当前评审记录
+			expertReview = expertReviews.get(0);
+		}
+		ResultVO<Object> result = new ResultVO<>();
+		result.setOthers("expertReview", expertReview);
+		return result.toString();
+	}
+
+	/**
+	 * 管理人员录入专家评分
+	 * 
+	 * @param expertReview
+	 *            专家评审记录
+	 * @return
+	 */
+	@RequestMapping(value = "/inputMasterGrade", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String inputMasterGrade(ExpertReview expertReview,
+			String taskId) {
+		logger.debug("InputMasterGrade --> taskId: "+ taskId);
+		ResultVO<Object> result = new ResultVO<>();
+		Task task = userTaskServiceImpl.getTask(taskId);
+		if(null != task){
+			
+			ExpertReview toUpdateExpertReview = expertReviewServiceImpl
+					.selectByPrimaryKey(expertReview.getRecordId());
+			// 保存评分记录
+			toUpdateExpertReview.setExpertScore(expertReview.getExpertScore());
+			expertReviewServiceImpl.update(toUpdateExpertReview);
+			// 完成任务
+			Map<String, Object> variables = new HashMap<String, Object>();
+			userTaskServiceImpl.completeTask(taskId, variables);
+			result.setOthers("recordId", toUpdateExpertReview.getRecordId());
+		}else{
+			result.setResult(ResultVO.FAILURE);
+		}
+		logger.debug("InputMasterGrade --> result: "+ result.getResult());
+		return result.toString();
+	}
+
+	/**
+	 * 决策委员会审批
+	 * 
+	 * @param id
+	 */
+	@RequestMapping(value = "/committeeApproval", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String committeeApproval(
+			CommitteeApproval committeeApproval, String taskId) {
+		logger.debug("CommitteeApproval --> taskId: "+ taskId);
+		ResultVO<Object> result = new ResultVO<>();
+		
+		Task task = userTaskServiceImpl.getTask(taskId);
+		if(null != task){
+			
+			String projectId = getProjectIdByProcessInstanceId(task.getProcessInstanceId());
+			// 设置项目ID
+			committeeApproval.setProjectId(Long.parseLong(projectId));
+			String stage = "";
+			
+			// 设置审批意见流程变量
+			Map<String, Object> variables = new HashMap<String, Object>();
+			String approvalConclusion = committeeApproval.getConclusion();
+			// 设置评审阶段
+			if (ProjectConstants.State.COMMITTEEAPPROVAL.equals(task.getTaskDefinitionKey())) {
+				stage = ProjectConstants.Stage.BEGIN;
+				if ("同意".equals(approvalConclusion)) {
+					variables.put("primaryReviewConclusion", "pass");
+				} else {
+					variables.put("primaryReviewConclusion", "notpass");
+				}
+			} else if (ProjectConstants.State.MIDCOMMITTEEAPPROVAL.equals(task.getTaskDefinitionKey())) {
+				stage = ProjectConstants.Stage.MIDDLE;
+				if ("同意".equals(approvalConclusion)) {
+					variables.put("midConclusion", "pass");
+				} else {
+					variables.put("midConclusion", "notpass"); 
+				}
+			} else {
+				stage = ProjectConstants.Stage.LAST;
+				if ("同意".equals(approvalConclusion)) {
+					variables.put("endConclusion", "pass");
+				} else {
+					variables.put("endConclusion", "notpass");
+				}
+			}
+			committeeApproval.setStage(stage);
+			// 保存决策委员会审批记录
+			Long recordId = CommitteeApprovalServiceImpl.save(committeeApproval);
+			
+			userTaskServiceImpl.completeTask(taskId, variables);
+			
+			result.setOthers("recordId", recordId);
+		}else{
+			result.setResult(ResultVO.FAILURE);
+		}
+		logger.debug("CommitteeApproval --> result: "+ result.getResult());
+		return result.toString();
+	}
+
+	/**
+	 * 部门经理审批
+	 * 
+	 * @param project
+	 */
+	@RequestMapping(value = "/departleaderApproval", method = {
+			RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String departleaderApproval(
+			DepartleaderApproval departleaderApproval, String taskId) {
+		logger.debug("DepartleaderApproval --> taskId: "+ taskId);
+		ResultVO<Object> result = new ResultVO<>();
+		
+		Task task = userTaskServiceImpl.getTask(taskId);
+		if(null != task){
+			
+			String projectId = getProjectIdByProcessInstanceId(task.getProcessInstanceId());
+			// 设置项目ID
+			departleaderApproval.setProjectId(Long.parseLong(projectId));
+			String stage = "";
+			
+			// 设置审批意见流程变量
+			Map<String, Object> variables = new HashMap<String, Object>();
+			String approvalConclusion = departleaderApproval.getConclusion();
+			// 设置评审阶段
+			if (ProjectConstants.State.DEPARTLEADERAPPROVAL.equals(task.getTaskDefinitionKey())) {
+				stage = ProjectConstants.Stage.BEGIN;//初期
+				if ("同意".equals(approvalConclusion)) {
+					variables.put("resultOfDepartApproval", "pass");
+				} else if ("不同意".equals(approvalConclusion)) {
+					variables.put("resultOfDepartApproval", "notpass");
+				} else {
+					// 终止该项目流程
+					variables.put("resultOfDepartApproval", "endProcess");
+				}
+			} else if (ProjectConstants.State.DEPARTLEADERMIDAPPROVAL.equals(task.getTaskDefinitionKey())) {
+				stage = ProjectConstants.Stage.MIDDLE;//中期
+				if ("同意".equals(approvalConclusion)) {
+					variables.put("resultOfMidChecked", "pass");
+				} else{
+					variables.put("resultOfMidChecked", "notpass");
+				}
+			} else {
+				stage = ProjectConstants.Stage.LAST;//终期
+				if ("同意".equals(approvalConclusion)) {
+					variables.put("resultOfEndChecked", "pass");
+				} else{
+					variables.put("resultOfEndChecked", "notpass");
+				}
+			}
+			departleaderApproval.setStage(stage);
+			// 保存领导审批记录
+			Long recordId = departleaderApprovalServiceImpl
+					.save(departleaderApproval);
+			//完成任务
+			userTaskServiceImpl.completeTask(taskId, variables);
+			
+			result.setOthers("recordId", recordId);
+		}else{
+			result.setResult(ResultVO.FAILURE);
+		}
+		logger.debug("DepartleaderApproval --> result: "+ result.getResult());
+		return result.toString();
+	}
+	
+	/**
+	 * 尽职调查
+	 * @param project
+	 */
+	@RequestMapping(value="/jzdc", method={RequestMethod.GET, RequestMethod.POST})
+	public @ResponseBody String JZDC(CommonBiz commonBiz,String taskId) 
+    {
+		logger.debug("JZDC --> taskId: "+ taskId);
+		ResultVO<Object> result = new ResultVO<>();
+		Task task = userTaskServiceImpl.getTask(taskId);
+		if(null != task && task.getTaskDefinitionKey().equals(ProjectConstants.State.JZDC.trim())){
+			//获取当前用户信息
+			User user = getCurrentUser();
+			commonBiz.setServiceType("jzdc");
+			//获取项目信息
+			Project project = projectService.selectByPrimaryKey(commonBiz.getProjectId());
+			if(null != project){
+				commonBiz.setProjectCategory(project.getCategoryId().toString());
+			}
+			//设置创建人
+			commonBiz.setCreatePerson(user.getId().toString());
+			//设置任务ID
+			commonBiz.setTaskId(taskId);
+			//设置流程实例ID
+			commonBiz.setProcessInstanceId(task.getProcessInstanceId());
+			//保存尽职调查对象
+			String dataId = CommonBizServiceImpl.save(commonBiz);
+			//完成任务
+			userTaskServiceImpl.completeTask(taskId, null);
+			logger.debug("JZDC --> result: "+ result.getResult());
+			result.setOthers("dataId", dataId);
+		}else{
+			result.setResult(ResultVO.FAILURE);
+		}
+		return result.toString();
+    }
+
+	/**
+	 * 项目经理自评
+	 * @param project
+	 */
+	@RequestMapping(value="/selfAppraise", method={RequestMethod.GET, RequestMethod.POST})
+	public @ResponseBody String selfAppraise(String selfAppraise,String taskId) 
+    {
+		logger.debug("SelfAppraise --> taskId: "+ taskId);
+		ResultVO<Object> result = new ResultVO<>();
+		Task task = userTaskServiceImpl.getTask(taskId);
+		if(null != task && task.getTaskDefinitionKey().equals(ProjectConstants.State.PMSELFCONCLUSION)){
+			
+			String processInstanceId = task.getProcessInstanceId();
+			Long projectId = Long.parseLong(getProjectIdByProcessInstanceId(processInstanceId));
+			Project project = projectService.selectByPrimaryKey(projectId);
+			if (null != project) {
+				// 修改项目信息
+				project.setSelfAppraise(selfAppraise);
+				projectService.update(project);
+				
+				Map<String, Object> variables = new HashMap<String, Object>();
+				// 完成任务
+				userTaskServiceImpl.completeTask(taskId, variables);
+				result.setOthers("projectId", project.getProjectId());
+			}else{
+				result.setResult(ResultVO.FAILURE);
+			}
+		}else{
+			result.setResult(ResultVO.FAILURE);
+		}
+		logger.debug("SelfAppraise --> result: "+ result.getResult());
+		return result.toString();
+	}
+	
+	/**
+	 * 部门经理评价
+	 * @param project
+	 */
+	@RequestMapping(value="/departLeaderAppraise", method={RequestMethod.GET, RequestMethod.POST})
+	public @ResponseBody String departLeaderAppraise(String departLeaderAppraise,String taskId) 
+	{
+		logger.debug("DepartLeaderAppraise --> taskId: "+ taskId);
+		ResultVO<Object> result = new ResultVO<>();
+		Task task = userTaskServiceImpl.getTask(taskId);
+		if(null != task && task.getTaskDefinitionKey().equals(ProjectConstants.State.DEPARTLEADERCONCLUSION)){
+			
+			String processInstanceId = task.getProcessInstanceId();
+			Long projectId = Long.parseLong(getProjectIdByProcessInstanceId(processInstanceId));
+			Project project = projectService.selectByPrimaryKey(projectId);
+			
+			if (null != project) {
+				// 修改项目信息
+				project.setDepartLeaderAppraise(departLeaderAppraise);
+				projectService.update(project);
+				// 完成任务
+				Map<String, Object> variables = new HashMap<String, Object>();
+				userTaskServiceImpl.completeTask(taskId, variables);
+				result.setOthers("projectId", project.getProjectId());
+			}else{
+				result.setResult(ResultVO.FAILURE);
+			}
+		}else{
+			result.setResult(ResultVO.FAILURE);
+		}
+		logger.debug("DepartLeaderAppraise --> result: "+ result.getResult());
+		return result.toString();
+	}
+	
+	/**
+	 * 根据流程实例ID获取所属项目的项目ID
+	 * 
+	 * @param processInstanceId 流程实例ID
+	 * @return
+	 */
+	public String getProjectIdByProcessInstanceId(String processInstanceId) {
+		String projectId = "";
+		// 获取正在执行的流程实例
+		ProcessInstance processInstance = processServiceImpl
+				.getProcessInstance(processInstanceId);
+		if (null != processInstance) {
+			projectId = processInstance.getBusinessKey();
+		} else {// 如果项目流程已经结束
+			// 获取历史流程实例
+			HistoricProcessInstance historicProcessInstance = processServiceImpl
+					.findHistoryProcessInstance(processInstanceId);
+			if (null != historicProcessInstance) {
+				projectId = historicProcessInstance.getBusinessKey();
+			}
+		}
+		return projectId;
+	}
+
+	/**
+	 * 构建用户任务对象
+	 * 
+	 * @param task
+	 *            Activiti中任务对象
+	 * @param project
+	 *            任务对应的项目
+	 * @return
+	 */
+	public UserTask buildUserTaskByTask(Task task, Project project ) {
+		UserTask userTask = new UserTask();
+		if (null != task && null != project) {
+
+			userTask.setId(task.getId());
+			userTask.setName(task.getName());
+			userTask.setAssignee(task.getAssignee());
+			userTask.setCreateTime(task.getCreateTime());
+			userTask.setProjectId(project.getProjectId());
+			userTask.setProjectName(project.getProjectName());
+			// 设置项目状态信息
+			StateInfo stateInfo = new StateInfo();
+			String state = userTaskServiceImpl.getStateByTaskDefinitionKey(task.getTaskDefinitionKey());
+			stateInfo.setState(state);
+			stateInfo.setStateName(task.getName());
+			stateInfo.setTaskId(task.getId());
+			userTask.setStateInfo(JsonUtil.toJson(stateInfo));
+		}
+		return userTask;
+	}
+
+	/**
+	 * 构建用户任务对象
+	 * 
+	 * @param historicTask
+	 *            Activiti中历史任务对象
+	 * @param project
+	 *            任务对应的项目
+	 * @return
+	 */
+	public UserTask buildUserTaskByHistoricTask(
+			HistoricTaskInstance historicTask, Project project) {
+		UserTask userTask = new UserTask();
+		if (null != historicTask && null != project) {
+
+			userTask.setId(historicTask.getId());
+			userTask.setName(historicTask.getName());
+			userTask.setAssignee(historicTask.getAssignee());
+			userTask.setCreateTime(historicTask.getCreateTime());
+			userTask.setCompleteTime(historicTask.getEndTime());
+			userTask.setProjectId(project.getProjectId());
+			userTask.setProjectName(project.getProjectName());
+			// 设置项目状态信息
+			String stateInfo = project.getMainCurrentState();
+			userTask.setStateInfo(stateInfo);
+		}
+		return userTask;
+	}
+	
+	/**
+	 * 高亮跟踪流程实例
+	 */
+	@RequestMapping(value="/traceProcessImage",produces = MediaType.IMAGE_PNG_VALUE)
+	@ResponseBody
+	public byte[] traceProcessImage(String processInstanceId, HttpServletResponse response) {
+		try {
+			return projectService.traceProcessImage(processInstanceId);
+		} catch (Exception e) {
+			System.err.println("获取图片流错误！！");
+			e.printStackTrace();
+			return null;
+		}
+	}
+}

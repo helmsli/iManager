@@ -1,0 +1,297 @@
+App.controller('initBgData', function($scope) {
+	
+	
+ //变更的状态控制
+   var controllerBgStep=
+	{
+			    STEP_0: "B000",//创建变更
+			    STEP_1: "B001", //决策委员会评审
+			    STEP_2: "B002", //经理评审
+			    STEP_3: "B003", //变更通过
+	};
+   var controllerBgState=
+	{
+			 projectBgReviewResult:false,
+             committeeBgReviewResult:false,
+             departBgReviewResult:false,
+             projectBgReview:false,
+             committeeBgReview:false,
+             departBgReview:false
+	};
+   var useNameObj=
+	{
+			projectManagerA:1,
+			offercerA:2,
+			committeeA:3,
+		    departLeaderA:4,
+	};
+   function getShowFlagList(changState,useName){
+	   switch(changState){
+	   case controllerBgStep.STEP_0:
+		   break;
+	   case controllerBgStep.STEP_1:
+		   controllerBgState.committeeBgReview=true;
+		   break;
+	   case controllerBgStep.STEP_2:
+		   controllerBgState.committeeBgReview=false;
+		   controllerBgState.departBgReview=true;
+		   controllerBgState.projectBgReviewResult=true,
+		   controllerBgState.committeeBgReviewResult=true;
+		   break;
+	   case controllerBgStep.STEP_3:
+		   controllerBgState.committeeBgReview=false;
+		   controllerBgState.departBgReview=false;
+		   controllerBgState.projectBgReviewResult=true,
+		   controllerBgState.committeeBgReviewResult=true;
+		   controllerBgState.departBgReview=true;
+		   break;
+		default:
+		   controllerBgState.committeeBgReview=false;
+		   controllerBgState.departBgReview=false;
+		   controllerBgState.projectBgReviewResult=false,
+		   controllerBgState.committeeBgReviewResult=false;
+		   controllerBgState.departBgReview=false;
+	   }
+	    if(useName==useNameObj.committeeA){
+	       controllerBgState.committeeBgReview=true;
+	   }
+	    if(useName==useNameObj.departLeaderA){
+	       controllerBgState.departBgReview=true;   
+		   }
+	    $scope.controllerBgState=controllerBgState;
+   }
+   $scope.mianControl=function(){
+	   //得到参数
+	   var myParm=getParm();
+	   var changState=myParm.changeStata;
+	   var userInfo=localStorage.getItem("userInfo");
+	   var useName=JSON.parse(userInfo).uid
+	   //给各个控制状态赋值
+	   getShowFlagList(changState,useName);
+	   //初始化页面的基本信息
+	   $scope.initDataAfterModify();
+   }
+   
+	/***
+	 *  统一的数据处理，把data1和data2和data3处理变成以前查看的数据
+	 * */
+	function processData(data1,data2){
+		for(var i in data2){
+			data1[i]=data2[i];
+		}
+		return data1;
+	}
+	/*
+	 * 根据状态选定不同的提交函数
+	 * */
+	function subMitFnCall(changState,useName){
+		switch(changState){
+		   case controllerBgStep.STEP_1:
+			   reviewBgSuggestion(changState,useName);
+			 //此状态下调用决策委员会审批
+			   break;
+		   case controllerBgStep.STEP_2:
+			 //此状态下调用决部门经理审批审批
+			   reviewBgSuggestion(changState,useName);
+			   break;
+		   case controllerBgStep.STEP_0:	   
+		   case controllerBgStep.STEP_3:
+			   console.log("这个STEP_0/STEP_3状态下什么都不调用");
+			break;
+			default:
+			 console.log("这个change状态下什么都不调用");
+		}
+		
+	}
+	/*
+	 * 决策委员会和部门经理的审批调用函数
+	 * */
+	//如果是决策委员会的话，传的应该就是决策委员会的意见和结论，如果是部门经理的话传的应该是经理的意见
+	function reviewBgSuggestion(){
+		   if(useName==committeeA||controllerBgStep.changState==STEP_1){
+			   request.result=""//决策委员会的结论和意见
+		     }else{
+		    	  request.result=""//决策委员会的结论和意见
+		     }
+			var obj={	   
+					"request.projectId":projectId, 
+					"request.result":"",
+					"request.processInstanceId":""
+			};
+			bgSuggestionByServer(obj,function(data){
+				if(data.result == 0){	
+					window.history.go(-1);
+					
+				}
+		    });	
+	}
+	
+	/*
+	 * 决策委员会和部门经理的查看意见的调用函数
+	 * */
+	function reviewResultSuggestion(){
+		var obj={
+				"request.projectId":projectId, 
+				"request. result":"",
+		};
+		bgSuggestionResultByServer(obj,function(data){
+			if(data.result == 0){
+				
+				//把查看到的信息绑定到前边的页面中去
+			}
+	    });	
+	}
+	
+	/***
+	 * 
+	 *读取对象的长度
+	 * */
+	function getObjectLength(object){
+		   var objectLength=0;
+		   for(var js2 in object){
+			   objectLength++;
+				} 
+		   return objectLength;
+	}
+	/***
+	 * 初始化数据
+	 * 功能：获取项目数据并写入全局变量 mainParm
+	 * */
+	$scope.initDataAfterModify=function ()
+	{	
+		        data1={
+		        	    "projectId": "",
+		        	    "projectName": "4",
+		        	    "projectManagerId": 4,
+		        	    "projectManagerName": "projectManagerA",
+		        	    "categoryId": 1,
+		        	    "subcategory": "[{\"value\":\"核心网\",\"id\":\"002\"}]",
+		        	    "cycleType": "[{\"value\":\"1年\",\"id\":\"001\"}]",
+		        	    "projectExtInfo": "[{\"taskDescribe\":\"d\",\"taskbackground\":\"d\",\"taskgoal\":\"d\",\"taskDanger\":\"3\",\"taskcreate\":\"3\",\"taskplan\":\"[{\\\"planTime\\\":\\\"d\\\",\\\"planContext\\\":\\\"d\\\",\\\"planOutPUT\\\":\\\"d\\\",\\\"planOutWord\\\":\\\"d\\\"},{\\\"planTime\\\":\\\"d\\\",\\\"planContext\\\":\\\"d\\\",\\\"planOutPUT\\\":\\\"d\\\",\\\"planOutWord\\\":\\\"d\\\"},{\\\"planTime\\\":\\\"d3\\\",\\\"planContext\\\":\\\"d3\\\",\\\"planOutPUT\\\":\\\"d3\\\",\\\"planOutWord\\\":\\\"d3\\\"}]\"}]",
+		        	    "startTime": "2017-02-14 13:36:12",
+		        	    "completeTime": "2018-02-14 13:36:12",
+		        	    "telno": "4",
+		        	    "email": "4@163.com",
+		        	    "projectMilestone": "项目里程碑"
+		        	};
+		        data2={
+		        	    "projectCosts": "[{\"payName\":\"3\",\"payPrice\":\"3\",\"payNumber\":\"4\",\"paySbutotal\":\"4\",\"payRemarks\":\"5\"},{\"payName\":\"5\",\"payPrice\":\"6\",\"payNumber\":\"7\",\"paySbutotal\":\"9\",\"payRemarks\":\"9\"}]"
+		        };
+		        data3={"projectTaskDetail":"[{\"postName\":\"5\",\"requireName\":\"7\"},{\"postName\":\"6\",\"requireName\":\"7\"}]"};
+				//真实的数据时候使用
+				/*var data1=data.data1;
+				var data2=data.data2;*/
+				//任务、项目信息
+				$scope.data1=processData(data1,data2);
+				$scope.project=processData($scope.data1,data3);
+				console.log("测试 $scope.project");
+				console.log($scope.project);
+				var projectExtInfo=JSON.parse($scope.project.projectExtInfo);
+				try{
+					$scope.project.CycleType=JSON.parse($scope.project.cycleType)[0].value;
+					$scope.project.subcategory=JSON.parse($scope.project.subcategory)[0].value;
+				}catch(e){
+					log(e+"initData:"+e.messageInfo);
+				}
+				$scope.projectExtInfo=projectExtInfo[0];
+				$scope.Taskplan=JSON.parse(projectExtInfo[0].taskplan);
+				$scope.ProjectCosts=JSON.parse($scope.project.projectCosts);
+				console.log("测试 $scope.project.projectTaskDetail");
+				console.log($scope.project.projectTaskDetail);
+				$scope.ProjectTaskDetail=JSON.parse($scope.project.projectTaskDetail);	
+				//变更后的信息在页面的渲染
+				//如果是更改的则显示更改的标志edeitData为构造的测试模型(进行模拟)，到时候换data5
+				 $scope.edeitData={
+						    "upData": {
+						        "taskDanger": "[\"taskDanger\",\"3\",\"3x\"]",
+						        "taskcreate": "[\"taskcreate\",\"3\",\"3x\"]",
+						        "taskgoal": "[\"taskgoal\",\"4\",\"4x\"]",
+						        "taskbackground": "[\"taskbackground\",\"4\",\"4x\"]",
+						        "taskDescribe": "[\"taskDescribe\",\"4\",\"4x\"]",
+						        "telno": "[\"telno\",\"4\",\"4\"]",
+						        "projectCycle": "[\"projectCycle\",\"1年\",\"3年\"]",
+						        "projectName": "[\"projectName\",\"4\",\"44\"]",
+						        "tableRuleInner_3_planTime": "[\"tableRuleInner_3_planTime\",\"ses\",\"ses4\"]"
+						    },
+						    "deletData": {},
+						    "addData": {
+						        "tableRuleInner": "{\"4\":{\"planTime\":\"xx\",\"planContext\":\"xx\",\"planOutPUT\":\"x\",\"planOutWord\":\"x\"}}"
+						    }
+						}
+	
+				 /***
+				  * 查看的时候变化的会有灯闪烁
+				  *
+				  * */		 
+			   var tableIdArry=["tableRuleInner","tableRule","tablePost"];
+			   var upData= $scope.edeitData.upData;
+			   var addData= $scope.edeitData.addData;
+			   var deletData= $scope.edeitData.deletData;
+			   var upDataLength=getObjectLength(upData);
+			   var addLength=getObjectLength(addData);
+			   var deletLength=getObjectLength(deletData);
+			    
+			    for(var i in upData){
+			    	 $("label[data-for="+i+"]").addClass("label-tips");
+			    	 var dynamicTableupData=i.split("_")[0];
+			    	// console.log(dynamicTableupData);
+			    	 if(dynamicTableupData==tableIdArry[0]||dynamicTableupData==tableIdArry[1]||dynamicTableupData==tableIdArry[2]){
+			    		 $("label[data-for="+dynamicTableupData+"]").addClass("label-tips"); 
+			    	 }
+			    }
+			    //如果增加不为0
+			   if(addLength!=0){
+				   for(var i in addData){
+						 $("label[data-for="+i+"]").addClass("label-tips");
+				   }
+			   }
+			   //如果删除不为0
+			   if(deletLength!=0){
+				   for(var i in deletData){
+						 $("label[data-for="+i+"]").addClass("label-tips");
+				   }
+			   }; 
+			
+		
+		//走ajax请求，请求真实数据的时候放开
+		/*	var obj={
+					"request.projectId":mainParm.parm.projectId
+				};
+			//从后台取到数据，显示在前台as
+			queryItem(obj,function(data){if(data.result==0){
+			}
+			})*/
+	}
+})
+
+/*				
+			 * 是为了变成下边的样式
+			 *  $scope.edeitData=[{name:'taskDanger',changeBefore:'3',changeAfter:'3x'},
+	              {name:'taskcreate',changeBefore:'3',changeAfter:'3x'},
+	              {name:'taskgoal',changeBefore:'3',changeAfter:'3x'}];
+	        
+				 var editArry=[];
+				 updataData1=$scope.edeitData.upData;
+				 deletData1=$scope.edeitData.deletData;
+				 addData1=$scope.edeitData.addData;
+				 for(var i in updataData1 ){
+					 var editObject=
+				        {
+				        	name:null,
+				        	changeBefore:null,
+				        	changeAfter:null
+				        }
+					 var hh=updataData1[i];
+					 hh=JSON.parse(hh);
+					 for(var i=0 ;i<hh.length;i++){
+						 editObject.name=hh[0];
+						 editObject.changeBefore=hh[1];
+						 editObject.changeAfter=hh[2];
+					 }
+					 editArry.push(editObject);
+				 }
+				 $scope.edeitDataSee=editArry;*/
+				 /*
+				  * 是为了控制查看的时候改变的标志
+				  * */
+				 				

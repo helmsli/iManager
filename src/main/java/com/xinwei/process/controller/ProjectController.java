@@ -101,6 +101,10 @@ public class ProjectController extends BaseController {
 	@Value("${downTempBase}")
 	private String downTempBase;// 下载模板路径
 
+	@Value("${departLeader}")
+	private String g_departLeader;// 下载模板路径
+
+	
 	private final String PROJECT_SEQ = "project_seq";// 项目编号
 	
 	/**
@@ -350,6 +354,11 @@ public class ProjectController extends BaseController {
 			project.setPublishTitle(publish.getTitle());
 			// 指定部门经理为发布的创建者
 			departLeader = publish.getCreatePerson();
+			
+			if(!StringUtils.isEmpty(g_departLeader))
+			{
+				departLeader = g_departLeader;
+			}
 			// 设置部门经理组为空
 			roleId_departLeader = "";
 			// 将该用户从该条发布的数据权限中移除
@@ -393,9 +402,9 @@ public class ProjectController extends BaseController {
 		// 指定某个部门经理组
 		variables.put("departLeaderGroup", roleId_departLeader);
 		// 根据项目周期类型判断是否需要提交周期性报告，如需要设置周期时间
-		variables.put("submitMonthlyReport_result", "reject"); // 设置流程变量：需要提交周期性报告
+		variables.put("submitMonthlyReport_result", "pass"); // 设置流程变量：需要提交周期性报告
 		// 初始化终期部门经理审批意见(依据部门经理终期审批意见判断是否还需要提交周期报告，通过则不用再进行提交)
-		variables.put("departleaderEndApproval_result", "reject");
+		variables.put("departleaderEndApproval_result", "pass");
 		logger.debug("Current User's ID is : " + userId);
 		// 启动项目流程
 		ProcessInstance processInstance = processServiceImpl
@@ -909,6 +918,10 @@ public class ProjectController extends BaseController {
 		return result.toString();
 	}
 
+	
+	
+	
+	
 	/**
 	 * 分页某个项目类型下正在进行的项目列表
 	 * 

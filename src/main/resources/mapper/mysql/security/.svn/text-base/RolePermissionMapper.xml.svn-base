@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinwei.security.dao.RolePermissionDao">
+	
+	<!-- 开启本mapper的namespace下的二级缓存 -->
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache" />
+	
+	<resultMap id="RolePermissionMap" type="RolePermission">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="role_id" property="role_id" jdbcType="BIGINT" />
+		<result column="resource_id" property="resource_id" jdbcType="BIGINT" />
+		<collection property="menu" ofType="Menu">
+			<id column="menu_id" property="id" />
+		</collection>
+		<collection property="function" ofType="Function">
+			<id column="function_id" property="id" />
+		</collection>
+	</resultMap>
+	
+	
+	
+	<select id="findSimpleByRoleId" parameterType="java.lang.Long"    resultType="RolePermission" useCache="true">
+		SELECT A.*,
+			   (case when B.sn is null then C.sn 
+			   		when C.sn is null then B.sn 
+			   end) resource_sn 
+		  FROM security_role_permission A
+		  left join security_menu B     on A.resource_id=B.id and A.resource_type=0
+		  left join security_function C on A.resource_id=C.id and A.resource_type=1
+		 where A.role_id=#{role_id} 
+	</select>
+	
+	<select id="findByRoleId" parameterType="java.lang.Long"    resultType="Menu" useCache="true">
+		SELECT  B.*,
+		  FROM  security_menu A
+		 inner join security_role_permission B on A.id=B.resource_id and A.resource_type=0
+		 where B.role_id=#{role_id} 
+	</select>
+	
+	<insert id="save" >
+		insert INTO security_role_permission(role_id,resource_id,resource_type)
+	  	VALUES (#{role_id}, #{resource_id},#{resource_type})
+	</insert>
+	
+	<delete id="delete" parameterType="java.lang.Long" >
+		delete from security_role_permission where role_id = #{role_id}
+	</delete>
+	
+	
+	
+	
+	<select id="findByUserId" parameterType="java.lang.Long"    resultType="Menu" useCache="true">
+		SELECT  A.*
+		  FROM  security_menu A
+		 inner join security_role_permission B on A.id=B.resource_id and A.resource_type=0
+		 inner join security_user_role C on B.role_id = C.role_id
+		 where C.user_id=#{user_id} 
+	</select>
+	
+	
+	
+	
+	
+	<!-- 未用 -->
+	<select id="findAll"    resultType="RolePermission" useCache="true">
+		SELECT A.*,
+			   case when B.sn is null then C.sn 
+			   		when C.sn is null then B.sn 
+			   end 
+		  FROM security_role_permission A
+		  left join security_menu B     on A.resource_id=B.id and A.resource_type=0
+		  left join security_function C on A.resource_id=C.id and A.resource_type=1
+	</select>
+	
+	
+	<select id="findMenus"     resultMap="RolePermissionMap" useCache="true">
+		SELECT  B.id menu_id,B.parent_id,B.name,B.action,B.imgurl,B.description,
+	   			B.priority,B.sn,B.remark,
+	   			A.*
+  		  FROM  security_role_permission A
+  		  left  join  security_menu B on A.resource_id=B.id and A.resource_type=0
+	</select>
+	
+	
+	<select id="findFunctions"     resultMap="RolePermissionMap" useCache="true">
+		SELECT  B.id function_id,B.menu_id,B.name,B.action,B.imgurl,B.description,
+	   			B.priority,B.sn,B.remark,
+	   			A.*
+  		  FROM  security_role_permission A
+  		  left  join  security_function B on A.resource_id=B.id and A.resource_type=1
+	</select>
+	
+	
+	
+	
+	
+	
+</mapper>
+
+
+
+

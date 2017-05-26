@@ -1,0 +1,42 @@
+package com.xinwei.process.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.xinwei.process.entity.CommonBiz;
+
+public interface CommonBizMapper {
+	//根据DataID查询
+    int deleteByPrimaryKey(String dataId);
+
+    void insert(CommonBiz commonBiz);
+
+    CommonBiz selectByPrimaryKey(String dataId);
+
+    List<CommonBiz> selectAll();
+
+    int updateByPrimaryKey(CommonBiz commonBiz);
+    
+    //根据项目标识和状态进行查询
+    List<CommonBiz> selectByProjectIdAndStatus(@Param("projectId")Long projectId, @Param("status") String status);
+    
+    //根据项目标识和业务类型进行查询
+    List<CommonBiz> selectByProjectIdAndServiceType(@Param("projectId")Long projectId,@Param("serviceType")String serviceType);
+	
+    //根据项目类别和业务类型进行统计
+    Long countByProjectCategoryAndServiceType(Map<String, Object> map);
+    
+    //根据项目类别和业务类型进行分页查询
+    List<CommonBiz> selectByProjectCategoryAndServiceType(Map<String,Object> map);
+    
+    void updateApprovalChange(String dataId);
+	
+    // 更新审批结果result、变更状态status，更新人updatePerson和更新时间 updateTime
+	void updateApprovalChangeByDataId(CommonBiz commonBiz);
+	
+	//更新变更状态status
+	void updateChangeStatusByDataId(@Param("status") String status,@Param("dataId") String dataId);
+	
+}

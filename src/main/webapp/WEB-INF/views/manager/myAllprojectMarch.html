@@ -22,6 +22,15 @@
 	    <style>
 	    	.table-show{display:table-row-group;}
 	    	.table-hide{display:none;}
+	    		.table-show{display:table-row-group;}
+	    	.table-hide{display:none;}
+	    	.panel-heading .search-group {
+			    position: relative;
+			    top: 0;
+			    right: auto;
+			    left: 0;
+			    max-width: 400px;
+			}
 	    </style>
 
 	</head>
@@ -35,7 +44,18 @@
 			<div id="page-wrapper" ng-controller="myDataController">
 				<div class="panel">
 					<div class="panel-heading">
-						<h2 class="panel-title">所有进行中的项目</h2>
+						<div class="row" >
+						    <div class="col-lg-11"></div>
+							<div class="col-lg-3" style="display:none;">
+								<div class="search-group">
+		                        	<div class="search-inline">
+		                         		<input type="search" id="search" class="form-control ng-pristine ng-untouched ng-valid ng-empty" placeholder="请输入项目名称" ng-model="queryProjectName">
+		                             	<span class="btn-group"><button type="button" class="btn btn-primary waves-effect" ng-click="initTabSerach(queryProjectName)">搜索</button></span>
+		                         	</div>
+		                        </div>
+							</div>
+							<div class="col-lg-1 p-l-0" style="padding-top:1px;"><button id="searchButton"  type="button" class="btn btn-primary waves-effect" ng-click="downLoadAllRunningProject()">导出列表</button></div>
+						</div>
 					</div>
 					<div class="panel-body min-height-550">
 						<div class="table-responsive">
@@ -47,10 +67,10 @@
 			                    </thead>
 			                    <tbody class="dataList" ng-init="initTab();"><!--tbody的class名不能为‘show’,否则表格不能自动撑开-->
 				                  	<tr id="box" ng-repeat="data in dataLists">
-			                        	<td width="10%">{{data.projectId}}</td>
+			                        	<td width="15%">{{data.project_detail.declarationUnit}}</td>
 			                            <td width="30%">{{data.projectName}}</td>
 		                            	<td width="25%">{{data.projectApplyTime}}</td>
-		                            	<td width="20%">{{data.stateName}}</td>
+		                            	<td width="15%">{{data.stateName}}</td>
 	                           			<td width="15%">
 		                                	<!--project menu-->
 		                                	<a ng-show="true"  href="javascript:void(0);" class="p-r-10" ng-click="openMyapplySeeWin(data.projectId,data.state,1)">查看</a>

@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/shiro
+END
+BaseFormAuthenticationFilter.java
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/shiro/BaseFormAuthenticationFilter.java
+END
+ShiroDbRealm.java
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/shiro/ShiroDbRealm.java
+END
+UserHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/Authority_Repository/!svn/ver/1264/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/shiro/UserHelper.java
+END

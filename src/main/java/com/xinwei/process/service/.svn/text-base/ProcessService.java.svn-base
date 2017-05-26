@@ -1,0 +1,62 @@
+package com.xinwei.process.service;
+
+import java.util.List;
+import java.util.Map;
+import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.runtime.ProcessInstance;
+/**
+ * Activiti流程相关服务
+ *
+ */
+public interface ProcessService {
+	/**
+	 * 启动一个流程实例
+	 * @param businessKey 业务key
+	 * @param userId  启动流程的用户ID
+	 * @param variables 设置流程中需要用的流程变量
+	 * @return
+	 */
+	public abstract ProcessInstance startProcess(String processDefinitionKey,String businessKey,
+			String userId, Map<String, Object> variables);
+	
+	/**
+	 * 获取某个正在执行的流程实例
+	 * @param processInstanceId 流程实例Id
+	 * @return
+	 */
+	public abstract ProcessInstance getProcessInstance(String processInstanceId);
+
+	/**
+	 * 查询历史流程实例
+	 * @param processInstanceId 流程实例ID
+	 * @return 历史流程实例对象
+	 */
+	public abstract HistoricProcessInstance findHistoryProcessInstance(
+			String processInstanceId);
+	
+	/**
+	 * 查询某个流程实例已经历的所有活动
+	 * @param processInstanceId 流程实例ID
+	 * @return
+	 */
+	public abstract List<HistoricActivityInstance> findHistoryActiviti(
+			String processInstanceId);
+	/**
+	 * 查询某个流程实例已经历的所有用户任务
+	 * @param processInstanceId 流程实例ID
+	 * @return
+	 */
+	public abstract List<HistoricTaskInstance> findHistoryTask(
+			String processInstanceId);
+	
+	/**
+	 * 查询某个流程实例的执行中设置的所有流程变量
+	 * @param processInstanceId 流程实例ID
+	 * @return
+	 */
+	public abstract List<HistoricVariableInstance> findHistoryProcessVariables(
+			String processInstanceId);
+}

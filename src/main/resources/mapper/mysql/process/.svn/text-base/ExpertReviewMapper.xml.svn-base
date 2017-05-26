@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinwei.process.dao.ExpertReviewMapper" >
+  <resultMap id="BaseResultMap" type="com.xinwei.process.entity.ExpertReview" >
+    <id column="record_id" property="recordId" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="stage" property="stage" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="expert_list" property="expertList" jdbcType="VARCHAR" />
+    <result column="room" property="room" jdbcType="VARCHAR" />
+    <result column="expert_score" property="expertScore" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_expert_review
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xinwei.process.entity.ExpertReview" >
+    insert into tb_expert_review (record_id, project_id, stage, 
+      time, expert_list, room, 
+      expert_score)
+    values (#{recordId,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{stage,jdbcType=VARCHAR}, 
+      #{time,jdbcType=TIMESTAMP}, #{expertList,jdbcType=VARCHAR}, #{room,jdbcType=VARCHAR}, 
+      #{expertScore,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.xinwei.process.entity.ExpertReview" >
+    update tb_expert_review
+    set project_id = #{projectId,jdbcType=BIGINT},
+      stage = #{stage,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP},
+      expert_list = #{expertList,jdbcType=VARCHAR},
+      room = #{room,jdbcType=VARCHAR},
+      expert_score = #{expertScore,jdbcType=VARCHAR}
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select record_id, project_id, stage, time, expert_list, room, expert_score
+    from tb_expert_review
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select record_id, project_id, stage, time, expert_list, room, expert_score
+    from tb_expert_review
+  </select>
+  
+  <select id="getExpertReviewByProjectId" resultMap="BaseResultMap" >
+    select record_id, project_id, stage, time, expert_list, room, expert_score
+    from tb_expert_review 
+    where project_id = #{projectId,jdbcType=BIGINT}
+    order by record_id desc
+  </select>
+  <select id="getExpertReviewByStage" resultMap="BaseResultMap" >
+    select record_id, project_id, stage, time, expert_list, room, expert_score
+    from tb_expert_review 
+    where project_id = #{projectId,jdbcType=BIGINT} and stage = #{stage,jdbcType=VARCHAR}
+    order by time desc
+  </select>
+</mapper>

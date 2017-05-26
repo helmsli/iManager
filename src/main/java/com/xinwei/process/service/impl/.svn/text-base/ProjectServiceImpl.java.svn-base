@@ -1,0 +1,270 @@
+package com.xinwei.process.service.impl;
+
+import java.io.InputStream;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.engine.HistoryService;
+import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.ProcessEngineConfiguration;
+import org.activiti.engine.ProcessEngines;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
+import org.activiti.engine.task.Task;
+import org.apache.commons.io.IOUtils;
+import org.springframework.stereotype.Service;
+
+import com.xinwei.process.dao.CommitteeApprovalMapper;
+import com.xinwei.process.dao.DepartleaderApprovalMapper;
+import com.xinwei.process.dao.ProjectAnnexMapper;
+import com.xinwei.process.dao.ProjectMapper;
+import com.xinwei.process.entity.CommitteeApproval;
+import com.xinwei.process.entity.DepartleaderApproval;
+import com.xinwei.process.entity.ExpertReview;
+import com.xinwei.process.entity.Project;
+import com.xinwei.process.entity.ProjectAnnex;
+import com.xinwei.process.entity.ProjectDetailInfo;
+import com.xinwei.process.service.ExpertReviewService;
+import com.xinwei.process.service.ProcessService;
+import com.xinwei.process.service.ProjectService;
+import com.xinwei.process.service.UserTaskService;
+import com.xinwei.security.exception.ExistedException;
+import com.xinwei.system.xwsequence.service.XwSysSeqService;
+import com.xinwei.util.page.Page;
+
+@Service
+public class ProjectServiceImpl implements ProjectService {
+	@Resource
+	private ProjectMapper projectDao;
+	@Resource
+	private ExpertReviewService expertReviewServiceImpl;
+	@Resource
+	private DepartleaderApprovalMapper departleaderApprovalDao;
+	@Resource
+	private CommitteeApprovalMapper committeeApprovalDao;
+	@Resource
+	private ProjectAnnexMapper projectAnnexdao;
+	@Resource
+	private RepositoryService repositoryService;
+	@Resource
+	private TaskService taskService;
+	@Resource
+	private HistoryService historyService;
+	@Resource
+	private RuntimeService runtimeService;
+	@Resource
+	private ProcessEngine processEngine;
+	@Resource
+	private XwSysSeqService xwSysSeqService;
+	@Resource
+	private UserTaskService userTaskServiceImpl;
+	@Resource
+	private ProcessService ProcessServiceImpl;
+	private final String PROJECT_SEQ = "project_seq";//项目编号
+	
+	@Override
+	public void delete(Long project_id) {
+		projectDao.deleteByPrimaryKey(project_id);
+	}
+
+	@Override
+	public void update( Project project) {
+		projectDao.updateByPrimaryKey(project);
+	}
+
+	@Override
+	public Long save(Project project) throws ExistedException {
+		// 生成项目编号
+		Long projectSeqCode = xwSysSeqService.getXwSequence(PROJECT_SEQ, 1)
+				.getStartSequence();
+		// 设置项目编号
+		project.setProjectId(projectSeqCode);
+		// 获取当前时间
+		Date now = new Date(System.currentTimeMillis());
+		// 设置项目的申请时间
+		project.setProjectApplyTime(now);
+		// 初始化项目状态
+		project.setState("start");
+		// 保存项目
+		projectDao.insert(project);
+		return project.getProjectId();
+	}
+
+	@Override
+	public List< Project> selectAll() {
+           return projectDao.selectAll();
+	}
+
+	@Override
+	public  Project selectByPrimaryKey(Long project_id) {
+		return 	projectDao.selectByPrimaryKey(project_id);
+	}
+	
+	public Page<Project> getProjectListByUserId(Map<String, Object> map) {
+		Page<Project> page = new Page<Project>(projectDao.getProjectListByUserIdCount(map));
+		map.put("startRow", page.getStartRow());
+		map.put("pageSize", page.getPageSize());
+		page.setList(projectDao.getProjectListByUserId(map));
+		return page;
+	}
+	
+	/**
+	 * 获取评审详情
+	 */
+	@Override
+	public ProjectDetailInfo getProjectDetailInfo(Long projectId) {
+		ProjectDetailInfo projectDetailInfo = new ProjectDetailInfo();
+		//项目基本信息
+		Project project = projectDao.selectByPrimaryKey(projectId);
+		projectDetailInfo.setProject(project);
+		//项目各阶段信息
+		projectDetailInfo.setBeginStage(getProjectStageInfo(projectId,"begin"));//获取初期项目信息
+		projectDetailInfo.setMiddleStage(getProjectStageInfo(projectId,"middle"));//获取中期项目信息
+		projectDetailInfo.setLastStage(getProjectStageInfo(projectId,"last"));//获取终期项目信息
+		//项目周期性报告
+		List<ProjectAnnex> projectAnnexLists = projectAnnexdao.selectMonthlyReportByProjectId(projectId);
+		projectDetailInfo.setProjectAnnexLists(projectAnnexLists);
+		return projectDetailInfo;
+	}
+
+	private Map<String, Object> getProjectStageInfo(Long projectId, String stage) {
+		Map<String, Object> stageMap = new HashMap<String,Object>();
+		List<ExpertReview> expertReviewByStage = new ArrayList<ExpertReview>();
+		List<DepartleaderApproval> departleaderApprovalByStage = new ArrayList<DepartleaderApproval>();
+		List<CommitteeApproval> committeeApprovalByStage = new ArrayList<CommitteeApproval>();
+		//专家评审
+	    expertReviewByStage = expertReviewServiceImpl.getExpertReviewByStage(projectId, stage);
+		//部门经理审批
+		departleaderApprovalByStage = 
+				departleaderApprovalDao.getDepartleaderApprovalByStage(
+				projectId, stage);
+		//决策委员会审批
+		committeeApprovalByStage = committeeApprovalDao.getCommitteeApprovalByStage(projectId,
+				stage);
+		stageMap.put("expertReview", expertReviewByStage);
+		stageMap.put("committeeApproval", committeeApprovalByStage);
+		stageMap.put("departleaderApproval", departleaderApprovalByStage);
+		return stageMap;
+	}
+	
+    //根据UID和项目类别分页查询已结项目列表
+	@Override
+	public Page<Project> getFinishedProjectListByUserId(Map<String, Object> map) {
+		Page<Project> page = new Page<Project>(projectDao.getFinishedProjectListByUserIdCount(map));
+		map.put("startRow", page.getStartRow());
+		map.put("pageSize", page.getPageSize());
+		page.setList(projectDao.getFinishedProjectListByUserId(map));
+		return page;
+	}
+	
+	/**
+	 * 得到带有高亮节点的流程图
+	 * @param processInstanceId	流程实例id
+	 */
+	@Override
+	public byte[] traceProcessImage(String processInstanceId) {
+		//创建核心引擎流程对象processEngine
+        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+		TaskService taskService = processEngine.getTaskService();
+	    //唯一
+		Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
+		//流程定义
+		BpmnModel bpmnModel = processEngine.getRepositoryService().getBpmnModel(task.getProcessDefinitionId()); 
+		
+		//正在活动节点
+		List<String> activeActivityIds = processEngine.getRuntimeService().getActiveActivityIds(task.getExecutionId());
+
+		ProcessEngineConfiguration processEngineConfiguration = processEngine.getProcessEngineConfiguration();
+      
+       //得到图片输出流（这样加可防止生成的流程图片乱码）
+       InputStream inputStream = processEngineConfiguration.getProcessDiagramGenerator()
+               .generateDiagram(bpmnModel, "png", activeActivityIds, new ArrayList(),
+            			processEngineConfiguration.getActivityFontName(),
+            			processEngineConfiguration.getLabelFontName(), null, 1.0);
+      try {
+          return IOUtils.toByteArray(inputStream);
+       } catch (Exception e) {
+           throw new RuntimeException("生成流程图异常！", e);
+       } finally {
+           IOUtils.closeQuietly(inputStream);
+       }
+	}
+	
+	/**
+	 * 修改项目某个属性值
+	 * @param propertyName 属性名称 
+	 * @param propertyNewValue 属性新值
+	 * @param projectId 项目ID
+	 */
+	@Override
+	public void updateProjectPropertyByProjectId(String propertyName,
+			String propertyNewValue, Long projectId) {
+		if (null != projectId) {
+			if (propertyName.equals(ProjectService.CHANGECURRENTSTATE)) {
+				//修改更改流程当前状态
+				projectDao.updateChangeCurrentState(propertyNewValue, projectId);
+			} else if (propertyName.equals(ProjectService.CHANGEDATAID)) {
+				// 修改更改数据ID
+				projectDao.updateChangeDataId(propertyNewValue, projectId);
+			} else if (propertyName.equals(ProjectService.CHANGEPREVIOUSSTATE)) {
+				// 修改项目更改流程上一状态信息
+				projectDao.updateChangePreviousState(propertyNewValue, projectId);
+			} else if (propertyName.equals(ProjectService.CHANGEPROCESSINSTANCEID)) {
+				// 修改项目更改流程实例ID
+				projectDao.updateChangeProcessInstanceId(propertyNewValue, projectId);
+			} else if (propertyName.equals(ProjectService.DEPARTLEADERAPPRAISE)) {
+				// 修改项目表部门经理评价
+				projectDao.updateDepartLeaderAppraiseByProjectId(propertyNewValue, projectId);
+			} else if (propertyName.equals(ProjectService.MAINCURRENTSTATE)) {
+				// 修改项目主流程当前状态信息
+				projectDao.updateMainCurrentState(propertyNewValue, projectId);
+			} else if (propertyName.equals(ProjectService.MAINPREVIOUSSTATE)) {
+				// 修改项目主流程上一状态信息
+				projectDao.updateMainPreviousState(propertyNewValue, projectId);
+			} else if (propertyName.equals(ProjectService.PROJECTPROCESSINSTANCEID)) {
+				// 修改项目流程实例ID
+				projectDao.updateProcessInstanceByProjectID(propertyNewValue, projectId);
+			} else if (propertyName.equals(ProjectService.REPORTCURRENTSTATE)) {
+				// 修改周期性报告当前状态
+				projectDao.updateReportCurrentState(propertyNewValue, projectId);
+			} else if (propertyName.equals(ProjectService.SELFAPPRAISE)) {
+				// 修改项目经理自评
+				projectDao.updateSelfAppraiseByProjectId(propertyNewValue, projectId);
+			}else{
+				// 修改项目状态
+				projectDao.updateState(propertyNewValue, projectId);
+			}
+		}
+	}
+
+	//更新多个属性
+	@Override
+	public void updateProjectPropertysByProjectId(String[] propertyName,
+			String[] propertyNewValue, Long projectId) {
+		for (int i = 0; i < propertyName.length; i++) {
+			updateProjectPropertyByProjectId(propertyName[i],
+					propertyNewValue[i],projectId);
+		}
+	}
+    
+	//修改项目changeDataId&changeProcessInstanceId&changeCurrentState
+	@Override
+	public void updateProjectChangeByProjectId(String changeDataId,
+			 String changeProcessInstanceId, String changeCurrentState,Long projectId) {
+		projectDao.updateProjectChangeByProjectId(changeDataId,changeProcessInstanceId,changeCurrentState,projectId);
+	}
+
+	@Override
+	public Project selectChangeInfoByProjectId(Long projectId) {
+		return 	projectDao.selectChangeInfoByProjectId(projectId);
+	}
+
+	
+}

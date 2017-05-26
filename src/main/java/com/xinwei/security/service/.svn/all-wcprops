@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/Authority_Repository/!svn/ver/1147/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service
+END
+UserService.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/UserService.java
+END
+UserRoleService.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/UserRoleService.java
+END
+RoleService.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/RoleService.java
+END
+DepartmentService.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/DepartmentService.java
+END
+MenuService.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/MenuService.java
+END
+FunctionService.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/FunctionService.java
+END
+BaseService.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/BaseService.java
+END
+RolePermissionService.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/RolePermissionService.java
+END
+BusinessService.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/Authority_Repository/!svn/ver/684/branches/process_v0.1.2/process/src/main/java/com/xinwei/security/service/BusinessService.java
+END

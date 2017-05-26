@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.xinwei.process.entity.CommonBiz;
+import com.xinwei.process.entity.DepartleaderPublish;
 
 public interface CommonBizMapper {
 	/**
@@ -15,11 +16,28 @@ public interface CommonBizMapper {
 	 */
     int deleteByPrimaryKey(String dataId);
 
+    /**
+     * 根据项目名称，机构名称查询月报表
+     * @param commonBiz
+     * @return
+     */
+    List<CommonBiz> selectMonthlyReportWithResult(@Param("projectName")String projectName, @Param("extStatus") String extStatus,@Param("extActivitiInfo")String extActivitiInfo, @Param("projectCategory") String projectCategory);
+
+  
+    
     void insert(CommonBiz commonBiz);
 
     CommonBiz selectByPrimaryKey(String dataId);
 
     List<CommonBiz> selectAll();
+    
+    /**
+	 * 根据发布id列表查询
+	 * @param dataIdList
+	 * @return
+	 */
+	List<CommonBiz> selectByIdList(@Param("idList")List<String> idList);
+
 
     int updateByPrimaryKey(CommonBiz commonBiz);
     

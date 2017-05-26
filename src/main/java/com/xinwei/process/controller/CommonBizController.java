@@ -22,6 +22,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xinwei.process.constant.ProjectConstants;
 import com.xinwei.process.entity.CommonBiz;
+import com.xinwei.process.entity.DataInfo;
+import com.xinwei.process.entity.DataPermission;
 import com.xinwei.process.entity.MonthlyCheck;
 import com.xinwei.process.entity.MonthlyReport;
 import com.xinwei.process.entity.ReportActivity;
@@ -45,6 +47,11 @@ public class CommonBizController extends BaseController {
 	private RoleServiceTypeService roleServiceTypeService;
 	@Value("${uploadPath}")
 	private String uploadPath; 
+	@Value("${roleId_departLeader}")
+	private Long roleId_departLeader;// 项目经理角色ID
+	
+	@Value("${roleId_committee}")
+	private String roleId_committee;// 决策委员会组ID
 	
 	private Gson gson = new Gson();
 	@RequestMapping(value = "/reloadCommonBizCache", method = {
@@ -146,6 +153,56 @@ public class CommonBizController extends BaseController {
 		return result.toString();
 	}
 
+	@RequestMapping(value = "/getMonthlyReport/list", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String getMonthlyReportList(Long categoryId,String serviceType) {
+		ResultVO<CommonBiz> result = new ResultVO<>();
+		try {
+			//获取当前登录用户信息		
+			User currentUser = getCurrentUser();
+			//判断如果用户不为空
+			if (null != currentUser) {
+				//获取当前用户ID
+				Long userId = currentUser.getId();
+				logger.debug("Current User's ID is : " + userId);
+				Map<String, Object> queryMap = new HashMap<String, Object>();
+				queryMap.put("projectCategory", categoryId);
+				queryMap.put("dataType", serviceType);			
+				queryMap.put("permissionType", DataPermission.PERMISSIONTYPE_USER);				
+				queryMap.put("permissionId", currentUser.getId().toString());				
+				//获取当前用户角色,
+				List<Long> roles = currentUser.getRoleIds();
+				if (roles.size() > 0) {
+					StringBuilder stringRoles = new StringBuilder();
+					int rolesIndex = 0;
+					for (Long rolesid : roles) {
+						if (rolesIndex > 0) {
+							stringRoles.append(",");
+						}
+						stringRoles.append(rolesid);
+					}
+
+					queryMap.put("permissionRoleType", DataPermission.PERMISSIONTYPE_ROLE);
+					queryMap.put("permissionRoleId", stringRoles.toString());
+				}
+				//根据当前用户信息分页获取数据监测
+				Page<CommonBiz> page = service.selectMonthReportList(currentUser,
+						queryMap);
+				result.setPage(page);
+				result.setLists(page.getList());	
+			}else{
+				logger.debug("Current user's infomation is null");
+				// 给客户端响应
+				result.setResult(ResultVO.USERNULL);
+			}
+		} catch (Exception e) {
+			result.setResult(ResultVO.EXCEPTION);
+			e.printStackTrace();
+		}
+		return result.toString();
+	}
+
+	
 	// 根据项目类别和业务类型以及当前用户角色信息查询
 		@RequestMapping(value = "/getByCatetgoryAndServiceType/list", method = { RequestMethod.GET,
 				RequestMethod.POST })

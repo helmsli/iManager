@@ -1,0 +1,313 @@
+/**
+ * 统一处理用户的项目的状态；
+ */
+
+function processProjectState(dataList)
+{
+    for(var i =0;i<dataList.length;i++)
+    {
+        var data = dataList[i];
+        if(data.mainCurrentState&&data.mainCurrentState!=null)
+        {
+        	var stateObject = JSON.parse(data.mainCurrentState);
+            data.state= stateObject.state;	
+            data.stateName = stateObject.stateName;
+            data.stateTaskId = stateObject.taskId;
+        }
+        
+    }
+    return dataList;
+}
+
+
+/**
+ * 统一处理任务项目的状态；
+ */
+
+function processTaskState(dataList)
+{
+    for(var i =0;i<dataList.length;i++)
+    {
+        var data = dataList[i];
+        if(data.stateInfo&&data.stateInfo!=null)
+        {
+        	var stateObject = JSON.parse(data.stateInfo);
+            data.state= stateObject.state;	
+            data.stateName = stateObject.stateName;
+            data.stateTaskId = stateObject.taskId;
+            //data.mainCurrentState = data.stateName;
+        }
+        
+    }
+    return dataList;
+}
+
+/**
+ * return:  允许变更 ，变更等待审批(决策委员会，部门经理)，变更已经审批通过，提交新的变更，变更驳回修改，
+ */
+function changeChangeAction(changeStatus,mainCtrolStata)
+{
+	var scope=getAngularScope("myDataController");
+	scope.changSata={
+			"changStep_create":"001",
+			"changStep_committee_approval":"002",
+			"changStep_manager_approval":"003",
+			"changStep_need_modify":"004",
+			"changStep_comfirm":"005",
+	}
+	//console.log(scope.changSata.changStep1);
+	scope.mainCtrolStata={
+		"mainCtrolStata_can_modify":"005",
+		//需要尽职调查的时候，
+		"mainCtrolStata_need_survey":"000",
+		//需要提交周期性报告
+		"mainCtrolStata_need_period_report":"000",
+		"mainCtrolStata_need_middle_report":"000",
+		"mainCtrolStata_need_end_report":"000"
+	}
+	scope.buttonFlag={
+			p_button_view:true,
+			p_button_modify:false,
+			pc_button_create:false,
+			pc_button_waitApproval:false,
+			pc_button_cancel:false,
+			pc_button_confirm:false,
+			//我的代办任务列表的按钮
+			p_button_approval:false,
+			p_button_survey:false,
+			p_button_period_report:false,
+			p_button_middle_report:false,
+			p_button_end_report:false
+	}
+	var canShowChange =true;
+	if(canShowChange)
+	{
+		switch(changeStatus){
+		//变更
+		case scope.changSata.changStep_create:
+			scope.buttonFlag.p_button_modify=true;
+			break;
+		//变更审批	
+		case scope.changSata.changStep_committee_approval:
+		case scope.changSata.changStep_manager_approval:
+			scope.buttonFlag.pc_button_waitApproval=true;
+			break;
+		//变更驳回修改	
+		case scope.changSata.changStep_need_modify:
+			scope.buttonFlag.pc_button_cancel=true;
+			break;
+		case scope.changSata.changStep_comfirm:
+			scope.buttonFlag.pc_button_confirm = true; 
+			break;
+		default:
+			scope.buttonFlag.pc_button_create=true;
+			break;
+		}
+	}
+	//主流程中可不可以修改的查看
+	if(mainCtrolStata==scope.mainCtrolStata.mainCtrolStata_can_modify){
+		scope.buttonFlag.p_button_modify=true;
+	}
+	
+	//控制我的代办任务列表中的状态
+	if(mainCtrolStata==scope.mainCtrolStata.mainCtrolStata_need_survey)
+	{
+		scope.buttonFlag.p_button_survey=true;
+	}
+	else if(mainCtrolStata==scope.mainCtrolStata.mainCtrolStata_need_period_report)
+	{
+		scope.buttonFlag.p_button_period_report=true;
+	}
+	
+	else if(mainCtrolStata==scope.mainCtrolStata.mainCtrolStata_need_middle_report)
+	{
+		scope.buttonFlag.p_button_middle_report=true;
+	}else if(mainCtrolStata==scope.mainCtrolStata.mainCtrolStata_need_end_report)
+	{
+		scope.buttonFlag.p_button_end_report=true;
+	}
+	else
+	{
+		scope.buttonFlag.p_button_approval=true;
+	}
+	
+	return scope.buttonFlag;
+}
+
+/***
+ * 我的申请项目的渲染界面(coomarts项目)
+ * 
+ * **/
+function getCooMartsApplyListCall(data){
+	 var scope=getAngularScope("myDataController");
+	 scope.currentChangeState=[];
+	 scope.mainPreviousState=[];
+	 if(data.result == 0){
+		var dataLists=processProjectState(data.responseInfo.lists);
+		console.log(0988766);
+        console.log(dataLists);
+        for(var i in dataLists){
+        	scope.mainPreviousState[i]=dataLists[i].mainPreviousState;
+        	scope.currentChangeState[i]=dataLists[i].changeCurrentState;
+        	dataLists[i].buttonFlag=changeChangeAction(scope.currentChangeState[i],scope.mainPreviousState[i]);
+        }
+        //得到所有的按钮控制标志绑定到前台
+        scope.dataLists=dataLists;
+		//得到我的申请的每个列表
+       console.log(9388347);
+       console.log(scope.dataLists);
+		
+		
+		changeChangeAction("001","005");//模拟得到各个列表的状态
+		var pageInfo=data.responseInfo.page;
+		if(dataLists.length == 0){
+			$("#tabNoData").removeClass("hide");
+		}else{
+			$("#tabPageNav").removeClass("hide");
+			scope.dataList=dataLists;
+			scope.$applyAsync(scope.dataList);
+		    if(scope.flag){
+		    	pageNav.go(pageInfo.pageNum, pageInfo.pages);
+		    	scope.flag = false;
+		    }
+		}
+	}else{
+		$("#tabNoData").removeClass("hide");
+	}		    	
+};
+
+/***
+ * 我的申请项目中已完成项目的渲染界面(coomarts项目)
+ * 
+ * **/
+function getCooMartsFinishedListCall(data){
+	 var scope=getAngularScope("myDataController");
+	 if(data.result == 0){
+		var dataLists=data.responseInfo.lists;
+		var pageInfo=data.responseInfo.page;
+		if(dataLists.length == 0){
+			$("#tabNoData").removeClass("hide");
+		}else{
+			$("#tabPageNav").removeClass("hide");
+			scope.dataList=dataLists;
+			scope.$applyAsync(scope.dataList);
+			if(scope.flag){
+		    	pageNav.go(pageInfo.pageNum, pageInfo.pages);
+		    	scope.flag = false;
+		    }
+		}
+	}else{
+		$("#tabNoData").removeClass("hide");
+	}		    	 
+}
+
+/***
+ * 我的代办任务的渲染界面(coomarts项目)
+ * 
+ * **/
+function getCooMartsAgentTaskListCall(data){
+	var scope=getAngularScope("myDataController");
+	console.log(data.responseInfo.taskList);
+	
+	if(data.result == 0){
+		//var dataLists=data.responseInfo.taskList;
+		var dataLists=processTaskState(data.responseInfo.taskList);
+		
+		var pageInfo=data.responseInfo.page;
+		changeChangeAction("001","005");//模拟得到各个列表的状态
+		if(dataLists.length == 0){
+			$("#tableNoData").removeClass("hide");
+		}else{
+			$("#tabPageNav").removeClass("hide");
+			scope.dataList=dataLists;
+		    scope.$applyAsync(scope.dataList);
+		    if(scope.flag){
+		    	pageNav.go(pageInfo.pageNum, pageInfo.pages);
+		    	scope.flag = false;
+		    }
+		}
+	}else{
+		$("#tableNoData").removeClass("hide");
+	}		
+};
+
+/***
+ * 我的代办任务中已完成的渲染界面(coomarts项目)
+ * 
+ * **/
+function getCooMartsAgentFinishedTaskListCall(data){
+	var scope=getAngularScope("myDataController");
+	if(data.result == 0){
+		//var dataLists=data.responseInfo.taskList;
+		var dataLists=processTaskState(data.responseInfo.taskList);
+		
+		var pageInfo=data.responseInfo.page;
+		if(dataLists.length == 0){
+			$("#tabNoData").removeClass("hide");
+		}else{
+			$("#tabPageNav").removeClass("hide");
+			scope.dataList=dataLists;
+		    scope.$applyAsync(scope.dataList);
+		    if(scope.flag){
+		    	pageNav.go(pageInfo.pageNum, pageInfo.pages);
+		    	scope.flag = false;
+		    }
+		}
+	}else{
+		$("#tabNoData").removeClass("hide");
+	}		  
+};
+
+/***
+ * 我的代办任务渲染界面(coomarts项目)
+ * 
+ * **/
+/*function myApplyCooMartsListCall(data){
+	 var scope=getAngularScope("applyController");
+	 if(data.result == 0){
+		console.log(data);
+		var dataLists=data.responseInfo.lists;
+		var pageInfo=data.responseInfo.page;
+		if(dataLists.length == 0){
+			$("#tabNoData").removeClass("hide");
+		}else{
+			$("#applyPageNav").removeClass("hide");
+			
+			scope.dataList=dataLists;
+			scope.$applyAsync(scope.dataList);
+		    if(scope.flag){
+		    	pageNav.go(pageInfo.pageNum, pageInfo.pages);
+		    	scope.flag = false;
+		    }
+		}
+	}else{
+		$("#tabNoData").removeClass("hide");
+	}		    	
+};*/
+
+/***
+ * 我的申请项目的渲染界面(coomarts项目)
+ * 
+ * **/
+/*function myApplyCooMartsListCall(data){
+	var scope=getAngularScope("applyController");
+	if(data.result == 0){
+		console.log(data);
+		var dataLists=data.responseInfo.lists;
+		var pageInfo=data.responseInfo.page;
+		if(dataLists.length == 0){
+			$("#tabNoData").removeClass("hide");
+		}else{
+			$("#applyPageNav").removeClass("hide");
+			
+			scope.dataList=dataLists;
+			scope.$applyAsync(scope.dataList);
+		    if(scope.flag){
+		    	pageNav.go(pageInfo.pageNum, pageInfo.pages);
+		    	scope.flag = false;
+		    }
+		}
+	}else{
+		$("#tabNoData").removeClass("hide");
+	}		    	
+};*/

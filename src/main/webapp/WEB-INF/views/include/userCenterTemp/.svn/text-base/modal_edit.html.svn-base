@@ -1,0 +1,55 @@
+<meta charset="UTF-8">
+<div class="modal-dialog" ng-controller="editCtrl" >
+    <div class="modal-content">
+        <div class="modal-header">
+        	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">编辑信息</h4>
+        </div>
+        <div class="modal-body">
+        	<form action="#" method="post" id="theForm" class="form-column">
+        		<div class="row clearfix">
+			        <div class="col-sm-4 col-xs-12 form-control-label">
+			            <label for="email_address_2">单板ID:</label>
+			        </div>
+			        <div class="col-sm-7 col-xs-12">
+			            <div class="form-group">
+			                <div class="form-line">
+			                    <input type="text" class="form-control" placeholder="请输入单板ID" name="userName" id="userName" ng-model="user.btsId" data-error="UserName error" data-tip="Please enter the user name" />
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			    
+			    <div class="row clearfix">
+			        <div class="col-sm-4 col-xs-12 form-control-label">
+			            <label for="email_address_2">单板名称:</label>
+			        </div>
+			        <div class="col-sm-7 col-xs-12">
+			            <div class="form-group">
+			                <div class="form-line">
+			                    <input type="text" class="form-control" placeholder="请输入单板名称" id="pwd" data-error="password error" ng-model="user.btsName" data-tip="Please enter your password" />
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			    
+			    <div class="row clearfix">
+			        <div class="col-sm-4 col-xs-12 form-control-label">
+			            <label for="email_address_2">单板类型:</label>
+			        </div>
+			        <div class="col-sm-7 col-xs-12">
+			            <div class="form-group">
+			                <div class="form-line">
+			                    <input type="text" class="form-control" placeholder="请输入单板类型" ng-model="user.btsType" id="email" />
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			</from>
+        </div>
+        <div class="modal-footer align-center">
+            <button type="button" class="btn btn-primary m-r-8 m-w-80 waves-effect" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-success m-l-8 m-w-80 waves-effect" data-dismiss="modal" ng-click="commitUser()">保存</button>
+        </div>
+    </div>
+</div>

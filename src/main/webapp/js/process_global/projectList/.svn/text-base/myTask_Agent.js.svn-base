@@ -1,0 +1,66 @@
+var nodeInfo = {};
+/*定义module*/
+App.controller('myDataController', ['$scope', function($scope) {
+	//表格标题
+	$scope.titleList = [
+			"任务编号",
+			"任务名称",
+			"任务创建时间",
+			"项目名称",
+			"操作"
+	];
+	$scope.pageFlag=true;
+	//数据初始化--我的申请项目	
+	$scope.initTab=function(pageNum){
+		var myParm=parseQueryString();//所有的参数
+        var projectName=myParm.projectName; 
+	    var obj=null;
+	    obj = getMyProjectOptions(projectName,pageNum);
+	    getMyAgentTaskDataList(projectName,obj);
+	}
+	
+	
+	
+	$scope.openMyTaskQuestionWin=function(projectId,taskid,state){
+		openMyTaskQuestion(projectId,taskid,state)
+	}
+	
+	$scope.openMyapplySeeWin=function(projectId,taskid,state){
+		openSeeWin(projectId,taskid,state)
+	}
+	//办理变更，跳到变更的我的查看
+	$scope.openSeeChangeBg=function(projectId,taskid,changeCurrentState){
+		var parm=parseQueryString();
+		var projectName =parm.projectName||""; 
+		url = "myApply_SeeReviewBg.html?projectName="+projectName+"&projectId="+projectId+"&changeCurrentState="+changeCurrentState+"&from="+from;
+		location.href=url;
+	}
+	/***
+	 * 我的待办项目-办理页面
+	 * @param {Object} userId
+	 */
+	var openSeeWin = function(projectId,taskid,state){
+		var parm=parseQueryString();
+		var projectName =parm.projectName||""; 
+		//var state="B";
+		//如果state状态中含有b，那么证明是变更的审批，则会跳到变更的办理审批中去。
+		if(state.indexOf("B")!=-1){
+			url="myApply_seeBg.html?projectName="+projectName+"&projectId="+projectId+"&taskId="+taskid+"&state="+state+"&from="+from; 
+		}else{
+			url = "myApply_see.html?projectName="+projectName+"&projectId="+projectId+"&taskId="+taskid+"&state="+state+"&from="+from;
+		}
+		location.href=url;
+	}
+	
+	/***
+	 * 我的待办项目-尽职调查
+	 * @param {Object} userId
+	 */
+	var openMyTaskQuestion = function(projectId,taskid,state){
+		var parm=parseQueryString();
+		var projectName =parm.projectName||""; 
+		url = "myTaskAgent_question.html?projectName="+projectName+"&projectId="+projectId+"&taskId="+taskid+"&state="+state+"&from="+from;
+		location.href=url;
+	}
+
+}]);
