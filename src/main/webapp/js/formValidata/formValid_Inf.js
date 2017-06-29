@@ -3,13 +3,15 @@
  * 默认对应错误信息
  */
 var formValid_errMsgList={
-        require :"不能为空",	
+        require :"该输入项目不能为空",	
 		isMail:"邮箱格式不正确",
 		isNumber:"只能输入数字",
 		isPositNumber:"只能输入正整数",
 		isPwd:"密码格式不正确,只能输入6到15位的字母或数字",
 		loginNamevalidate:"登录名只能为3-20位字母或数字",
-		numberLetter:"只能输入1-20位的汉字、字母或数字"
+		numberLetter:"只能输入1-20位的汉字、字母或数字",
+		companyNameValidate:"申报单位名称不能为空",
+		needInputValidate:"该输入项不能为空"
 }
 
 /***
@@ -22,5 +24,6 @@ var formValid_tipList={
 		isPositNumber:"只能输入正整数",
 		isPwd:"请输入6到15位的字母或数字",
 		loginNamevalidate:"登录名只能为3-20位字母或数字",
-		numberLetter:"请输入1-20位的输入汉字、字母或数字"
+		numberLetter:"请输入1-20位的输入汉字、字母或数字",
+		companyNameValidate:"申报单位名称不能为空"
 }

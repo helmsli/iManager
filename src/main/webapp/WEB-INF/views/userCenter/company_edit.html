@@ -45,6 +45,8 @@
 	    
 	    <!-- Global JS -->
 	    <script src="../../js/server/server.js" type="text/javascript"></script>
+		<script src="../../js/server/beijing.js" type="text/javascript"></script>
+		
 		<script src="../../js/cookie.js" type="text/javascript"></script>
 		<script src="../../js/skin.js" type="text/javascript"></script>
 		<script src="../../js/config/config_skin.js" type="text/javascript"></script>
@@ -80,6 +82,10 @@
 	                margin-right: 0;
 	            } 
             }
+            /*弹框控制在页面中部*/
+            .modal.in .modal-dialog{-webkit-transform:translate(0,-50%);-ms-transform:translate(0,-50%);-o-transform:translate(0,-50%);transform:translate(0,-50%)}
+            .modal-dialog{position:absolute;width:auto;margin:10px auto;left:0;right:0;top:50%}
+            @media (min-width:768px){.modal-dialog{width:600px}
         </style>
 	</head>
 	<body ng-controller="app">
@@ -156,17 +162,19 @@
 										</div>
 										<div class="row clearfix">
 									        <div class="col-sm-4 col-xs-4 form-control-label r-chk-rad">
-									            <label for="certificateId">注册地址：</label>
+									            <label for="certificateId"><span style="color:#ff0000;">*</span>注册地：</label>
 									        </div>
 											<div class="col-sm-5 col-xs-8">						
 									             <div class="form-group">
 									                 <div class="form-line">
-									                      <input type="text" class="form-control"  maxlength="20" ng-model="companyInfo.registerAddress" name="companyInfo.registerAddress" id="certificateIdAddress" data-error="请输入证件地址" data-tip="请输入证件地址" />
+									                      <input type="text" class="form-control"  maxlength="20" ng-model="companyInfo.registerAddress" name="companyInfo.registerAddress" id="certificateIdAddress" data-error="请输入证件地址" data-tip="请输入证件地址" onFocus="$('#modelForRegisterAddress').modal();"/>
 									                 </div>
 									             </div>
 											</div>
+											
+											
 										</div>
-										<div class="row clearfix">
+										<div class="row clearfix" style="display:none;">
 									        <div class="col-sm-4 col-xs-4 form-control-label r-chk-rad">
 									            <label for="certificateId">公司地址：</label>
 									        </div>
@@ -174,6 +182,8 @@
 									             <div class="form-group">
 									                 <div class="form-line">
 									                      <input type="text" class="form-control"  maxlength="20" ng-model="companyInfo.businessAddress" name="companyInfo.businessAddress" id="companyAddress" data-error="请输入公司地址" data-tip="请输入公司地址" />
+									                     
+									              
 									                 </div>
 									             </div>
 											</div>
@@ -231,6 +241,49 @@
 								</div>
 							</div>
 						</div>
+						<!-- 模态框选择注册地（Modal）$('#modelForRegisterAddress').modal(); -->
+						<div class="modal fade" id="modelForRegisterAddress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+											&times;
+										</button>
+										<h4 class="modal-title" id="myModalLabel">
+											请选择注册地
+										</h4>
+									</div>
+									<div class="modal-body">
+												<div class="table-responsive m-b-0">
+									        		<table id="tablePost" class="table table-bordered table-striped m-b-0 scrolltable">
+									                    <tbody id="box" style="display:block; max-height:200px;overflow-y: scroll;">
+									        				<tr ng-repeat="data in beijing_diqu">
+									        					<td width="1%" data-name="onlyList">
+									        						<label class="checkbox-inline">
+									        							<input type="checkbox" class="filled-in chk-col-blue" data-checkBoxname="listCheckbox" ng-click="selectCompanyDistrict(data.code,data.name);"  id="{{data.code}}" value="{{data.name}}" >
+									        							<label for="{{data.code}}" data-forId="{{data.code}}" ></label>
+									        						</label>
+									        					</td>
+									        					<td width="16%">{{data.name}}</td>
+									        					
+									        				</tr>
+									        			
+									        			</tbody>
+									        		</table>
+									        	</div>
+			
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">取消
+										</button>
+										<button type="button" class="btn btn-primary" style="display:none;">
+											提交更改
+										</button>
+									</div>
+								</div><!-- /.modal-content -->
+							</div><!-- /.modal -->
+						</div>
+					<!--  -->
 					</div>
 				</div>
 				<!-- / .panel -->

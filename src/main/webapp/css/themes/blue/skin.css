@@ -292,3 +292,19 @@ a:hover{
 	color: #999;
 }
 
+/*!
+ * personal cneter
+ * myOperator
+ *
+ */
+.bg-apply {
+	background-position: -4px -90px;
+}
+
+.bg-monitor {
+	background-position: -114px -90px;
+}
+
+.bg-finish {
+	background-position: -230px -90px;
+}

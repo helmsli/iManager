@@ -210,6 +210,11 @@ public class ProjectAnnexController extends BaseController{
 			            file.transferTo(targetFile);
 			            //当前用户
 			            User user = getCurrentUser();
+			            if(user==null)
+			            {
+			            	 user = new User();
+			            	 user.setId(0L);
+			            }
 			            //构建项目附件对象
 			            ProjectAnnex projectAnnex = buildProjectAnnex(annexName,file.getOriginalFilename(),
 			            		ProjectConstants.ANNEX_TYPE.ANNEX,user.getId().toString(),uploadDate);
@@ -322,7 +327,10 @@ public class ProjectAnnexController extends BaseController{
 		    	 
 		    	//response.setHeader("charset","GKB");
 		    	//解决下载文件中文乱码的问题
-	    		response.setHeader("Content-disposition", "attachment; filename="   +  java.net.URLEncoder.encode(originalFilename, "UTF-8"));
+		    	String as = java.net.URLEncoder.encode(originalFilename);
+		    	String urlfileName = new String(originalFilename.getBytes("GB2312"), "ISO_8859_1");
+		    	
+	    		response.setHeader("Content-disposition", "attachment; filename="   + urlfileName );
 	    		//		+new String(originalFilename.getBytes(Charset.forName("UTF-8")),"ISO8859-1"));
 	    		response.setContentType("application/force-download");// 设置强制下载不打开
 	    		//文件上传地址

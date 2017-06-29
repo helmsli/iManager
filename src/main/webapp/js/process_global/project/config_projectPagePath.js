@@ -73,7 +73,9 @@ var CONFIG_PATH=
 		    "STEP_pm_finalDepartLeaderApprove_PATH": "userTemplate/approveTemplate/approve.html?projectName=coomarts",
 		    "STEP_pm_jinzhidiaocha_PATH": "userTemplate/approveTemplate/jzdc.html?projectName=coomarts",
 		    "STEP_pm_tijiaofujian_PATH": "userTemplate/approveTemplate/submitAttachment.html?projectName=coomarts",
-		   
+		    "STEP_apply_PATH": "userTemplate/approveTemplate/applyChildApprove.html?projectName=coomarts",
+		    "STEP_apply_PATH": "userTemplate/approveTemplate/applyChildApprove.html?projectName=coomarts",
+		    "STEP_applyModify_PATH": "userTemplate/approveTemplate/applyChildApproveResult.html?projectName=coomarts"  
 		};
 
 /***
@@ -128,7 +130,9 @@ var SCRIPTFile={
 	    "STEP_pm_finalDepartLeaderApprove_PATH": "/js/process_global/project/model/approve.js",
 	    "STEP_pm_jinzhidiaocha_PATH": "/js/process_global/project/model/jzdc.js",
 	    "STEP_pm_tijiaofujian_PATH": "/js/process_global/project/model/submitAttachment.js",
-	};
+         "STEP_apply_PATH":"/js/process_global/project/model/applyChildApprove.js",
+         "STEP_applyModify_PATH":"/js/process_global/project/model/applyChildApproveResult.js"
+};
 
 	var APPROVE_TITLE={
 		"AGREE":"同意",

@@ -12,6 +12,8 @@ public interface UserDao {
 	
 	void update(User user);
 	
+	public void updateAddressByCompany(User user);
+	
 	void delete(@Param("id")Long id);
 	
 	User get(@Param("id")Long id);

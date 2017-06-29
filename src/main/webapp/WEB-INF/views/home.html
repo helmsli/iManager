@@ -89,15 +89,17 @@
 		<div id="wrapper">
 			<div class="header" ng-include="'include/header.html'"></div>
 			<div class="menus" ng-include="'include/leftMenu.html'"  ></div>
-			<div id="page-wrapper" ng-controller="myDataController">
+			<div id="page-wrapper" ng-controller="myDataController" style="background-image:url('../images/media-1.jpg')">
 				<div class="row home clearfix" ng-init="initTab();">
-					<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+					<div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
+					</div>
+					<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
 						<div class="info-box panel-red hover-expand-effect">
-                       		<div class="icon"><i class="fa fa-tachometer fa-3x"></i></div>
+                       		<div class="icon" style="display:none;"><i class="fa fa-tachometer fa-3x"></i></div>
                        		<div class="content">
                        			<!--div class="sub-title">福彩金项目</div-->
-                       			<div class="sub-title">残联项目</div>
-                       			<div class="number">26</div>
+                       			<div class="sub-title" >消息通知</div>
+                       			
                        		</div>
                        	</div>
                        	<div class="thumbnail">
@@ -109,7 +111,7 @@
                        </div>
 					</div>
 					<!-- / .col-lg-3 -->
-					<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+					<div style="display:none;" class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
 						<div class="info-box panel-yellow hover-expand-effect">
                        		<div class="icon"><i class="fa fa-tachometer fa-3x"></i></div>
                        		<div class="content">
@@ -126,7 +128,7 @@
                        </div>
 					</div>
 					<!-- / .col-lg-3 -->
-					<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+					<div style="display:none;" class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
 						<div class="info-box panel-green hover-expand-effect">
                        		<div class="icon"><i class="fa fa-tachometer fa-3x"></i></div>
                        		<div class="content m-b-0">
@@ -143,12 +145,12 @@
                        </div>
 					</div>
 					<!-- / .col-lg-3 -->
-					<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-						<div class="info-box panel-primary hover-expand-effect">
-                       		<div class="icon"><i class="fa fa-tachometer fa-3x"></i></div>
+					<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+						<div class="info-box panel-green hover-expand-effect">
+                       		<div style="display:none;" class="icon"><i class="fa fa-tachometer fa-3x"></i></div>
                        		<div class="content">
-                       			<div class="sub-title">我的待办任务</div>
-                       			<div class="number">13</div>
+                       			<div class="sub-title">公告</div>
+                       			<div style="display:none;" class="number">13</div>
                        		</div>
                        	</div>
                        	<div class="thumbnail">

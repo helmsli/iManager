@@ -1,5 +1,7 @@
 package com.xinwei.process.constant;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 项目相关常量
  * 
@@ -7,6 +9,17 @@ package com.xinwei.process.constant;
  */
 public class ChangeConstants {
 	
+	/*
+	 * 判断是否区域是全区域
+	 */
+	public static final String Application_Owner="owner";
+	
+	public static final String ALL_DISTRICT="beijing";
+   public static boolean isAllDistrict(String district)
+   {
+	   return StringUtils.equalsIgnoreCase(district, ALL_DISTRICT);
+   }
+	   
 	public static String getProcessKey(Long projectCategory)
 	{
 		return "changeProcess";

@@ -3405,7 +3405,8 @@ form p:last-child {
 	padding: 6px 12px;
 }
 
-.bootstrap-select .dropdown-toggle:focus, .bootstrap-select .dropdown-toggle:active {
+.bootstrap-select .dropdown-toggle:focus,
+.bootstrap-select .dropdown-toggle:active {
 	outline: none !important;
 }
 
@@ -3414,6 +3415,10 @@ form p:last-child {
   .bootstrap-select .bs-donebutton {
 	padding: 0 0 5px 0;
 	border-bottom: 1px solid #e9e9e9;
+}
+
+.bootstrap-select .bs-searchbox {
+	padding-bottom: 0;
 }
 
 .bootstrap-select .bs-searchbox .form-control,
@@ -3428,20 +3433,20 @@ form p:last-child {
 	-ms-box-shadow: none !important;
 	box-shadow: none !important;
 	border: none;
-	margin-left: 30px;
+	padding-left: 30px;
 }
 
 .bootstrap-select .bs-searchbox {
 	position: relative;
 }
 
-.bootstrap-select .bs-searchbox:after {
-	content: '\E8B6';
-	font-family: 'Material Icons';
+.bootstrap-select .bs-searchbox:before {
+	content: '\f002';
+	font-family: 'FontAwesome';
 	position: absolute;
-	top: 0;
+	top: 5px;
 	left: 10px;
-	font-size: 25px;
+	font-size: 18px;
 }
 
 .bootstrap-select ul.dropdown-menu {
@@ -3467,6 +3472,21 @@ form p:last-child {
 .bootstrap-select.btn-group.show-tick .dropdown-menu li.selected a span.check-mark {
 	margin-top: 9px;
 }
+
+/* modal-dialog ================================= */
+.modal-dialog {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%,-50%)!important;
+    -ms-transform: translate(-50%,-50%)!important;
+    -o-transform: translate(-50%,-50%)!important;
+    transform: translate(-50%,-50%)!important;
+    margin: 0 auto!important;
+}
+
+
+
 
 /* Input Group ================================= */
 .input-group {
@@ -3770,7 +3790,7 @@ form p:last-child {
 .search-group .search-inline .btn-group,
 .search-group .search-block .btn-group{
 	display: table-cell;
-	width: 20%;
+	width: 1%;
 	box-shadow: none;
 	white-space: nowrap;
 	vertical-align: middle;
@@ -3968,6 +3988,12 @@ fieldset[disabled] .form-control {
 
 .form-control ~ .form-control-max .btn {
 	padding: 7px 12px;
+}
+
+.custom-input-group {
+	position: relative;
+    display: table;
+    border-collapse: separate;	
 }
 
 /*
@@ -7044,7 +7070,7 @@ table .select-group {
 /*
  * ds-table
  */
-.ds-table{
+.ds-table,.ds-input-group{
 	display: table;
 	position: relative;
 	width: 100%;
@@ -7061,7 +7087,8 @@ table .select-group {
 	margin-bottom: 0;
 }
 
-.ds-cell-control {
+.ds-cell-control,
+.ds-input-group .input-group-control {
 	display: table-cell;
 	width: 100%;
 	float: left;
@@ -7079,6 +7106,42 @@ table .select-group {
 	white-space: nowrap;
     vertical-align: middle;
 }
+
+.ds-input-group .ds-cell-addon .form-control,
+.ds-input-group .input-group-control + .ds-cell-addon .form-control,
+.ds-input-group .input-group-addon {
+	min-width: 80px;
+	text-align: center;
+    background-color: #eee;
+}
+
+.ds-input-group .input-group-control:first-child,
+.ds-input-group .ds-cell-addon:first-child .form-control {
+	border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.ds-input-group .ds-cell-addon:last-child .form-control {
+	border-left: 0;
+}
+
+.ds-input-group .ds-cell-addon:first-child .form-control {
+	border-right: 0;
+}
+
+.ds-input-group .ds-cell-addon:last-child .form-control,
+.ds-input-group .ds-cell-addon:first-child + .input-group-control {
+	border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.ds-input-group .input-group-control:not(:first-child):not(:last-child) {
+	border-radius: 0;
+}
+
+
+
+
 
 /*
  * 分步骤
@@ -7724,7 +7787,7 @@ table .select-group {
 
 .navbar-brand.manager-navbar{
 	padding-left: 70px;
-	width: 250px;
+	width: 350px;
 	text-indent: 0;
 	font-weight: bold;
 }
@@ -8158,7 +8221,6 @@ table .select-group {
 .tree-nav{
 	position: relative;
 	z-index: 1;
-	margin-bottom: 20px;
 	background-color: #fff;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }

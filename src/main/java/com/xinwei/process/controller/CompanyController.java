@@ -16,6 +16,7 @@ import com.xinwei.process.entity.Company;
 import com.xinwei.process.service.CompanyService;
 import com.xinwei.security.entity.Role;
 import com.xinwei.security.entity.User;
+import com.xinwei.security.service.UserService;
 import com.xinwei.security.vo.ResultVO;
 import com.xinwei.util.page.Page;
 
@@ -25,6 +26,11 @@ public class CompanyController extends BaseController {
 
 	@Autowired
 	private CompanyService service;
+	
+	
+
+	@Autowired
+	private UserService userService;
 	
 	@Value("${roleId_admin}")
 	private Long roleId_admin;//管理员角色ID
@@ -93,6 +99,10 @@ public class CompanyController extends BaseController {
 		company.setApproveTime(oldEntity.getApproveTime());
 		company.setCurrentStatus(oldEntity.getCurrentStatus());
 		service.update(company);
+		User user = new User();
+		user.setCompany_name(company.getCompanyName());
+		user.setAddress(company.getBusinessAddress());
+		userService.updateAddressByCompany(user);
 		return new ResultVO<>().toString();
 	}
 	

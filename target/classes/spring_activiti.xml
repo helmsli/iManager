@@ -11,7 +11,7 @@
         <!-- 指定事务管理器 -->
         <property name="transactionManager" ref="transactionManager" />
         <!-- 设置数据库schema的更新方式 -->
-		<property name="databaseSchemaUpdate" value="true"/>
+		<property name="databaseSchemaUpdate" value="false"/>
 		<!-- 是否启动jobExecutor -->
 		<property name="jobExecutorActivate" value="true" />
 		<!-- 设置历史记录 -->
@@ -19,7 +19,7 @@
 	    <property name="activityFontName" value="宋体" />
 		<property name="labelFontName" value="宋体" />
 		<!-- 自动资源部署 
-		<property name="deploymentResources" value="classpath:deployments/projectprocess.bpmn20.xml" />
+		<property name="deploymentResources" value="classpath:deployments/*.bpmn20.xml" />
 		-->
 	</bean>
 	

@@ -288,3 +288,27 @@ a:hover{
 .table a{
 	color: #999;
 }
+
+/*!
+ * personal cneter
+ * myOperator
+ *
+ */
+.bg-apply {
+	background-position: -4px -182px;
+}
+
+.bg-monitor {
+	background-position: -114px -180px;
+}
+
+.bg-finish {
+	background-position: -230px -182px;
+}
+
+.operatorBox .media .btn-primary,
+.operatorBox .media.btn-primary:hover,
+.operatorBox .media.btn-primary:active,
+.operatorBox .media.btn-primary:focus {
+	background-color: #ed943e!important;
+}

@@ -36,10 +36,16 @@ FormValid.prototype.initParm=function(){
         var elTip=formElement[i].tip;
 		if(formElement[i].id){  //如果元素id存在
 			var formObj=formElement[i];
+			var isBlur = true;
+			if(formElement[i].isOnChange)
+			{
+				isBlur = false;
+			}
+			console.log("********id:" + formElement[i].id + "：" +  isBlur);
 			var domObj=this.getDomObj(formObj.id);  //获取dom对象
 			if(domObj){   //如果dom对象存在
 				this.addEl(formObj.id);	
-				this.initEvent(elTip,domObj,formObj.validateRule,formObj.ajaxValid);
+				this.initEvent(elTip,domObj,formObj.validateRule,formObj.ajaxValid,isBlur);
 			    
 			}
 		}else{
@@ -95,7 +101,7 @@ FormValid.prototype.setDomVisible=function(dom){
  * @description 给元素绑定blur和focus事件
  * 
  */
-FormValid.prototype.initEvent=function(elTip,filed,rule,ajax){
+FormValid.prototype.initEvent=function(elTip,filed,rule,ajax,isBlur){
 
 
    	    var _this=this;   	    
@@ -106,16 +112,29 @@ FormValid.prototype.initEvent=function(elTip,filed,rule,ajax){
    	    //默认隐藏错误信息
    	    _this.initErr(filed.id);
    	    _this._setCheckSuccAndFlag(filed.id);
-   	      	      	    
-		addEvent(filed,"blur",function(e){
-			
-			_this.setDomHide(tipInf);
-			//记录下元素失焦校验过的次数,提交校验时会用到
-			_this.blurList++;
-		    _this.checkForm(filed,rule,ajax);
-	    })
-			
+   	    if(isBlur)
+   	    {
+			addEvent(filed,"blur",function(e){
+				console.log("*******************");
+				_this.setDomHide(tipInf);
+				//记录下元素失焦校验过的次数,提交校验时会用到
+				_this.blurList++;
+			    _this.checkForm(filed,rule,ajax);
+		    })
+   	    }
+   	    else
+   	    {
+   	    	console.log("add change");
+		    addEvent(filed,"change",function(e){
+				console.log("*******************");
+				_this.setDomHide(tipInf);
+				//记录下元素失焦校验过的次数,提交校验时会用到
+				_this.blurList++;
+			    _this.checkForm(filed,rule,ajax);
+		    })
+   	    }	
 		addEvent(filed,"focus",function(e){
+			console.log("%%%%%%%%%%%%%%%%%%%%%");
 			_this._setCheckSuccAndFlag(filed.id);
 			_this.setDomVisible(tipInf);
 			var myTipInf=_this.getTipAttr(filed);  //获取页面定义的data-tip属性值
@@ -603,8 +622,8 @@ FormValid.prototype.getFormData=function(){
  * @return checkSubFlag
  * 
  */
-FormValid.prototype.beforeSubmit=function(){
-	
+FormValid.prototype.beforeSubmit=function(submitId){
+	submitId=submitId||'all';
 	var errList=[];
 	var checkSubFlag=false;
 	var myErr=this.ErrList;
@@ -629,7 +648,17 @@ FormValid.prototype.beforeSubmit=function(){
 		var formData=this.getFormData();
 		for(var i=0; i<formFied.length; i++)
 		{
+			
 			var inputId=formFied[i].id;
+			
+			if(submitId!='all')
+			{
+				if(inputId!=submitId)
+				{
+				  continue;	
+				}
+				
+			}
 			var rule=formFied[i].validateRule;
 			var ajax=formFied[i].ajaxValid;
 			var errKey=this.getErrKey(inputId);			

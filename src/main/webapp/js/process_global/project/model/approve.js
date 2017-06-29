@@ -23,14 +23,14 @@ function approvalRefreshUi()
 		setCycleTime:false,
 		commentsFlag:true,
 		radioFlag:true,
-		radioRefuseFlag:false//只有初期的部门经理可以拒绝
+		radioRefuseFlag:true//只有初期的部门经理可以拒绝
 	}
 	scope.setCycleTimeObj={
 			cycle:"",
 			unit:"天"
 	};
   scope.setPersonFlag=false;
-var scope=getAngularScope("projectModel");
+
 var state=scope.gloablParm.state;
 scope.fileUpload={};
 //状态配在config中	

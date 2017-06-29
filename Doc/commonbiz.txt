@@ -1,0 +1,29 @@
+1.残联项目申报
+project_category:canlian
+service_type:applicaiton
+project_name:项目名称
+create_person:申报人电话号码
+create_person_name:联系人姓名
+ext_activiti_info：当前办理人
+
+status：状态： 0 - 申报 1--申报书需要修改  2-- 申报没有中标   255-- 申报中标  4-- 初审审批同意
+result:申报结果
+updatePerson:更新人
+updateTime：更新时间
+setProcessInstanceId：办理人：
+
+data1 == 注册地/科室名称
+data2 = 申请金额
+data3 = 单位名称
+data4 = 单位type
+datta5=所有社会组织填写的信息
+datta6=申报书
+data7=申报资质
+data8=申报审批需要修改的附件地址
+process_instance_id=预计服务人数
+taskId(apply_type)=项目分类 :shen/ding/wei
+
+serviceOwner==服务地区
+
+
+

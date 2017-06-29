@@ -46,6 +46,12 @@
   	  where id=#{id}
   </update>
   
+   <update id="updateAddressByCompany" parameterType="com.xinwei.security.entity.User" > 
+  	update security_user 
+  	   set address=#{address}
+  	  where company_name=#{company_name}
+  </update>
+  
   <update id="moveDepartment"  >
   	update security_user 
   	   set department_id = #{department_id}

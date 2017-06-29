@@ -1,5 +1,7 @@
 package com.xinwei.process.constant;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 三级部门经理发布相关常量
  * 
@@ -18,5 +20,5 @@ public class DepartmentLeaderPublishConstants {
 		static final String PROCESS_PROJECT_ID = "projectid";
 		static final String DISPATCH_THREELEAVELSLEADER = "dispatch_threeLevelsLeader";//指定三级部门经理
 		}
-
+   
 }

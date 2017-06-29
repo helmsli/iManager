@@ -180,6 +180,13 @@ public class UserControllerNew extends BaseController{
 	public @ResponseBody String create(User user,@RequestParam(value = "roleId[]", required = false)List<Long> roleId) {	
 		user.setRoleIds(roleId);
 		user.setCreateTime(new Date());
+		try {
+			Company company = companyServiceImpl.selectCompaniesByName(user.getCompany_name());
+			user.setAddress(company.getBusinessAddress());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		userService.save(user);
 		
 		System.out.println(user);
@@ -200,6 +207,15 @@ public class UserControllerNew extends BaseController{
 		user.setCreateTime(new Date());
 		//设置用户状态为待审批状态
 		user.setApprovalStatus(0);
+		
+		try {
+			Company company = companyServiceImpl.selectCompaniesByName(user.getCompany_name());
+			user.setAddress(company.getBusinessAddress());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		userService.save(user);
 		
 		System.out.println(user);
@@ -347,6 +363,13 @@ public class UserControllerNew extends BaseController{
 			@RequestParam(value = "roleId[]", required = false)List<Long> roleId) 
 	{
 		user.setRoleIds(roleId);
+		try {
+			Company company = companyServiceImpl.selectCompaniesByName(user.getCompany_name());
+			user.setAddress(company.getBusinessAddress());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		userService.update(user);
 		return new ResultVO<>().toString();
 	}

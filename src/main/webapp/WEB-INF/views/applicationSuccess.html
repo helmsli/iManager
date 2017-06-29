@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html data-ng-app="App">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+ 		<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+        <meta http-equiv="Expires" content="-1">
+	    <meta http-equiv="Cache-Control" content="no-cache">
+	    <meta http-equiv="Pragma" content="no-cache">
+		<title>残联2017年项目申报</title>
+		
+		<!-- Plugin Css -->
+    	<link href="../plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    	<link href="../plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    	<link href="../plugins/material-design-preloader/md-preloader.css" rel="stylesheet" />
+    	<link href="../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    	<link href="../plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    	<link href="../plugins/node-waves/waves.min.css" rel="stylesheet" />
+   	 	<link href="../plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+    	<link href="../plugins/animate-css/animate.css" rel="stylesheet" />
+    	
+	    <!-- Custom Css -->
+    	<link href="../css/custom.css" rel="stylesheet">
+	    <link href="../css/themes/default/skin.css" rel="stylesheet" type="text/css" title="default"/>
+		 
+	    <!-- Bootstrap JS -->
+	    <script src="../plugins/jquery/jquery-2.2.4.min.js"></script>
+	    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+	    <script src="../plugins/angular/angular.min.js"></script>
+	    <script src="../plugins/angular/angular-translate.min.js"> </script>
+	    <script src="../plugins/angular/angular-translate-loader-static-files.min.js"> </script> 
+	    <script src="../plugins/ocLazyLoad/ocLazyLoad.min.js"></script>
+	    <script src="../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+	    <script src="../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+	    <script src="../plugins/bootstrap-select/js/i18n/defaults-zh_CN.js"></script>
+	    <script src="../plugins/bootstrap-notify/bootstrap-notify.js"></script>
+	    <script src="../plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+	    <script src="../plugins/node-waves/waves.js"></script>
+	    <script src="../plugins/sweetalert/sweetalert.min.js"></script>
+	    <script src="../js/ui/dialogs.js"></script>
+	    <script src="../js/ui/modals.js"></script>
+	    <script src="../js/ui/notifications.js"></script>
+	    <script src="../js/ui/tooltips-popovers.js"></script>
+	    <script src="../js/ui/load_resize.js"></script>
+	    
+	    <!-- Global JS -->
+	    <script src="../js/server/server.js" type="text/javascript"></script>
+	    <script src="../js/server/beijing.js" type="text/javascript"></script>		
+		<script src="../js/cookie.js" type="text/javascript"></script>
+		<script src="../js/skin.js" type="text/javascript"></script>
+		<script src="../js/config/config_skin.js" type="text/javascript"></script>
+		<script src="../js/errcode/errcode.js" type="text/javascript"></script>
+		<script src="../js/App.js" type="text/javascript"></script>
+		<script src="../js/home.js" type="text/javascript"></script>
+	    
+	    <!--Tree CSS-->
+		<link href="../js/tree/css/demo.css" type="text/css" rel="stylesheet">
+		<link href="../js/tree/css/zTreeStyle/zTreeStyle.css" type="text/css" rel="stylesheet">
+	    
+		<!--Tree Js-->
+		<script src="../js/tree/js/jquery.ztree.core-3.5.js" type="text/javascript"></script>
+		<script src="../js/template/leftMenu.js" type="text/javascript"></script>
+		<script src="../js/userCenter/angular-tree_check.js"type="text/javascript"></script>
+		<!--Forms JS -->
+		<script src="../js/formValidata/formValid_Inf.js" type="text/javascript"></script>
+		<script src="../js/formValidata/formValid_Rule.js" type="text/javascript"></script>
+		<script src="../js/formValidata/formValid.js" type="text/javascript"></script>
+		<!--Pages JS--->
+		<script src="../js/fileupload/fileupload.js" type="text/javascript"></script>
+		<script src="../js/application.js" type="text/javascript"></script>
+        
+		<style type="text/css">
+           .firstname-col{
+                margin-right: 10px;
+            }
+            @media(max-width:992px) {
+                .firstname-col{
+	                margin-right: 0;
+	            } 
+            }
+            .p-l-0{padding-left:0!important;}
+            .p-r-0{padding-right:0!important;}
+            .form-control-label label {margin-right:0;}
+            
+            a.canlianlabel:link,a.canlianlabel:visited{
+			 text-decoration:underline;  /*超链接无下划线*/
+			}
+          
+        </style>
+	</head>
+	<body ng-controller="app" >
+	   <div class="overlay"></div>
+	   <div id="wrapper" ng-controller="application_public" ng-init="init()">
+			<div class="header" >
+				<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="head_ms">
+					<a  id="head_navbar_toggle" class="navbar-toggle" data-toggle="collapse"  data-target=".navbar-collapse"><i class="fa fa-bars"></i></a>
+					<a class="navbar-brand manager-navbar" href="javascript:void(0);">残联2017年项目申报 </a>
+				    <!-- <ul class="nav navbar-right navbar-top-links">
+				        <li class="dropdown">
+				            <a class="dropdown-toggle skin-fa" data-toggle="dropdown" href="#">
+				            	<i class="fa fa-ellipsis-v"></i>
+				            </a>
+				            <ul class="dropdown-menu dropdown-user" id="skin">
+				            	<li><span href="javascript:;" id="default" onclick="mySkin.changeSkin('blue');"><i class="fa fa-stop fa-fw"></i>蓝色</span></li>
+				            	<li><span href="javascript:;" id="yellow" onclick="mySkin.changeSkin('yellow');"><i class="fa fa-stop fa-fw"></i>黄色</span></li>
+				            </ul>
+				        </li>
+				    </ul> -->
+				</nav>
+			</div>
+			<div id="page-wrapper" style="margin-left:0;">
+                <div class="panel" style="margin-left:0; background-color:#DFF1FD;">
+					<div class="panel-heading" style="display:none;">
+						<h2 class="panel-title">残联2017年项目申报</h2>
+						<!-- <span class="abs pull-right-20">
+							<button type="button" class="btn btn-success waves-effect m-r-8" ng-click="saveUserInfo();" ng-disabled="false">保存</button>
+							<button type="button" class="btn btn-primary waves-effect m-l-8" ng-click="cancelWin();" >关闭</button>
+						</span> -->
+					</div>
+					<div class="panel-body" style="margin-left:0; background-color:#DFF1FD;">
+						<div class="row clearfix">
+							<div class="col-lg-12">
+								<!-- <h2 class="panel-inside-title">基本信息</h2>	 -->						
+								<div>
+									<form action="#" method="post" id="formApplication" class="form-horizontal">
+										
+									    <div class="row clearfix">
+									        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 p-r-0 form-control-label r-chk-rad">
+									            <label for="username"><span style="color:#ff0000;">*</span>申报单位：</label>
+									        </div>
+									        <div class="col-lg-5 col-md-6 col-sm-6 col-xs-4">
+									            <div class="form-group">
+									                <div class="form-line">
+									                	<input type="text"  maxlength="20"  class="form-control" ng-model="application.companyName" name="application.companyName" id="companyName"   />
+									                </div>
+									            </div>
+									        </div>
+									    </div>
+									    
+										<div class="row clearfix">
+									        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 p-r-0 form-control-label  r-chk-rad">
+									            <label for="rolelist"><span style="color:#ff0000;">*</span>申报单位类型：</label>
+									        </div>
+									        <div class="col-lg-5 col-md-6 col-sm-6 col-xs-4">
+									            <div class="form-group">
+									                <div class="form-line">
+									                	<div class="radio">
+									                		<div class="radio-inline">
+									                			<input class="with-gap radio-col-blue"  name="radio0" id="companyType_0" ng-model="application.comType" ng-init="" value="she" type="radio"  checked="true">
+									                        	<label for="companyType_0">社会团体</label>
+									                		</div>
+									                		<div class="radio-inline">
+									                			<input class="with-gap radio-col-blue" name="radio1" id="companyType_1" ng-model="application.comType" value="minfei" type="radio">
+									                        	<label for="companyType_1">民办非企业单位</label>
+									                		</div>
+									                		<div class="radio-inline">
+									                			<input class="with-gap radio-col-blue" name="radio2" id="companyType_2" ng-model="application.comType" value="jijin" type="radio">
+									                        	<label for="companyType_2">基金会</label>
+									                		</div>
+									                		<div class="radio-inline">
+									                			<input class="with-gap radio-col-blue" name="radio" id="companyType_3" ng-model="application.comType" value="others" type="radio">
+									                        	<label for="companyType_3">其他</label>
+									                		</div>
+									                    </div>
+									                </div>
+									            </div>
+									        </div>
+									    </div>
+										<div class="row clearfix">
+									        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 p-r-0 form-control-label r-chk-rad">
+									            <label for="firtname"><span style="color:#ff0000;">*</span>注册地址：</label>
+									        </div>
+											<div class="col-lg-5 col-md-6 col-sm-6 col-xs-4" >						
+									             <div class="form-group">
+									                  <div class="form-line">
+									                      <input type="text" class="form-control"  maxlength="120" ng-model="application.registerAddress" name="application.registerAddress" id="registerAddress" data-error="请选择注册地" data-tip="请选择注册地" onFocus="$('#modelForRegisterAddress').modal();"/>
+									                 </div>
+									             </div>
+											</div>
+										</div>
+										
+										<div class="row clearfix" style="display:none;">
+									        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 p-r-0 form-control-label  r-chk-rad">
+									            <label for="rolelist"><span style="color:#ff0000;">*</span>项目类型：</label>
+									        </div>
+									        <div class="col-lg-5 col-md-6 col-sm-6 col-xs-4">
+									            <div class="form-group">
+									                <div class="form-line">
+									                	<div class="radio">
+									                		<div class="radio-inline">
+									                			<input class="with-gap radio-col-blue"  name="radio" id="man" ng-model="userInfo.sex" ng-init="userInfo.sex=0" value="0" type="radio"  checked="true">
+									                        	<label for="man">定向</label>
+									                		</div>
+									                		<div class="radio-inline">
+									                			<input class="with-gap radio-col-blue" name="radio" id="woman" ng-model="userInfo.sex" value="1" type="radio">
+									                        	<label for="woman">申请</label>
+									                		</div>
+									                    </div>
+									                </div>
+									            </div>
+									        </div>
+									    </div>
+										<div class="row clearfix">
+									        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 p-r-0 form-control-label  r-chk-rad">
+									            <label for="rolelist"><span style="color:#ff0000;">*</span>项目名称：</label>
+									        </div>
+									        <div class="col-lg-5 col-md-6 col-sm-6 col-xs-4">
+									            <div class="form-group">
+									                <div class="form-line">
+									                	<input type="text"  maxlength="15" class="form-control" ng-model="application.projectName" name="application.projectName" id="projectName"  />
+									                </div>
+									            </div>
+									        </div>
+									    </div>
+									    
+									    <div class="row clearfix">
+									        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 p-r-0 form-control-label  r-chk-rad">
+									            <label for="rolelist"><span style="color:#ff0000;">*</span>申请金额(万元)：</label>
+									        </div>
+									        <div class="col-lg-5 col-md-6 col-sm-6 col-xs-4">
+									            <div class="form-group">
+									                <div class="form-line">
+									                	<input type="text" class="form-control" maxlength="15" ng-model="application.amount"  onkeyup="checkNum(this)" name="application.amount" id="amount" data-error="请输入申请金额" data-tip="请输入申请金额" />
+									                  
+									                </div>
+									                
+									            </div>
+									        </div>
+									        
+									    </div>
+									    
+									    <div class="row clearfix">
+									        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 p-r-0 form-control-label  r-chk-rad">
+									            <label for="rolelist"><span style="color:#ff0000;">*</span>联系人姓名：</label>
+									        </div>
+									        <div class="col-lg-5 col-md-6 col-sm-6 col-xs-4">
+									            <div class="form-group">
+									                <div class="form-line">
+									                	<input  type="tel" maxlength="32" class="form-control" ng-model="application.contactName"  name="application.contactName" id="contactName"  data-error="必须填写联系人姓名" data-tip="请输入联系人姓名"/>
+									                </div>
+									            </div>
+									        </div>
+									    </div>
+									    <div class="row clearfix">
+									        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 p-r-0 form-control-label  r-chk-rad">
+									            <label for="rolelist"><span style="color:#ff0000;">*</span>联系人电话：</label>
+									        </div>
+									        <div class="col-lg-5 col-md-6 col-sm-6 col-xs-4">
+									            <div class="form-group">
+									                <div class="form-line">
+									                	<input  type="tel" maxlength="32" class="form-control" ng-model="application.contactTel" onkeyup="checkTel(this)" name="application.contactTel" id="contactTel"  data-error="必须填写电话号码" data-tip="请输入电话号码"/>
+									                </div>
+									            </div>
+									        </div>
+									    </div>
+									    
+									    
+									        
+									    <div class="row clearfix">
+									        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 p-r-0 form-control-label  r-chk-rad">
+									            <label for="rolelist">申请人邮箱</label>
+									        </div>
+									        <div class="col-lg-5 col-md-6 col-sm-6 col-xs-4" style="">
+									            <div class="form-group">
+									                <div class="form-line">
+									                	<input type="email" maxlength="32" class="form-control" ng-model="application.contactEmail" name="application.contactEmail" id="contactEmail"  />
+									                </div>
+									            </div>
+									        </div>
+									    </div>
+									    
+									    <div class="row clearfix">
+			                                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 p-r-0 form-control-label  r-chk-rad"><label>项目申报书:</label></div>
+			                                <div class="col-lg-5 col-md-6 col-sm-6 col-xs-4" style="">
+			                                    <a class="canlianlabel" href="http://www.w3school.com.cn/index.html">请按照申报模板填写后提交，如果没有模板，请点击下载模板</a>
+			                                   			
+			                                  
+			                                    <div class="form-group"">
+			                                        <div class="form-line">
+			                                        	<div class="file-group">
+			                                        	 
+			               									<input type="text" name="fileName" id="textfile_applicationFile" class="form-control" placeholder="选择要上传的项目申报书..." />
+			                   								<input type="button" value="选择文件" class="btn btn-primary"/ style="">
+			                   								<input type="file" name="filefield" id="file_applicationFile" onchange="document.getElementById('textfile_applicationFile').value=this.value;uploadApplication('file_applicationFile',this);" />
+			                   							    
+			                   							  			
+			                   							</div>
+			                   						   
+			                                        </div>
+			                                    </div>
+			                                </div>
+			                               
+			                            </div>
+			                            
+			                            
+			                             <div class="row clearfix">
+			                                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 form-control-label"><label>企业资质证明材料:</label></div>
+			                                <div class="col-lg-5 col-md-6 col-sm-6 col-xs-4">
+			                                     <label class="form-label" style="text-algin:left;">资质证明材料至少包括：</br>附有年检结论的登记证书副本和税务登记证书/或三证合一的法人登记证书；</br></label>			
+			                                    <div class="form-group"">
+			                                        <div class="form-line">
+			                                        	<div class="file-group">
+			               									<input type="text" name="fileName" id="textfileCompanyId" class="form-control" placeholder="选择要上传的资质证明文件..." />
+			                   								<input type="button" value="选择文件" class="btn btn-primary"/>
+			                   								<input type="file" name="filefield" id="fileCompanyId" onchange="document.getElementById('textfileCompanyId').value=this.value;uploadApplication('fileCompanyId',this)" />
+			                   							  
+			                   							</div>
+			                   							
+			                                        </div>
+			                                    </div>
+			                                </div>
+			                                
+			                            </div>  
+									</form>									
+								</div>
+							</div>
+						</div>
+						<!-- / .row -->
+						<hr />
+						<div class="row clearfix">
+							<div class="col-lg-11 col-md-12 col-sm-12 col-xs-4 align-center">
+								<button type="button" class="btn btn-success waves-effect m-r-8" id="btn_application" ng-click="saveApplication()" ng-disabled="false">申报</button>
+								<button type="button" class="btn btn-primary waves-effect m-l-8" ng-click="cancelWin();" >取消</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- / .panel -->
+			</div>
+			<!-- / #page-wrapper -->
+			<!-- Default Size -->
+			
+			<!-- 模态框选择注册地（Modal）$('#modelForRegisterAddress').modal(); -->
+						<div class="modal fade" id="modelForRegisterAddress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+											&times;
+										</button>
+										<h4 class="modal-title" id="myModalLabel">
+											请选择注册地
+										</h4>
+									</div>
+									<div class="modal-body">
+												<div class="table-responsive m-b-0">
+									        		<table id="tablePost" class="table table-bordered table-striped m-b-0 scrolltable">
+									                    <tbody id="box" style="display:block; max-height:200px;overflow-y: scroll;">
+									        				<tr ng-repeat="data in beijing_diqu">
+									        					<td width="1%" data-name="onlyList">
+									        						<label class="checkbox-inline">
+									        							<input type="checkbox" class="filled-in chk-col-blue" data-checkBoxname="listCheckbox" ng-click="selectCompanyDistrict(data.code,data.name);"  id="{{data.code}}" value="{{data.name}}" >
+									        							<label for="{{data.code}}" data-forId="{{data.code}}" ></label>
+									        						</label>
+									        					</td>
+									        					<td width="16%">{{data.name}}</td>
+									        					
+									        				</tr>
+									        			
+									        			</tbody>
+									        		</table>
+									        	</div>
+			
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">取消
+										</button>
+										<button type="button" class="btn btn-primary" style="display:none;">
+											提交更改
+										</button>
+									</div>
+								</div><!-- /.modal-content -->
+							</div><!-- /.modal -->
+						</div>
+						<!--end of modal diaglog  -->
+       <!-- / #wrapper -->
+		
+        </div>
+	</body>
+	
+</html>

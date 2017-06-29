@@ -2,6 +2,7 @@ package com.xinwei.process.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.xinwei.process.constant.ApprovedConstants;
+import com.xinwei.process.constant.ChangeConstants;
 import com.xinwei.process.constant.ProjectConstants;
 import com.xinwei.process.entity.CommonBiz;
 import com.xinwei.process.entity.DataInfo;
@@ -50,8 +53,13 @@ public class CommonBizController extends BaseController {
 	@Value("${roleId_departLeader}")
 	private Long roleId_departLeader;// 项目经理角色ID
 	
+	@Value("${roleId_threeLevelsLeader}")
+	private Long roleId_threeLevelsLeader;// 项目经理角色ID
+	
+	
+	
 	@Value("${roleId_committee}")
-	private String roleId_committee;// 决策委员会组ID
+	private Long roleId_committee;// 决策委员会组ID
 	
 	private Gson gson = new Gson();
 	@RequestMapping(value = "/reloadCommonBizCache", method = {
@@ -187,6 +195,129 @@ public class CommonBizController extends BaseController {
 				}
 				//根据当前用户信息分页获取数据监测
 				Page<CommonBiz> page = service.selectMonthReportList(currentUser,
+						queryMap);
+				result.setPage(page);
+				result.setLists(page.getList());	
+			}else{
+				logger.debug("Current user's infomation is null");
+				// 给客户端响应
+				result.setResult(ResultVO.USERNULL);
+			}
+		} catch (Exception e) {
+			result.setResult(ResultVO.EXCEPTION);
+			e.printStackTrace();
+		}
+		return result.toString();
+	}
+
+
+	@RequestMapping(value = "/application/approve", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String applicationApprove(CommonBiz commonBiz) {
+		ResultVO<Object> result = new ResultVO<>();
+		logger.debug(commonBiz.toString());
+		try {
+			//获取当前登录用户信息		
+			User currentUser = getCurrentUser();
+			//判断如果用户不为空
+			if (null != currentUser) {
+				CommonBiz oldCommonBiz = service.selectByPrimaryKey(commonBiz.getDataId());
+				oldCommonBiz.setStatus(commonBiz.getStatus());
+				
+				oldCommonBiz.setResult(commonBiz.getResult());
+				oldCommonBiz.setUpdatePerson(currentUser.getFirstname());
+				oldCommonBiz.setUpdateTime(Calendar.getInstance().getTime());
+				oldCommonBiz.setData8(commonBiz.getData8());
+				oldCommonBiz.setProcessInstanceId(oldCommonBiz.getCreatePerson());
+				service.update(oldCommonBiz);
+				result.setResult(ResultVO.SUCCESS);
+				
+			}else{
+				logger.debug("Current user's infomation is null");
+				// 给客户端响应
+				result.setResult(ResultVO.USERNULL);
+			}
+		} catch (Exception e) {
+			result.setResult(ResultVO.EXCEPTION);
+			e.printStackTrace();
+		}
+		return result.toString();
+	}
+
+	
+	
+	@RequestMapping(value = "/getApplication/listByDistrict", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String getApplicationListByDistrict(String categoryId,String serviceType) {
+		ResultVO<CommonBiz> result = new ResultVO<>();
+		try {
+			//获取当前登录用户信息		
+			User currentUser = getCurrentUser();
+			//判断如果用户不为空
+			if (null != currentUser) {
+				
+				
+				
+				Long userId = currentUser.getId();
+				logger.debug("Current User's ID is : " + userId);
+				Map<String, Object> queryMap = new HashMap<String, Object>();
+				queryMap.put("projectCategory", categoryId);
+				queryMap.put("serviceType", serviceType);			
+				
+				
+				//queryMap.put("permissionType", DataPermission.PERMISSIONTYPE_USER);				
+				//queryMap.put("permissionId", currentUser.getId().toString());				
+				
+				
+				
+				//获取当前用户角色,
+				//0 -- projectmanager 1-- manager  2 -- threeleader
+				int isRoleManager = 0;
+				List<Long> roles = currentUser.getRoleIds();
+				if (roles.size() > 0) {
+					
+					for (Long rolesid : roles) {
+						if(roleId_departLeader==rolesid||roleId_committee==rolesid)
+						{
+							isRoleManager=1;
+							
+						}
+						if(roleId_threeLevelsLeader==rolesid)
+						{
+							//
+							isRoleManager=2;
+							break;
+						}
+					}
+
+				}
+				
+				if(isRoleManager>0)
+				{
+					//获取当前用户的所在地区
+					String district = currentUser.getAddress();
+					if(isRoleManager==2)
+					{
+						district=ApprovedConstants.ApplicationDistrict.district_ding;
+					}
+					
+					if(!ChangeConstants.isAllDistrict(district))
+					{
+						queryMap.put("serviceOwner", district);				
+						
+					}
+					result.setOthers(ChangeConstants.Application_Owner,"0");
+				}
+				//get crete by myself
+				else
+				{
+					queryMap.put("createPerson",currentUser.getPhone());				
+					result.setOthers(ChangeConstants.Application_Owner,"1");
+				}
+				
+				
+				//根据当前用户信息分页获取数据监测
+				Page<CommonBiz> page = service.selectQueryBizPage(currentUser,
 						queryMap);
 				result.setPage(page);
 				result.setLists(page.getList());	

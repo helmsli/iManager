@@ -7,6 +7,7 @@
 * }
 * @Description  登录
 * **/
+var SESSION_TIME_OUT = "2009";
 function login(obj,callback,errorback) {
     var options ={
         "url": "/login/tologin",

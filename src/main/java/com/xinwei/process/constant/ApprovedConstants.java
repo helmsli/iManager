@@ -26,4 +26,14 @@ public interface ApprovedConstants {
 		int CODE_REJECT = 1;
 		int CODE_AGREE  = 0;
 	}
+	
+	public interface ApplicationResult{
+	    int application = 0;//申报
+	    int needChange = 1;//需要修改
+	    int reject = 2;//没有中标
+	    int agree = 3;//中标
+	}
+	public interface ApplicationDistrict{
+		String district_ding="keshi";
+	}
 }

@@ -106,5 +106,7 @@ public interface CommonBizService {
 	 */
 	Page<CommonBiz> selectMonthReportList(User user,
 			Map<String, Object> map);
+	
+	public Page<CommonBiz> selectQueryBizPage(User user, Map<String, Object> map);
 
 }

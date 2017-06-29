@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/Authority_Repository/!svn/ver/4026/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/personal
+END
+companyManage.html
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/Authority_Repository/!svn/ver/4026/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/personal/companyManage.html
+END
+personalCenter.html
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/Authority_Repository/!svn/ver/4032/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/personal/personalCenter.html
+END
+passwordModify.html
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/Authority_Repository/!svn/ver/4026/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/personal/passwordModify.html
+END
+userInfo.html
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/Authority_Repository/!svn/ver/4026/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/personal/userInfo.html
+END
+company_edit.html
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/Authority_Repository/!svn/ver/4026/branches/process_v0.1.2/process/src/main/webapp/WEB-INF/views/personal/company_edit.html
+END

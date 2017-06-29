@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Build-Jdk: 1.6.0_45
-Built-By: xw
+Built-By: helmsli
+Build-Jdk: 1.8.0_65
 Created-By: Maven Integration for Eclipse
 

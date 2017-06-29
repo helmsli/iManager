@@ -63,7 +63,17 @@
 				/company/selectAllCompanyIdsAndNames = anon
 				/company/verifyCompanyName = anon
 				/views/demo = anon
+				/projectAnnex/upload = anon
+				/projectAnnex/fileDownLoad = anon
 				/views/userRegister.html = anon
+				/views/application.html = anon
+				/views/application_wei.html = anon
+				/views/application_ding.html = anon				
+				/views/applycenter.html = anon				
+			    /views/include/header.html=anon
+			    /views/include/leftMenu.html=anon
+			    
+				/task//submitApplication=anon
 				/views/** = user,permissionFilter
 				/management/business/* = anon
 				/management/** = user,permissionFilter

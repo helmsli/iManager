@@ -1,5 +1,7 @@
 package com.xinwei.process.constant;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 项目相关常量
  * 
@@ -7,6 +9,8 @@ package com.xinwei.process.constant;
  */
 public interface ProjectConstants {
 
+	
+	   
 	public interface MonthlyConst{
 		static final String oldCommonBizCategory="oldMonthlyReport";
 	}

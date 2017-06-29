@@ -6,7 +6,7 @@
 	
 	<ul class="nav navbar-nav navbar-left navbar-top-links" id="headerModal" ng-if="headerTypeShow">
 	    <li  ng-repeat = "menu in menuList">
-	        <a ng-href="{{server_url}}{{menu.children.length>0?menu.children[0].action:menu.action}}"
+	        <a ng-href="{{server_url}}{{(menu.children.length>0 && (!menu.isShowAction))?menu.children[0].action:menu.action}}"
 	           ng-if="menu.name!='MENU_DEMO_HOME'">
 	        {{menu.name|translate }}   
 	        </a>
@@ -22,8 +22,8 @@
             	<b class="caret"></b>
             </a>
             <ul class="dropdown-menu dropdown-user">
-            	<li><a  ng-href="{{userInfoHref}}" ><i class="fa fa-user fa-fw"></i>用户资料</a></li>
-            	<li><a  ng-href="{{modifPwdHref}}"><i class="fa fa-edit fa-fw"></i>修改密码</a></li>
+            	<li><a ng-href="{{userInfoHref}}" target="_self"><i class="fa fa-user fa-fw"></i>用户资料</a></li>
+            	<li><a ng-href="{{modifPwdHref}}" target="_self"><i class="fa fa-edit fa-fw"></i>修改密码</a></li>
             	<li class="divider"></li>
                 <li><a href="#" ng-click="toLogout()"><i class="fa fa-sign-out fa-fw"></i>退出</a></li>
             </ul>

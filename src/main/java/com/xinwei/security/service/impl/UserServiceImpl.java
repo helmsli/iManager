@@ -227,4 +227,12 @@ public class UserServiceImpl  implements UserService {
 		return userDao.getCompanyNameByUserId(uesrId);
 	}
 
+
+
+	@Override
+	public void updateAddressByCompany(User user) {
+		// TODO Auto-generated method stub
+		 userDao.updateAddressByCompany(user);
+	}
+
 }

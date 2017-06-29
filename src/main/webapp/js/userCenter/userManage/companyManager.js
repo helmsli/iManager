@@ -69,7 +69,14 @@ App.controller('app', ['$scope','$ocLazyLoad', function($scope, $ocLazyLoad){
     }
     
     $scope.loadBootstrap();
-
+    try 
+    { 
+     $scope.beijing_diqu = beijing_diqu;
+    }
+    catch (e) 
+    {}
+    
+    //alert(JSON.stringify($scope.beijing_diqu));
 	//定义变量ID
 	$scope.currentId = "";
 	$scope.titleList = [
@@ -132,6 +139,7 @@ App.controller('app', ['$scope','$ocLazyLoad', function($scope, $ocLazyLoad){
 	}
 	
 	
+
 	/*pageNav.fn = function(p,pn){
 		initCompanyList(p);
     };*///这里因为在加单位的时候出现错误，所以先注掉，到时需要的话再放开
@@ -225,6 +233,21 @@ App.controller('editCompany', ['$scope','$ocLazyLoad', function($scope, $ocLazyL
 		});
 	}
 
+	$scope.selectCompanyDistrict =function(code,name)
+	{
+		
+		
+		setTimeout(function () {
+			$scope.$apply(function() {
+				$scope.companyInfo.registerAddress=name;
+				$scope.companyInfo.businessAddress=code;
+			});
+		     // AngularJS unaware of update to $scope
+		  }, 200);
+		$('#modelForRegisterAddress').modal('hide');
+		
+	}
+	
 }]);
 
 /***

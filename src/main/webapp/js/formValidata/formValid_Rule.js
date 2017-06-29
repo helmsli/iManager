@@ -9,6 +9,8 @@ var formValid_ruleList={
 		isPositNumber:/^[0-9]*[1-9][0-9]*$/,   //输入必须为数字且为正整数
 		isPwd:/^[A-Za-z0-9]{6,15}$/ ,  //只能输入字母和数字6到15位
 		loginNamevalidate:/^[A-Za-z0-9]{3,20}$/,
-		numberLetter:/^[a-zA-Z0-9\u4e00-\u9fa5]+$/ //只能输入字母或数字并且不能为空
+		companyNameValidate:/^[A-Za-z0-9]{3,60}$/,
+		numberLetter:/^[a-zA-Z0-9\u4e00-\u9fa5]+$/,//只能输入字母或数字并且不能为空
+		needInputValidate:/^[A-Za-z0-9]{3,60}$/
 		
 };

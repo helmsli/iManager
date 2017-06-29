@@ -171,7 +171,7 @@ function addSectorByServer(companyInfo,companys,flag){
 			"request.certificateType":companyInfo.certificateType,
 			"request.certificateId":companyInfo.certificateId,
 			"request.registerAddress":companyInfo.registerAddress,
-			"request.businessAddress":"",
+			"request.businessAddress":companyInfo.registerAddressCode,
 			"request.linkMan":companyInfo.connectMan,
 			"request.linkTel":companyInfo.connectTel,
 			"request.email":companyInfo.conectMail,
@@ -221,6 +221,13 @@ App.controller('registerUser', function($scope){
 	$scope.formValid = new FormValid({"formId":"addorEditUser",formField:uservalidOptions});
 	$scope.addCompanyValid = new FormValid({"formId":"companyInfoEdit",formField:companyVaildOptions});
 	
+	try 
+    { 
+     $scope.beijing_diqu = beijing_diqu;
+    }
+    catch (e) 
+    {}
+    
     //初始化函数
 	$scope.init=function()
 	{
@@ -229,6 +236,25 @@ App.controller('registerUser', function($scope){
 		$scope.initCompanyList();
 		//表单组件初始化
 		initComponents();
+	}
+	
+	$scope.selectCompanyDistrict =function(code,name)
+	{
+		
+		
+		setTimeout(function () {
+			 $scope.$apply(function() {
+			$scope.companyInfo.registerAddress=name;
+			$scope.companyInfo.registerAddressCode=code;
+			 });
+			 var subFlag=$scope.formValid.beforeSubmit('registerAddress');
+			 var checkbox = document.getElementById(code);
+				checkbox.checked = false; 
+				
+		     // AngularJS unaware of update to $scope
+		  }, 200);
+		$('#modelForRegisterAddress').modal('hide');
+		
 	}
 	
 	/***
@@ -241,6 +267,7 @@ App.controller('registerUser', function($scope){
 		//单位信息表单校验
 		var flag=$scope.addCompanyValid.beforeSubmit();
 		//单位信息接口
+	   // console.log(companyInfo);
 		var addSectorFlag=addSectorByServer(companyInfo,companys,flag);
 		if(addSectorFlag){
 			$('#companyslist').val(companyInfo.companyName);

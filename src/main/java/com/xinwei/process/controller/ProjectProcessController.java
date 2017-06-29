@@ -3,6 +3,7 @@ package com.xinwei.process.controller;
 import java.io.Console;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.activiti.engine.task.TaskInfo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -39,22 +41,26 @@ import com.xinwei.process.constant.ApprovedConstants;
 import com.xinwei.process.constant.ChangeConstants;
 import com.xinwei.process.constant.ProjectConstants;
 import com.xinwei.process.dao.DataPermissionMapper;
+import com.xinwei.process.entity.Application;
 import com.xinwei.process.entity.ApprovalResult;
 import com.xinwei.process.entity.AssignPerson;
 import com.xinwei.process.entity.CommitteeApproval;
 import com.xinwei.process.entity.CommonBiz;
+import com.xinwei.process.entity.Company;
 import com.xinwei.process.entity.CycleTime;
 import com.xinwei.process.entity.DataInfo;
 import com.xinwei.process.entity.DataPermission;
 import com.xinwei.process.entity.DepartleaderApproval;
 import com.xinwei.process.entity.DepartleaderPublish;
 import com.xinwei.process.entity.ExpertReview;
+import com.xinwei.process.entity.MonthlyReport;
 import com.xinwei.process.entity.Project;
 import com.xinwei.process.entity.ProjectAnnex;
 import com.xinwei.process.entity.ThreeleaderApplication;
 import com.xinwei.process.entity.UserTask;
 import com.xinwei.process.service.CommitteeApprovalService;
 import com.xinwei.process.service.CommonBizService;
+import com.xinwei.process.service.CompanyService;
 import com.xinwei.process.service.DepartleaderApprovalService;
 import com.xinwei.process.service.DepartleaderPublishService;
 import com.xinwei.process.service.ExpertReviewService;
@@ -68,6 +74,7 @@ import com.xinwei.report.month.MonthlyReportReader;
 import com.xinwei.report.month.process.ProgressReport;
 import com.xinwei.security.entity.User;
 import com.xinwei.security.service.UserRoleService;
+import com.xinwei.security.service.UserService;
 import com.xinwei.security.vo.ResultVO;
 import com.xinwei.util.JsonUtil;
 import com.xinwei.util.page.Page;
@@ -113,13 +120,21 @@ public class ProjectProcessController extends BaseController{
 	@Resource
 	private DataPermissionMapper DataPermissionDao;
 	
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private CompanyService companyServiceImpl;
+	
 	@Value("${roleId_departLeader}")
 	private Long roleId_departLeader;// 项目经理角色ID
 	
 	@Value("${roleId_committee}")
 	private Long roleId_committee;// 项目经理角色ID
 	
-  
+	
+	@Value("${roleId_projectManager}")
+	private Long roleId_projectManager;// 项目经理角色ID
+	
 
 	@Value("${uploadPath}")
 	private String uploadPath; 
@@ -791,6 +806,140 @@ public class ProjectProcessController extends BaseController{
 		return result.toString();
 	}
 	
+	
+	/**
+	 * 通用用户任务办理接口
+	 * @param commonBiz 通用业务对象
+	 * @return
+	 */		
+	@RequestMapping(value = "/submitApplication",produces = "text/html;charset=UTF-8",method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String submitApplication(HttpServletRequest request, HttpServletResponse response,CommonBiz commonBiz) {
+		logger.debug("submitApplication -->:" + commonBiz.toString());
+		ResultVO<Object> result = new ResultVO<>();
+		//获取当前登录用户信息
+		try {
+				//读取excel信息进行校验
+				//当前用户ID
+				//根据项目名称获取项目的信息
+				
+				//先更新
+				// 保存业务对象
+				String dataId = "";
+				boolean isFind = false;
+				if(StringUtils.isNotEmpty(commonBiz.getDataId()))
+				{
+					CommonBiz oldmmonBiz =CommonBizServiceImpl.selectByPrimaryKey(commonBiz.getDataId());
+				    
+					if(oldmmonBiz!=null)
+				    {
+						
+				    	try {
+				    		commonBiz.setCreatePerson(oldmmonBiz.getCreatePerson());
+							commonBiz.setResult(oldmmonBiz.getResult());
+							commonBiz.setData8(oldmmonBiz.getData8());
+							commonBiz.setCreateTime(Calendar.getInstance().getTime());
+							commonBiz.setStatus(String.valueOf(ApprovedConstants.ApplicationResult.application));
+							isFind = true;
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				    }
+				}
+				
+				if(isFind)
+				{
+					CommonBizServiceImpl.update(commonBiz);
+				}
+				else
+				{
+					//自动创建用户
+					User user = userService.get(commonBiz.getCreatePerson());
+					if(user==null)
+					{
+						/*
+						 * var alldata={"pName":$scope.application.projectName,
+    			     "personName":$scope.application.contactName,
+    			     "person":$scope.application.contactTel,
+    			     "address":$scope.application.registerAddress,
+    			     "amount":$scope.application.amount,
+    			    "cname":$scope.application.companyName,
+    			    "cType":$scope.application.comType
+    			    };
+						 */
+						Application application=null;
+						try {
+							application = gson.fromJson(commonBiz.getData5(), Application.class);
+							logger.debug(application.toString());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							application=new Application();
+							application.setEmail("123@chunze.com");
+						}
+						 try {
+							 Company company = companyServiceImpl.selectCompaniesByName(commonBiz.getData3());
+							 if(company==null)
+							 {
+								 company = new Company();
+								 company.setCreatePerson(commonBiz.getCreatePerson());
+								 company.setBusinessAddress(application.getAddressCode());
+								 company.setCompanyProperty(commonBiz.getData4());
+								 company.setCompanyName(commonBiz.getData3());
+								 company.setEmail(application.getEmail());
+								 company.setLinkMan(commonBiz.getCreatePersonName());
+								 company.setLinkTel(commonBiz.getCreatePerson());
+								 company.setRegisterAddress(application.getAddress());
+							
+								 company.setCreateTime(new Date());
+								 this.companyServiceImpl.save(company);
+							 }
+							user=new User();
+							 user.setCreateTime(new Date());
+							 user.setUsername(commonBiz.getCreatePerson());
+							user.setFirstname(commonBiz.getCreatePersonName());
+							user.setCompany_name(commonBiz.getData3());
+							user.setPhone(commonBiz.getCreatePerson());
+							user.setStatus(0);
+							user.setApprovalStatus(1);
+							user.setIsDisabled(0);						
+							user.setAddress(application.getAddress());
+							user.setEmail(application.getEmail());
+							
+							
+							
+							user.setPassword(application.getEmail());
+							List<Long> roleId = new ArrayList<Long>();
+							roleId.add(roleId_projectManager);
+							user.setRoleIds(roleId);
+							this.userService.save(user);
+							result.setOthers("email", application.getEmail());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							 result.setOthers("email", "");
+						}
+						 
+					}
+					else
+					{
+						 result.setOthers("email", "");
+					}
+					//end 自动创建用户
+				    dataId = CommonBizServiceImpl.save(commonBiz);
+				}
+				result.setResult(ResultVO.SUCCESS);		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			//任务对象为空
+			result.setResult(ResultVO.FAILURE);
+		}
+			
+		logger.debug("submitMonthlyReport --> result: "+ result.getResult());
+		return result.toString();
+	}
 	
 	
 	/**

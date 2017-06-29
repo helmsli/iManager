@@ -48,5 +48,9 @@ public interface UserService extends BaseService<User, Long>{
 	
 	String getCompanyNameByUserId(Long uesrId);
 	
-	
+	/**
+	 * 修改用户的基本信息
+	 * @param user
+	 */
+	public void updateAddressByCompany(User user);
 }

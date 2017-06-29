@@ -1,6 +1,6 @@
 /*定义module*/
 var from="";
-
+var roleIdProjectManager=14;
 var App = angular.module("App",
     ['oc.lazyLoad','pascalprecht.translate']); 
 /*国际化配置*/
@@ -105,6 +105,7 @@ App.controller('head_ms', ['$scope','$ocLazyLoad','$rootScope',"auth", function(
 	$scope.server_url = getBasePath();
 	/*用户名*/
 	$scope.userName = "";
+	$scope.roles=[];
 	/*菜单列表*/
 	$scope.menuList = [];
 	/*头部菜单跳转用户资料和修改密码页面的href取绝对路径*/
@@ -128,12 +129,36 @@ App.controller('head_ms', ['$scope','$ocLazyLoad','$rootScope',"auth", function(
 			$scope.headerTypeShow = false;
 		}
 	};
+	
+	$scope.userCenterIsIcon = function(){
+		//设置头部菜单是否显示
+		
+		try{
+		
+			for (var index = 0; index < $scope.roles.length; index++) {   
+			    
+			    if($scope.roles[index] == roleIdProjectManager)
+				{
+			    	console.log("((((((((((((((((((");
+			    	return true;
+				}
+			}  
+			
+			
+		}catch(e)
+		{
+			
+		}
+		return false;
+	};
  	/*获取用户名*/
  	$scope.getUserName = function(){
 		var userInfo = localStorage.getItem("userInfo");
 		if(userInfo!=""){
+			console.log(userInfo);
 			userInfo = JSON.parse(userInfo);
 			$scope.userName = userInfo.fullName;
+			$scope.roles=userInfo.roleIds;
 		}else{//获取用户名失败，提示重新登录
 			swal('无法获取用户信息，请退出后重新登录');
 		}
@@ -145,7 +170,37 @@ App.controller('head_ms', ['$scope','$ocLazyLoad','$rootScope',"auth", function(
 		//console.log(JSON.stringify(menuList));
 		if($scope.headerTypeShow){//当头部需要显示菜单的时候，才去加载菜单树
 			$scope.menuList = auth.getMenuList();
-			$scope.$applyAsync($scope.menuList);
+			
+			for(var i in $scope.menuList){
+				var menuName=$scope.menuList[i].name;
+				$scope.menuList[i].isShowAction=false;
+				console.log(JSON.stringify($scope.menuList[i]));
+				if(menuName=="MENU_USER_CENTER")
+				{	
+					if(!$scope.userCenterIsIcon()){
+						console.log("&&&&&&&&&&&&&&&&&&&&&&&");
+						$scope.userInfoHref = getBasePath()+"/views/userCenter/userInfo.html";
+						$scope.modifPwdHref = getBasePath()+"/views/userCenter/passwordModify.html";
+						
+					}else{
+						 $scope.menuList[i].action="/views/personal/personalCenter.html";
+						 $scope.menuList[i].isShowAction = true;
+						 $scope.userInfoHref = getBasePath()+"/views/personal/userInfo.html";
+						 $scope.modifPwdHref = getBasePath()+"/views/personal/passwordModify.html";
+					
+						}
+				}//end if if(menuName=="MENU_USER_CENTER")
+				else if(menuName=="MENU_CAMTALK")
+				{
+					if($scope.userCenterIsIcon()){
+						 $scope.menuList[i].action="/views/operator/myOperator.html";
+						 $scope.menuList[i].isShowAction = true;
+					}
+				}
+				$scope.$applyAsync($scope.menuList);
+			}
+			
+			
 		}
 	};
  	/* 退出登录方法*/
@@ -317,6 +372,12 @@ function requestAjax(options)
             }
         },
         success:function(data){
+        	console.log("dataresult:" + data.result);
+        	if(data.result===SESSION_TIME_OUT)
+    		{
+    			sessionTimeout();
+    			return;
+    		}
             if(callBack)
             {   //拦截data.result ,如果没有权限，直接返回false
             	if(data.result=='403'){
@@ -338,7 +399,6 @@ function requestAjax(options)
 }
 var contextPath = "";
 function getBasePath(){   
-	
 	var root=location.hostname;
 	var port=location.port;
 	var pathName=location.pathname;
@@ -385,6 +445,21 @@ function getErrMsg(errCode)
 	var errMsg=i18n[errKey];
 	return errMsg;
 }
+
+function getErrorCodeFile()
+{
+	var lang=getLanguage();
+	var errorCodePath;
+	errorCodePath="/js/errcode/errcode.js"
+	return getBasePath()+errorCodePath;
+}
+
+function getErrorMsg(errorCode,fnName)
+{
+	var errMsg=getErrMsg(errorCode);
+	//return errMsg;
+	alert("Fn:"+fnName+"   errorMsg:"+errMsg);
+}
 /**
  * @请求国家及语言类型
  * 参数：null
@@ -392,13 +467,15 @@ function getErrMsg(errCode)
  * **/
 function getLanguage()
 {
-	var olang=navigator.language;
-	olang=olang.toLowerCase();
-	return (olang=="zh-cn")?"zh":"en";
+	try{
+		var navigat=window.navigator;
+		var olang=navigat.language||navigat.systemLanguage||navigat.userLanguage;
+		olang=olang.toLowerCase();
+		return (olang=="zh-cn")?"zh":"en";
+	}catch(e){
+		console.log("请求国家及语言类型"+e.messageInfo+"=-="+e.message);
+	}
 }
-
-
-
 
 function loadFileList(arryFileList)
 {
@@ -417,24 +494,6 @@ function loadFileList(arryFileList)
 	}
 	
 }
-
-function getErrorCodeFile()
-{
-	var lang=getLanguage();
-	var errorCodePath;
-	errorCodePath="/js/errcode/errcode.js"
-	return getBasePath()+errorCodePath;
-}
-
-
-function getErrorMsg(errorCode,fnName)
-{
-	var errMsg=getErrMsg(errorCode);
-	alert("Fn:"+fnName+"   errorMsg:"+errMsg);
-}
-
-
-
 /**
  * 请求皮肤样式
  * 返回皮肤文件路径，依赖config配置文件
@@ -702,3 +761,13 @@ function loadFileScript(id,newJS,callBack)
 			}
 	   }
 }
+/**
+ * 处理失效跳转的的session函数
+ * */
+function sessionTimeout(goUrl){
+	  var currentUrl=location.href;
+	  var basePath=getBasePath();
+	  var url=goUrl||basePath+"/login/tologin";
+      localStorage.setItem("currentUrl",currentUrl);
+	   window.location.href = url;
+   }

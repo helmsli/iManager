@@ -1,0 +1,232 @@
+/*!
+ * personal cneter
+ * myOperator
+ *
+ */
+@media (min-width: 768px){
+	.page-loader-wrapper {
+	    left: 0;
+	}
+	.page-loader-wrapper .loader {
+	    margin-left: 0;
+	}
+}
+
+#page-wrapper{
+   	margin-left: 0;
+   	padding: 120px 100px 0 100px;
+   	background-color: #fff!important;
+}
+
+#leftMenu_navbar{
+	width: 0;
+}
+
+@media(max-width:768px){
+	#page-wrapper {padding: 90px 10px 1px 10px;}
+	#leftMenu_navbar {width: 250px;}
+	.p-t-100 {padding-top: 50px;} 
+}
+
+.panel {
+	margin-bottom: 0;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+h3.title{
+	margin: 0;
+}
+
+h3.title small {
+  	display: inline-block;
+  	position: relative;
+  	padding: 0 30px;
+  	height: 44px;
+  	line-height: 44px;
+  	font-size: 18px;
+  	color: #fff;
+  	background-color: #1177e9;
+}
+h3.title small:after{
+  	content: "";
+  	position:absolute;
+  	top: 0;
+  	right: -44px;
+  	bottom: 0;
+  	width: 0;   
+	height: 0;   
+	border: 22px solid transparent;
+	border-left: 22px solid #1177e9; 
+}
+
+h4.title{
+	position: relative;
+  	padding-top: 10px;
+  	font-size: 16px;
+  	font-weight: bold;
+  	color: #707071;
+}
+
+h4.title.small {
+	padding-left: 44px;
+}
+
+h4.title.small:before {
+	content: "——";
+	position: absolute;
+	top: 50%;
+	left: 0;
+	transform: translate(0,-32%);
+}
+
+.roundGroup {
+	margin: 0 auto;
+	width: 200px;
+}
+
+.roundGroup span {
+   	display: inline-block;
+   	position: relative;
+   	width: 150px;
+   	height: 150px;
+   	border-radius: 50%;
+}
+
+.roundGroup span i {
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 86px;
+	height: 86px;
+	transform: translate(-50%,-50%);
+}
+
+.roundGroup p {
+	margin-top: 10px;
+	font-size: 16px;
+	font-weight: bold;
+	color: #707071;
+}
+
+[class*="bg-"] {
+	background-image: url("../images/personal.png");
+	background-repeat: no-repeat;
+}
+
+.bg-editPw {
+	background-position: -2px 0px;
+}
+
+.ba-apply-ding {
+	background-image:url('../images/apply_ding.png');background-repeat: no-repeat;
+	background-size: 150px 150px;
+}
+.ba-apply-shen {
+	background-image:url('../images/apply_shen.png');background-repeat: no-repeat;
+	background-size: 150px 150px; 
+}
+.ba-apply-wei{
+	background-image:url('../images/apply_wei.png');background-repeat: no-repeat;
+	background-size: 150px 150px;
+}
+.bg-userMg {
+	background-position: -112px 1px;
+}
+
+.bg-roleMg {
+	background-position: -228px 1px;
+}
+
+.bg-unitMg {
+	background-position: -346px 2px;
+}
+
+.bg-userDt {
+	background-position: -469px 2px;
+}
+
+.col-orange {
+	background-color: #e29a5f;
+}
+
+.col-cyan-blue {
+	background-color: #61c6df;
+}
+
+.col-cyan {
+	background-color: #76c4b0;
+}
+
+.col-grey {
+	background-color: #505e73;
+}
+
+.col-red {
+	background-color: #cb7873;
+}
+
+.operatorBox {
+	padding: 20px 200px;
+}
+
+.operatorBox .media-left i {
+	display: inline-block;
+	width: 86px;
+	height: 86px;
+}
+
+.operatorBox h3.title {
+	font-size: 20px;
+	color: #1564db;
+}
+
+.operatorBox h4.title {
+	margin: 0;
+	font-size: 14px;
+	color: #000;
+}
+
+.operatorBox .media.m-b-50 {
+	margin-bottom: 50px;
+}
+
+@media(max-width:768px){
+	.operatorBox {
+		padding: 0;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
