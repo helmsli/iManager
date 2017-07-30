@@ -1,5 +1,18 @@
 /*定义module*/
+//各种状态
+var STATUS_APPLY="0";
+var STATUS_NEED_CHANGE="1";
+var STATUS_REJECTED = "2";
+var STATUS_AGREED = "255";
+var STATUS_APPLY_CONCLUDE="25501";
+var STATUS_FINISHED_CONCLUDE="255255";
+var STATUS_NEED_CHANGE_CONCLUDE="25502";
+var STATUS_REGECTED_CONCLUDE="25503";
+//导航页面的内容授权
+var G_NAV_TYPE=["首页","camtalk","用户中心"];
+
 var from="";
+var APP_NAME="canlian";
 var roleIdProjectManager=14;
 var App = angular.module("App",
     ['oc.lazyLoad','pascalprecht.translate']); 
@@ -170,7 +183,7 @@ App.controller('head_ms', ['$scope','$ocLazyLoad','$rootScope',"auth", function(
 		//console.log(JSON.stringify(menuList));
 		if($scope.headerTypeShow){//当头部需要显示菜单的时候，才去加载菜单树
 			$scope.menuList = auth.getMenuList();
-			
+			var menuList = [];
 			for(var i in $scope.menuList){
 				var menuName=$scope.menuList[i].name;
 				$scope.menuList[i].isShowAction=false;
@@ -197,9 +210,14 @@ App.controller('head_ms', ['$scope','$ocLazyLoad','$rootScope',"auth", function(
 						 $scope.menuList[i].isShowAction = true;
 					}
 				}
-				$scope.$applyAsync($scope.menuList);
+				else if(menuName=="MENU_COOMARTS"||menuName==="MENU_LOTTERY")
+				{
+					continue;
+				}
+				menuList.push( $scope.menuList[i]);
 			}
-			
+			$scope.menuList=menuList;
+			$scope.$applyAsync($scope.menuList);
 			
 		}
 	};

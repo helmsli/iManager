@@ -610,7 +610,6 @@ function getCooMartsProjectShenBaoListCall(data){
 
 
 
-
 /***
  * 我发布的任务列表渲染界面(coomarts项目)
  * 

@@ -10,11 +10,20 @@ function projectApply(){
 	//views/camtalk/newApply.html?projectName=camtalk
 			
 	//url= "../"+projectName+"/departmentReleaseNeedDeclare.html?projectName="+projectName;
+	url= "../applycenter.html";
+	
+	location.href = url;
+}
+function projectApplyed(){
+	
+	
+	//views/camtalk/newApply.html?projectName=camtalk
+			
+	//url= "../"+projectName+"/departmentReleaseNeedDeclare.html?projectName="+projectName;
 	url= "../"+projectName+"/newApply.html?projectName="+projectName;
 	
 	location.href = url;
 }
-
 /*
  * 数据监测
  */
@@ -28,6 +37,6 @@ function projectMonitor(){
  * 项目结项
  */
 function projectEnd(){
-	url= "../"+projectName+"/myApplyCompleted.html?projectName="+projectName;
+	url= "../"+projectName+"/concludeManage.html?projectName="+projectName;
 	location.href = url;
 }

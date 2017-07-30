@@ -62,7 +62,7 @@
                                         	<div class="file-group">
                									<input type="text" name="fileName" id="fileMonthlyReport" class="form-control" placeholder="选择要上传的文件..." />
                    								<input type="button" value="选择文件" class="btn btn-primary"/>
-                   								<input type="file" name="filefield" id="uploadMonthlyReportFile" onchange="document.getElementById('fileMonthlyReport').value=this.value;uploadMonthlyReport('uploadMonthlyReportFile',this)" />
+                   								<input type="file" name="filefield" accept="application/vnd.ms-excel"  id="uploadMonthlyReportFile" onchange="if(this.value){document.getElementById('fileMonthlyReport').value=this.value;uploadMonthlyReport('uploadMonthlyReportFile',this);}" />
                    							  
                    							</div>
                    							
@@ -80,10 +80,10 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <div class="form-group"">
                                         <div class="form-line">
-                                        	<div class="file-group">
+                                        	<div class="file-group"> 
                									<input type="text" name="fileName" id="fileName" class="form-control" placeholder="选择要上传的文件..." />
                    								<input type="button" value="选择文件" class="btn btn-primary"/>
-                   								<input type="file" name="filefield" id="uploadFile" onchange="document.getElementById('fileName').value=this.value;uploadMonthlyAttatchment('uploadFile',this)" />
+                   								<input type="file" name="filefield" accept=".zip,.rar" id="uploadFile" onchange="document.getElementById('fileName').value=this.value;uploadMonthlyAttatchment('uploadFile',this)" />
                    							  
                    							</div>
                    							
@@ -92,7 +92,7 @@
                                 </div>
                                 
                             </div>
-						  <div class="row clearfix">
+						  <div ng-show="showMonthlyDetail" class="row clearfix">
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 form-control-label"><label>项目名称:</label></div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <div class="form-group">
@@ -100,7 +100,7 @@
                                     </div>
                                 </div>
                             </div>
-                             <div class="row clearfix">
+                             <div ng-show="showMonthlyDetail" class="row clearfix">
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 form-control-label"><label>机构名称:</label></div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <div class="form-group">
@@ -108,7 +108,7 @@
                                     </div>
                                 </div>
                             </div>
-                             <div class="row clearfix">
+                             <div ng-show="showMonthlyDetail" class="row clearfix">
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 form-control-label"><label>报表月份:</label></div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <div class="form-group">
@@ -141,7 +141,7 @@
                             <div class="row clearfix align-center">
                             	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             		<button type="button" disabled="disabled" id="btn_subMonthlyReport" class="btn btn-success waves-effect m-r-8" onclick="submitMonthlyReport()">提交报表</button>
-                            		<button type="button" class="btn btn-primary waves-effect m-l-8">取消</button>
+                            		<button type="button" class="btn btn-primary waves-effect m-l-8" onclick="cancelMonthlyReport()">取消</button>
                             	</div>
                             </div>
 						</form>

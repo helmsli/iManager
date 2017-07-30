@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import com.xinwei.process.constant.ApprovedConstants;
 import com.xinwei.process.constant.ChangeConstants;
 import com.xinwei.process.constant.ProjectConstants;
 import com.xinwei.process.entity.CommonBiz;
+import com.xinwei.process.entity.Conclusion;
 import com.xinwei.process.entity.DataInfo;
 import com.xinwei.process.entity.DataPermission;
 import com.xinwei.process.entity.MonthlyCheck;
@@ -32,6 +34,7 @@ import com.xinwei.process.entity.MonthlyReport;
 import com.xinwei.process.entity.ReportActivity;
 import com.xinwei.process.service.CommonBizService;
 import com.xinwei.process.service.RoleServiceTypeService;
+import com.xinwei.process.service.impl.ApplicationExportExcel;
 import com.xinwei.security.entity.Role;
 import com.xinwei.security.entity.User;
 import com.xinwei.security.vo.ResultVO;
@@ -228,7 +231,7 @@ public class CommonBizController extends BaseController {
 				oldCommonBiz.setUpdatePerson(currentUser.getFirstname());
 				oldCommonBiz.setUpdateTime(Calendar.getInstance().getTime());
 				oldCommonBiz.setData8(commonBiz.getData8());
-				oldCommonBiz.setProcessInstanceId(oldCommonBiz.getCreatePerson());
+				oldCommonBiz.setExtActivitiInfo(oldCommonBiz.getCreatePerson());
 				service.update(oldCommonBiz);
 				result.setResult(ResultVO.SUCCESS);
 				
@@ -245,25 +248,176 @@ public class CommonBizController extends BaseController {
 	}
 
 	
+	@RequestMapping(value = "/application/conclude", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String applicationConclude(CommonBiz commonBiz) {
+		ResultVO<Object> result = new ResultVO<>();
+		logger.debug(commonBiz.toString());
+		try {
+			//获取当前登录用户信息		
+			User currentUser = getCurrentUser();
+			//判断如果用户不为空
+			if (null != currentUser) {
+			     
+				CommonBiz oldCommonBiz = service.selectByPrimaryKey(commonBiz.getDataId());
+				logger.debug(gson.toJson(oldCommonBiz));
+				Conclusion oldconclusion=new Conclusion();
+				try {
+					oldconclusion= gson.fromJson(oldCommonBiz.getData9(), Conclusion.class);
+					if(oldconclusion==null)
+					{
+						 oldconclusion=new Conclusion();
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					oldconclusion=new Conclusion();
+					e.printStackTrace();
+				}
+				
+				
+				try {
+					Conclusion conclusion = gson.fromJson(commonBiz.getData9(), Conclusion.class);
+					oldconclusion.setApplyTime(Calendar.getInstance().getTime());
+					oldconclusion.setApplyFile(conclusion.getApplyFile());
+					oldconclusion.setApplyOthers(conclusion.getApplyOthers());
+					oldCommonBiz.setData9(gson.toJson(oldconclusion));
+					if(StringUtils.isNoneBlank(commonBiz.getStatus()))
+					{
+						oldCommonBiz.setStatus(commonBiz.getStatus());	
+					}
+					else
+					{
+						oldCommonBiz.setStatus(ApprovedConstants.ApplicationResult.status_ApplyConclude);
+					}
+					service.update(oldCommonBiz);
+					result.setResult(ResultVO.SUCCESS);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					result.setResult(ResultVO.EXCEPTION);
+				}
+				
+				
+			}else{
+				logger.debug("Current user's infomation is null");
+				// 给客户端响应
+				result.setResult(ResultVO.USERNULL);
+			}
+		} catch (Exception e) {
+			result.setResult(ResultVO.EXCEPTION);
+			e.printStackTrace();
+		}
+		return result.toString();
+	}
+
+	
+	@RequestMapping(value = "/countMonthlyReport", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	
+	public @ResponseBody String countMonthlyReport(String categoryId,String serviceType) {
+		ResultVO<CommonBiz> result = new ResultVO<>();
+		//获取登录用户名的地区和ID
+		
+		return result.toString();
+	}
+	
+	
+	
+	
+	@RequestMapping(value = "/countApplicationService", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	
+	public @ResponseBody String countApplicationService(String categoryId,String serviceType) {
+		ResultVO<CommonBiz> result = new ResultVO<>();
+		//获取当前登录用户信息		
+		User currentUser = getCurrentUser();
+		//判断如果用户不为空
+		try {
+			if (null != currentUser) {
+				Long userId = currentUser.getId();
+				logger.debug("Current User's ID is : " + userId);
+				Map<String, Object> queryMap = new HashMap<String, Object>();
+				queryMap.put("projectCategory", categoryId);
+				queryMap.put("serviceType", serviceType);	
+				queryMap.put("create_time", new Date());
+				//queryMap.put("permissionType", DataPermission.PERMISSIONTYPE_USER);				
+				//queryMap.put("permissionId", currentUser.getId().toString());				
+				//获取当前用户角色,
+				//0 -- projectmanager 1-- manager  2 -- threeleader
+				int isRoleManager = 0;
+				List<Long> roles = currentUser.getRoleIds();
+				if (roles.size() > 0) {
+					
+					for (Long rolesid : roles) {
+						if(roleId_departLeader==rolesid||roleId_committee==rolesid)
+						{
+							isRoleManager=1;
+							
+						}
+						if(roleId_threeLevelsLeader==rolesid)
+						{
+							//
+							isRoleManager=2;
+							break;
+						}
+					}
+
+				}
+
+				if(isRoleManager>0)
+				{
+					//获取当前用户的所在地区
+					String district = currentUser.getAddress();
+					if(isRoleManager==2)
+					{
+						district=ApprovedConstants.ApplicationDistrict.district_ding;
+					}
+					
+					if(!ChangeConstants.isAllDistrict(district))
+					{
+						queryMap.put("serviceOwner", district);				
+						
+					}
+					result.setOthers(ChangeConstants.Application_Owner,"0");
+				}
+				//get crete by myself
+				else
+				{
+					queryMap.put("createPerson",currentUser.getPhone());				
+					result.setOthers(ChangeConstants.Application_Owner,"1");
+				}
+				List<CommonBiz>commonBizs =service.countServicePerson(this.getCurrentUser(), queryMap);
+				result.setLists(commonBizs);
+				result.setResult(result.SUCCESS);
+			}//if (null != currentUser) {
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+ 
+		
+		return result.toString();
+	}
 	
 	@RequestMapping(value = "/getApplication/listByDistrict", method = { RequestMethod.GET,
 			RequestMethod.POST })
-	public @ResponseBody String getApplicationListByDistrict(String categoryId,String serviceType) {
+	public @ResponseBody String getApplicationListByDistrict(String categoryId,String serviceType,String status) {
 		ResultVO<CommonBiz> result = new ResultVO<>();
 		try {
 			//获取当前登录用户信息		
 			User currentUser = getCurrentUser();
 			//判断如果用户不为空
 			if (null != currentUser) {
-				
-				
-				
 				Long userId = currentUser.getId();
 				logger.debug("Current User's ID is : " + userId);
 				Map<String, Object> queryMap = new HashMap<String, Object>();
 				queryMap.put("projectCategory", categoryId);
-				queryMap.put("serviceType", serviceType);			
-				
+				queryMap.put("serviceType", serviceType);
+				//queryMap.put("userid", userId);
+				if(!StringUtils.isBlank(status))
+				{
+					queryMap.put("status", status);	
+				}
 				
 				//queryMap.put("permissionType", DataPermission.PERMISSIONTYPE_USER);				
 				//queryMap.put("permissionId", currentUser.getId().toString());				
@@ -311,6 +465,7 @@ public class CommonBizController extends BaseController {
 				//get crete by myself
 				else
 				{
+					queryMap.put("userid", userId);
 					queryMap.put("createPerson",currentUser.getPhone());				
 					result.setOthers(ChangeConstants.Application_Owner,"1");
 				}
@@ -332,7 +487,132 @@ public class CommonBizController extends BaseController {
 		}
 		return result.toString();
 	}
+   
+	/**
+	 * 第三方下载申报数据
+	 * @param categoryId
+	 * @param serviceType
+	 * @param status
+	 * @return
+	 */
+	@RequestMapping(value = "/getApplication/downloadApp", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String downloadAppByDistrict(HttpServletRequest request,String categoryId,String serviceType,String status) {
+		ResultVO<CommonBiz> result = new ResultVO<>();
+		try {
+			if(StringUtils.isBlank(categoryId))
+			{
+				categoryId = "canlian";	
+			}
+			if(StringUtils.isBlank(serviceType))
+			{
+				serviceType="application";
+			}
+			
+			
+			
+			//获取当前登录用户信息		
+			User currentUser = getCurrentUser();
+			//判断如果用户不为空
+			if (null != currentUser) {
+				
+				
+				
+				Long userId = currentUser.getId();
+				logger.debug("Current User's ID is : " + userId);
+				Map<String, Object> queryMap = new HashMap<String, Object>();
+				queryMap.put("projectCategory", categoryId);
+				queryMap.put("serviceType", serviceType);
+				
+				if(!StringUtils.isBlank(status))
+				{
+					queryMap.put("status", status);	
+				}
+				
+				//queryMap.put("permissionType", DataPermission.PERMISSIONTYPE_USER);				
+				//queryMap.put("permissionId", currentUser.getId().toString());				
+				
+				
+				
+				//获取当前用户角色,
+				//0 -- projectmanager 1-- manager  2 -- threeleader
+				int isRoleManager = 0;
+				List<Long> roles = currentUser.getRoleIds();
+				if (roles.size() > 0) {
+					
+					for (Long rolesid : roles) {
+						if(roleId_departLeader==rolesid||roleId_committee==rolesid)
+						{
+							isRoleManager=1;
+							
+						}
+						if(roleId_threeLevelsLeader==rolesid)
+						{
+							//
+							isRoleManager=2;
+							break;
+						}
+					}
 
+				}
+				
+				if(isRoleManager>0)
+				{
+					//获取当前用户的所在地区
+					String district = currentUser.getAddress();
+					if(isRoleManager==2)
+					{
+						district=ApprovedConstants.ApplicationDistrict.district_ding;
+					}
+					
+					if(!ChangeConstants.isAllDistrict(district))
+					{
+						queryMap.put("serviceOwner", district);				
+						
+					}
+					result.setOthers(ChangeConstants.Application_Owner,"0");
+				}
+				//get crete by myself
+				else
+				{
+					queryMap.put("userid", userId);
+					queryMap.put("createPerson",currentUser.getPhone());				
+					result.setOthers(ChangeConstants.Application_Owner,"1");
+				}
+				
+				
+				//根据当前用户信息分页获取数据监测
+				Page<CommonBiz> page = service.selectQueryBizNoPage(currentUser,
+						queryMap);
+				result.setPage(page);
+				result.setLists(page.getList());
+				
+				
+				//获取模版文件目录
+				String templateFile = request.getSession().getServletContext()
+						.getRealPath(uploadPath)+File.separator +ApplicationExportExcel.getInstance().getDefaultAppTemplateFile();
+				//设置上传目录，用于获取申报书等
+				ApplicationExportExcel.getInstance().setUploadDir(request.getSession().getServletContext()
+						.getRealPath(uploadPath));
+				String tempRelativeFile = ApplicationExportExcel.getInstance().getTempRelativeFilePath();
+				String destPath = request.getSession().getServletContext()
+						.getRealPath(ApplicationExportExcel.getInstance().getApplicationTempPath())+ File.separator+tempRelativeFile;
+				String zipDestFile = ApplicationExportExcel.getInstance().createApplicationReport(page.getList(),destPath, templateFile);
+				result.setOthers("exportApplicationFile", zipDestFile);
+				
+			}else{
+				logger.debug("Current user's infomation is null");
+				// 给客户端响应
+				result.setResult(ResultVO.USERNULL);
+			}
+		} catch (Exception e) {
+			result.setResult(ResultVO.EXCEPTION);
+			e.printStackTrace();
+		}
+		return result.toString();
+	}
+
+	
 	
 	// 根据项目类别和业务类型以及当前用户角色信息查询
 		@RequestMapping(value = "/getByCatetgoryAndServiceType/list", method = { RequestMethod.GET,

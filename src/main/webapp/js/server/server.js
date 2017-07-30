@@ -3274,7 +3274,7 @@ function getCooMartsprojectShenBaoByServer(obj, callBack){
  * **/
 function getDepartmentOptimizeList(obj, callBack){
 	var options ={
-        "url": "/publish/getNeedOptimizeList/list",
+        "url": "/publish/listByDistrict",
         "data": obj,
         callBack: function(data) {
             callBack(data);

@@ -32,7 +32,15 @@ public interface ApprovedConstants {
 	    int needChange = 1;//需要修改
 	    int reject = 2;//没有中标
 	    int agree = 3;//中标
+	    String status_ApplyConclude = "25501";
 	}
+	
+	public interface Application_type{
+		String APP_SHENGQING="shenqing";
+		String APP_DING="ding";
+		String APP_WEI="wei";
+	}
+	
 	public interface ApplicationDistrict{
 		String district_ding="keshi";
 	}

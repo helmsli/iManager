@@ -2,9 +2,16 @@
 <html data-ng-app="App">
 	<head>
 		<meta charset="UTF-8">
+		<META HTTP-EQUIV="pragma" CONTENT="no-cache">    
+   		 <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">    
+    	<META HTTP-EQUIV="expires" CONTENT="0">    
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+            
         <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
-		<title>Manager system</title>
+		 <meta http-equiv="Expires" content="-1">
+	    <meta http-equiv="Cache-Control" content="no-cache">
+	    <meta http-equiv="Pragma" content="no-cache">
+		<title>政府购买服务项目管理及信用系统</title>
 		
 		<!-- Plugin Css -->
     	<link href="../../../plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -109,12 +116,12 @@
 				<div class="panel" ng-init="initModel()">
 					<div class="panel-heading">
 						<div class="row" >
-							<h2 class="panel-title col-lg-10 col-md-8 col-sm-10 col-xs-10">项目申报审批</h2>
+							<h2 class="panel-title col-lg-10 col-md-8 col-sm-10 col-xs-10" id="approveTitle">项目申报审批</h2>
 							<span class="abs pull-right-20" style="display:none;">
 								<button type="button" class="btn btn-primary waves-effect" onClick="downloadProject()" >下载</button>
 							</span>
 							<div ng-show="show_btn_refresh" class="col-lg-1 col-md-2 col-sm-2 col-xs-2 p-l-0" style="padding-top:1px;"><button id="searchButton"  type="button" class="btn btn-primary waves-effect" onClick="windowReload()">刷新</button></div>
-							<div ng-show="show_btn_application" class="col-lg-1 col-md-2 col-sm-2 col-xs-2 p-l-0" style="padding-top:1px;"><button id="searchButton"  type="button" class="btn btn-primary waves-effect" onClick="modifyApplication()">修改申报书</button></div>
+							<div ng-show="show_btn_application" class="col-lg-1 col-md-2 col-sm-2 col-xs-2 p-l-0" style="padding-top:1px;"><button id="btn_modifyapply"  type="button" class="btn btn-primary waves-effect" onClick="modifyApplication()">修改申报书</button></div>
 							
 						</div>
 					</div>

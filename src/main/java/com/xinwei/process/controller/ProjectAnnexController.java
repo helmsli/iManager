@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.task.Task;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,6 +46,7 @@ import com.xinwei.process.entity.ProjectAnnex;
 import com.xinwei.process.service.ProcessService;
 import com.xinwei.process.service.ProjectAnnexService;
 import com.xinwei.process.service.UserTaskService;
+import com.xinwei.process.service.impl.ApplicationExportExcel;
 import com.xinwei.security.entity.User;
 import com.xinwei.security.vo.ResultVO;
 import com.xinwei.system.xwsequence.service.XwSysSeqService;
@@ -362,6 +364,107 @@ public class ProjectAnnexController extends BaseController{
 	        } catch (IOException e) {  
 	        	 e.printStackTrace();
 	        }  
+	    }
+	}
+	
+	
+	@RequestMapping(value="/downLoadExport",produces = "text/html;charset=UTF-8")   
+	public void downLoadExport(HttpServletRequest request, HttpServletResponse response,String fileName,String localFile,String type) {  
+		logger.debug("fileDownLoad --> annexName: " + fileName + type);
+		FileInputStream fis = null;
+	    BufferedInputStream bis = null;
+	    OutputStream os = null;
+	    String path=null;
+	    try{
+	    	if(StringUtil.isNotEmpty(fileName)){
+	    		//浏览器下载后的文件名
+	    		if(StringUtils.isEmpty(localFile))
+	    		{
+	    			localFile=fileName;
+	    		}
+	    		path = request.getSession().getServletContext().getRealPath(uploadPath);   
+	    		
+	    		if(type.compareToIgnoreCase("applyExport")==0)
+	    		{
+	    			path= request.getSession().getServletContext().getRealPath(ApplicationExportExcel.getInstance().getApplicationTempPath());
+	    		}
+		    	
+		    	 
+		    	//response.setHeader("charset","GKB");
+		    	//解决下载文件中文乱码的问题
+		    	String as = java.net.URLEncoder.encode(localFile);
+		    	String urlfileName = new String(localFile.getBytes("GB2312"), "ISO_8859_1");
+		    	
+	    		response.setHeader("Content-disposition", "attachment; filename="   + urlfileName );
+	    		//		+new String(originalFilename.getBytes(Charset.forName("UTF-8")),"ISO8859-1"));
+	    		response.setContentType("application/force-download");// 设置强制下载不打开
+	    		//文件上传地址
+	    		   
+	    		byte buffer [] = new byte[1024*1024*1];//1M    
+	    		fis = new FileInputStream(new File(path,fileName));  
+	    		bis = new BufferedInputStream(fis);
+	    		os = response.getOutputStream();
+	    		int length = 0;
+	    		while(-1!=(length=bis.read(buffer))){  
+	    			os.write(buffer,0,length);//每次写1M  
+	    		}  
+	    		os.flush();
+	    		
+	    		
+	    	}
+	    }catch (Exception e) {
+	    	logger.error("fileDownLoad erro : "+ e.getMessage());
+	        e.printStackTrace();
+	    }finally{  
+	        try {  
+	            if(os!=null){  
+	                os.close();  
+	            }
+	            if(bis!=null){  
+	                bis.close();  
+	            }
+	            if(fis!=null){
+	            	fis.close();
+	            }
+	        } catch (IOException e) {  
+	        	 e.printStackTrace();
+	        }  
+	    }
+	    try {
+			ApplicationExportExcel.getInstance().deleteFile(path+File.separator+fileName);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@RequestMapping(value="/removeExport",produces = "text/html;charset=UTF-8")   
+	public void removeExport(HttpServletRequest request, HttpServletResponse response,String fileName,String type) {  
+		logger.debug("fileDownLoad --> annexName: " + fileName + type);
+		FileInputStream fis = null;
+	    BufferedInputStream bis = null;
+	    OutputStream os = null;
+	    try{
+	    	if(StringUtil.isNotEmpty(fileName)){
+	    		//浏览器下载后的文件名
+	        	String path = request.getSession().getServletContext().getRealPath(uploadPath);   
+	    		
+	    		if(type.compareToIgnoreCase("applyExport")==0)
+	    		{
+	    			path= request.getSession().getServletContext().getRealPath(ApplicationExportExcel.getInstance().getApplicationTempPath());
+	    		}
+		    	
+		    	 
+		    	 
+	    		ApplicationExportExcel.getInstance().deleteFile(path + File.separator + fileName);
+	    		
+	    	}
+	    }catch (Exception e) {
+	    	logger.error("fileDownLoad erro : "+ e.getMessage());
+	        e.printStackTrace();
+	    }finally{  
+	       
 	    }
 	}
 	

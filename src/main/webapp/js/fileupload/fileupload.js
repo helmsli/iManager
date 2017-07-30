@@ -61,6 +61,32 @@
 			form.appendChild(oldElement);
 			body.appendChild(form);
 		}
+		else
+		{
+			try{
+			
+			var oldElement = document.getElementById(fileId);
+			//移除老的文件
+			form.removeChild(oldElement);
+			}
+			catch(e)
+			{
+				
+			}
+			
+			oldElement = document.getElementById(fileElementId);
+			var newElement = oldElement.cloneNode(true);
+			var body=document.body;
+			//
+			var oldParent=oldElement.parentElement;
+			//在老的位置前出入新的
+			oldParent.insertBefore(newElement,oldElement);
+			var time=new Date();
+			oldElement.id=fileId;
+			form.appendChild(oldElement);
+			body.appendChild(form);
+			
+		}
 		return form;
 		
 	};
@@ -143,6 +169,7 @@
 	};
 	
 	
+	
 	uploadFile.uploadAjax=function(options)
 	{
 		var xhr = null;
@@ -166,6 +193,7 @@
 							options.success(resultData);
 						}else{
 							options.error(resultData);
+		
 						}
 					}
 				};

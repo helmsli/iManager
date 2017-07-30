@@ -4,6 +4,9 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+		  <meta http-equiv="Expires" content="-1">
+	    <meta http-equiv="Cache-Control" content="no-cache">
+	    <meta http-equiv="Pragma" content="no-cache">
 		<title>项目管理及信用系统</title>
 		
 		<!-- Plugin Css -->
@@ -31,7 +34,18 @@
 			<div id="page-wrapper" ng-controller="myDataController">
 				<div class="panel">
 					<div class="panel-heading">
-						<h2 class="panel-title">待申报的项目</h2>
+						<div class="row" style = "">
+							<div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 ">
+							<h2 class="panel-title">申报信息汇总</h2>
+							</div>
+							<div class="col-lg-6 col-md-5 col-sm-1 col-xs-1">
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-4 col-xs-4">
+							
+							 <span class="btn-group"><button style="margin-left:0px;" id="exportApplyDetail" type="button" class="btn btn-primary waves-effect" ng-click="exportApplyDetail()">导出申报明细</button></span>
+		                         	    
+		                    </div>   
+						</div>
 					</div>
 					<div class="panel-body min-height-550">
 						<div class="table-responsive">
@@ -41,18 +55,14 @@
 			                       		<th ng-repeat="i in titleList">{{i}}</th>
 			                       </tr>
 			                    </thead>
-			                    <tbody class="dataList" ng-init="initMyTaskForShenBao();"><!--tbody的class名不能为‘show’,否则表格不能自动撑开-->
+			                    <tbody class="dataList" ng-init="initCountServicePerson();"><!--tbody的class名不能为‘show’,否则表格不能自动撑开-->
 				                  	<tr id="box" ng-repeat="data in dataList">
-			                        	<td width="10%">{{data.publishId}}</td>
-			                            <td width="22%">{{data.serviceType}}</td>
-		                            	<td width="34%">{{data.title}}</td>
-		                            	<td width="20%">{{data.createTime}}</td>
-	                           			<td width="14%">
-		                                	<a href="javascript:void(0);" class="p-r-10" ng-show="data.canDeclareFlag" ng-click="declareDepartLeaderRelease(data.publishId,'complete')">申报</a>                             	
-	                            	        <a href="javascript:void(0);" class="p-r-10" ng-show="data.canDeclareFlag" ng-click="downloadAttatchment(data.publishId,data.data2)">下载申报书</a>                             	
-	                            	        
-	                            	        <a href="javascript:void(0);" class="p-r-10" ng-show="!data.canDeclareFlag" ng-click="openSeeDepartLeaderRelease(data.publishId,'complete')">查看</a>
-	                            		</td>
+			                        	<td width="20%">{{data.apply_type}}</td>
+			                            <td width="20%">{{data.data1}}</td>
+		                            	<td width="20%">{{data.projectId}}</td>
+		                            	<td width="20%">{{data.processInstanceId}}</td>
+		                            	<td width="20%">{{data.data2}}</td>
+	                           			
                						</tr>
 			                    </tbody>
 			                </table>
@@ -74,16 +84,7 @@
 		                	</div>
 		                </div>
 		                <!-- / .table-tips -->
-		                <div class="row hide" id="tabPageNav">
-            				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                				<div class="checkAll-group">&nbsp;</div>
-                			</div>
-                			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                				<div class="dataTables_paginate">
-                					<ul class="pagination pagination_reset" id="pageNav" data-ng-init="showInFo()"></ul>
-                				</div>
-                			</div>
-            			</div>
+		                
 					</div>
 				</div>
 				<!-- / .panel -->
@@ -122,5 +123,5 @@
     <!-- 业务信息 -->
     <script src="../../js/process_global/projectList/myApply_initApi.js" type="text/javascript"></script>
 	<script src="../../js/process_global/projectList/setProjectList_uiShenBao.js" type="text/javascript"></script>
-	<script src="../../js/process_global/projectList/projectManager.js" type="text/javascript"></script>
+	<script src="../../js/process_global/projectList/countServicePerson.js?ver=1.0" type="text/javascript"></script>
 </html>

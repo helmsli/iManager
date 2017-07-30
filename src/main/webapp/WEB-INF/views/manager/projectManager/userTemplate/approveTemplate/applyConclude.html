@@ -1,0 +1,82 @@
+<meta charset="UTF-8">
+
+<!-- / .col-12 -->
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"  id="decisionCommittee" >
+	<div class="row p-t-5 p-b-5 clearfix" >
+	
+	  
+	      <!--  指定监测时间开始-->
+        <div class="row clearfix">
+        <!-- 项目名称 -->
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-show="true">
+	        	<div class="row clearfix">
+	        		 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 p-r-0 form-control-label r-chk-rad">
+						<label for="username"><span style="color:#ff0000;">*</span>申报单位：</label>
+					 </div>
+			        <div class="col-lg-5 col-md-8 col-sm-10 col-xs-10">
+			            <div class="form-group">
+			                <div class="form-line">
+			                	<input type="text"  maxlength="20"  class="form-control" ng-model="commonbiz.data3" name="application.companyName" id="companyName"   />
+			                </div>
+			            </div>
+			        </div>
+				</div>
+				
+				<div class="row clearfix">
+	        		 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 p-r-0 form-control-label r-chk-rad">
+						<label for="username"><span style="color:#ff0000;">*</span>项目名称：</label>
+					 </div>
+			        <div class="col-lg-5 col-md-8 col-sm-10 col-xs-10">
+			            <div class="form-group">
+			                <div class="form-line">
+			                	<input type="text"  maxlength="20"  class="form-control" ng-model="commonbiz.projectName" name="application.companyName" id="companyName"   />
+			                </div>
+			            </div>
+			        </div>
+				</div>
+				
+				
+				<div class="row clearfix">
+			                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 p-r-0 form-control-label  r-chk-rad"><label>项目结项材料:</label></div>
+			                                    
+			                                <div class="col-lg-5 col-md-8 col-sm-10 col-xs-10" style="">
+			                                   			
+			                                     <label class="form-label" style="text-algin:left;">请按照结项模版要求填写结项材料。将多个结项文件压缩后上传(请压缩为ZIP格式的文件上传)</label>			
+			                                      <a class="canlianlabel" href="javascript:downloadApplicationTemplate();">如果恁没有模板，请点击下载模板</a>
+			                                   
+			                                    <div class="form-group"">
+			                                        <div class="form-line">
+			                                        	<div class="file-group">
+			                                        	 
+			               									<input type="text" name="fileName" id="textfile_applicationFile" class="form-control" placeholder="选择要上传的项目申报书..." />
+			                   								<input type="button" value="选择文件" class="btn btn-primary"/ style="">
+			                   								<input type="file" name="filefield" id="file_applicationFile" onchange="document.getElementById('textfile_applicationFile').value=this.value;uploadApplication('file_applicationFile',this);" />
+			                   							    
+			                   							  			
+			                   							</div>
+			                   						   
+			                                        </div>
+			                                    </div>
+			                                </div>
+			                               
+			                            </div>
+			                            
+        	</div>
+        	<!-- end of 项目名称 -->
+        	
+        	
+        </div>
+  </div>
+  <div class="p-t-15 align-center col-lg-8 col-md-8 col-sm-10 col-xs-10">
+	   <button type="button" id="btn_application" class="btn btn-success waves-effect m-r-5"  onclick="submitConclude()">提交</button>
+	   <button type="button" class="btn btn-primary waves-effect m-l-5" ng-click="cancelMyapplySeeWin();">关闭</button> 
+	   <!-- committeeSuggestionDate();managerSuggestionDate() -->
+	   <!-- 操作按钮结束 -->
+  </div>
+</div>
+
+<script>
+//g_state由系统定义，确定办理的步骤
+var scope=getAngularScope("projectModel");
+globalRegisterHtml(scope.gloablParm.state);
+</script>

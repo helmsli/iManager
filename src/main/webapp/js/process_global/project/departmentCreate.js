@@ -1,6 +1,49 @@
 var roleIds={
 		threeLeader:22
 }
+
+var applicationvalidOptions= [];
+applicationvalidOptions = [{
+	"id":"companyName",
+	"validateRule":{"require":true}	
+},{
+	"id":"projectName",
+	"validateRule":{"require":true}
+},{
+	"id":"amount",
+	"validateRule":{"require":true}
+},{
+	"id":"serviceAmount",
+	"validateRule":{"isPositNumber":true,"require":true}
+},{
+	"id":"registerAddress",
+	"isOnChange":false,
+	"validateRule":{"require":true}
+
+},{
+	"id":"companyRegisterAddress",
+	"isOnChange":false,
+	"validateRule":{"require":true}
+
+},{
+	"id":"input_projectTitle",
+	"validateRule":{"require":true}
+},{
+	"id":"input_releaseUrl",
+	"validateRule":{"require":true}
+},{
+	"id":"input_project_desc",
+	"validateRule":{"require":true}
+
+},{
+	"id":"companyRegisterAddress",
+	"validateRule":{"require":true}
+}
+
+
+];
+
+
 App.controller('projectManagerModel', ['$scope',initScope]);
 function initScope($scope) {
 	$scope.id="";
@@ -8,7 +51,36 @@ function initScope($scope) {
 	//配置项目类型
 	$scope.projectTypes=[{name:"请选择项目类型"},{name:"定向项目",id:"dingxiang"},{name:"申请项目",id:"shenqing"}];
 	//$scope.project.projectType="定向项目";
+	$scope.publish={};
+	$scope.formValid = new FormValid({"formId":"formApplication",formField:applicationvalidOptions});
 	
+	try 
+    { 
+     $scope.beijing_diqu = beijing_diqu;
+     $scope.XiangMu_diqu = XiangMu_diqu;
+     console.log(beijing_diqu);
+     console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+    }
+    catch (e) 
+    {}
+    
+    $scope.selectCompanyDistrict =function(code,name)
+	{
+		
+		
+		setTimeout(function () {
+			 $scope.$apply(function() {
+			$scope.publish.companyRegisterAddress=name;
+			$scope.publish.companyRegisterAddressCode=code;
+			 });
+			
+			 var checkbox = document.getElementById("company-"+code);
+				checkbox.checked = false; 
+		     // AngularJS unaware of update to $scope
+		  }, 200);
+		$('#modelForRegisterAddress').modal('hide');
+		
+	}
 	$scope.project={
 			title:"",
 			description:"",
@@ -219,10 +291,19 @@ function getDetail(){
 function submitCreate()
 {
 	//alert("submit");
+	
+	
+	
 	var userInfo= localStorage.getItem("userInfo");
 	roleIdValue=JSON.parse(userInfo).roleIds[0];
 	
 	var scope=getAngularScope("projectManagerModel");
+	
+	var subFlag=scope.formValid.beforeSubmit();
+	if(!subFlag )
+	{
+		return;
+	}
 	var parm = parseQueryString();
 	var projectName=parm.projectName;
 	var publishId=parm.publishId;
@@ -242,7 +323,7 @@ function submitCreate()
 	scope.threeLeaderIdLsit=unique(scope.threeLeaderIdLsit);
 	var data4 = {assignThreeEval:scope.project.assignThreeEval,releaseUrl:scope.project.releaseUrl};
 	//alert("data4");
-	//alert(JSON.stringify(data4));
+	alert(JSON.stringify(data4));
 	var obj={	
 			"request.departleaderPublishId":publishId,
 			"request.title":scope.project.title,
@@ -250,32 +331,25 @@ function submitCreate()
 		    "request.serviceType":scope.project.projectType,
 			"request.description":scope.project.description,
 			"request.assignPersonText":scope.project.assignorganization,
-			"request.data1":JSON.stringify(scope.orgazationIdLsit),//要发给后台的指定申报的三级部门列表
+			"request.data1":scope.publish.companyRegisterAddressCode,
 			"request.data2":data2,
 			"request.data3":JSON.stringify(threeEvalList),
-			"request.data4":JSON.stringify(data4)
-			
+			"request.data4":JSON.stringify(data4),
+			"request.data5":JSON.stringify(scope.orgazationIdLsit),//要发给后台的指定申报的三级部门列表
+			"request.data6":scope.publish.companyRegisterAddress
 			
 	};
 	//console.log("发送给后台的obj");
 	console.log(JSON.stringify(obj));
+	
+	leaderCreate(result,obj,function(data){
+		if(data.result == 0){	
+			window.history.go(-1);
+		}
+    });
+	
 	//如果是三级部门经理的话则承接部门经理的发布再发布
-	if(roleIdValue==roleIds.threeLeader&&publishId!=undefined&&publishId!=null){
-		threeLeaderCreate(result,obj,function(data){
-			console.log("三级部门经理");
-			console.log(data);
-			if(data.result == 0){	
-				window.history.go(-1);
-			}
-	    })
-	}else{
-		//部门经理的发布
-		leaderCreate(result,obj,function(data){
-			if(data.result == 0){	
-				window.history.go(-1);
-			}
-	    });
-	}
+	
 	
 }
 /**

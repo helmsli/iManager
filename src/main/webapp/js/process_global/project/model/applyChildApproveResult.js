@@ -1,7 +1,4 @@
-var STATUS_APPLY="0";
-var STATUS_NEED_CHANGE="1";
-var STATUS_REJECTED = "2";
-var STATUS_AGREED = "255";
+
 
 //回调函数
 function changeEnghlish(string){
@@ -18,6 +15,9 @@ function changeEnghlish(string){
 }
 function approvalRefreshUi()
 {  
+	
+	gueryApprovalResult();
+	
 	var scope=getAngularScope("projectModel");
 	//var title = APPROVE_TITLE[scope.gloablParm.state];
 	scope.suggestion={
@@ -197,8 +197,12 @@ function ajaxApprove(obj,callBack){
 
 function initApproval()
 {
-	gueryApprovalResult();
+	try{
+	
 	initFileStateListener(approvalRefreshUi);
+	}
+	catch(e)
+	{}
 }
 //只允许输入数字
 function digitInputInt(el, e) {  

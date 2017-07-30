@@ -21,7 +21,7 @@ App.controller('myDataController', ['$scope', '$ocLazyLoad', function($scope) {
         	userInfo=JSON.parse(userInfo);
 	        userId=userInfo.uid;
         var obj={
-	    		  "request.userId":userId
+	    		  "request.categoryId":2
 	    };
         //查看所有正在运行的项目列表
 	    getAllProjectDataList(obj);
@@ -87,8 +87,25 @@ App.controller('myDataController', ['$scope', '$ocLazyLoad', function($scope) {
 
 //获取后端数据(coomarts,camtalk,lottery)
 function getAllProjectDataList(obj){
-	getAllProjectDataListByServer(obj,getAllProjectDataListCall);
+	funMessageNotify(obj,getAllProjectDataListCall);
 }
+
+function funMessageNotify(obj,callBack){
+	console.log("nnnnnnnnnnnnnnnnnnnnn");
+	var options ={
+	        "url": "/publish/listByDistrict",
+	        "data": obj,
+	        callBack: function(data) {
+	            callBack(data);
+	        },
+	        errCallBack:function(e)
+	        {
+	            console.log("服务器异常");
+	        }
+	    };
+	 requestAjax(options); 
+}
+
 
 //返回前10条数据列表
 function setTopData(name,topName){
@@ -107,25 +124,50 @@ function setTopData(name,topName){
 //前端UI界面渲染(coomarts,camtalk,lottery)
 function getAllProjectDataListCall(data){
 	var scope=getAngularScope("myDataController");
+	console.log("data((((((((((((((");
+	console.log(data);
 	if(data.result == 0){
 		var coomartsTopList=[];
 		var camtalkTopList=[];
 		var lotteryTopList=[];
-		var coomartsDataList = data.responseInfo.runnigProjects.coolMarsProjects;
+		var coomartsDataList = [];
 		 	scope.coomartsDataList=coomartsDataList;
-		var camtalkDataList = data.responseInfo.runnigProjects.camTalkProjects;
+		var camtalkDataList = [];
 			scope.camtalkDataList=camtalkDataList;
-		var lotteryDataList = data.responseInfo.runnigProjects.lotteryProjects;
+		var lotteryDataList = [];
 			scope.lotteryDataList=lotteryDataList;
+			
+		var messageNotifyList = data.responseInfo.lists;
+		scope.initMessageNotifyList=messageNotifyList;
+		scope.messageNotifyList = [];
+		for(var i =0;i<messageNotifyList.length;i++)
+		{
+			if(messageNotifyList[i].title.length<20)
+			{
+				for(var j=messageNotifyList[i].title.length;j<30;j++)
+				{
+					messageNotifyList[i].title=messageNotifyList[i].title+"  ";
+				}
+			}
+			scope.messageNotifyList.push(messageNotifyList[i]);
+			
+			if(i>=9)
+				{
+				break;
+				}
+		}
 		scope.$apply(function () {
+			//scope.messageNotifyList=messageNotifyList;
 			scope.coomartsTopList=setTopData(coomartsDataList,coomartsTopList);
 			scope.camtalkTopList=setTopData(camtalkDataList,camtalkTopList);
 			scope.lotteryTopList=setTopData(lotteryDataList,lotteryTopList);
 		      });
+		console.log("aaaaaaaaaaaaaaaaaaaaa");
+		console.log(scope.messageNotifyList);
 		var  coomartsLength=scope.coomartsTopList.length;
 		var  camtalkLength=scope.camtalkTopList.length;
 		var  lotteryLength=scope.lotteryTopList.length;
-		if(coomartsLength>=5){
+		if(messageNotifyList.length>=10){
 			scope.moreFlag.coomartsMore=true;
 		}
 		if(camtalkLength>=5){
@@ -215,7 +257,7 @@ function getAllProjectDataListCall(data){
 			  //在这里处理错误
 			  }
 		}
-		if(scope.coomartsDataList.length == 0){
+		if(scope.messageNotifyList.length == 0){
 			$("#coomartsNoData").removeClass("hide");
 		}
 		if(scope.coomartsDataList.length == 0){
@@ -267,9 +309,9 @@ function openMoreProjectWin(projectName){
 	 currentUserId=currentUserId.uid;
 	 var from ="";
 	 if(currentUserId == 4){
-		 url = projectName+"/myApply.html?projectName="+projectName;
+		 url = projectName+"/departmentOptimize.html?projectName="+projectName;
 	}else{
-		url = projectName+"/myAllprojectMarch.html?projectName="+projectName;
+		url = projectName+"/departmentOptimize.html?projectName="+projectName;
 	}
 	location.href=url;
 }

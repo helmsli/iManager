@@ -1,0 +1,1 @@
+update security_menu set description="申报项目汇总" where description="待申报的项目";

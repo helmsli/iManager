@@ -31,7 +31,7 @@
 	    
 	    "-1014":"XiaYueZhongDaJihua_ISNULL",
 	    "-1015":"YueFen_ISNULL",
-	    "-1050":"YueFen_ISNULL",
+	    "-1050":"Monthly_ProjectName_ISNULL",
 	    
 	    
 			

@@ -21,6 +21,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 
  * 类简要描述
@@ -37,8 +39,8 @@ public class ZipUtils
 {
 	public static void main(String[] args)
 	{
-		String targetPath = "D:\\zipTest\\OnlineHall_V40.01.01.02_patch01_20170508_wch";
-		File file = ZipUtils.zip(targetPath);
+		String targetPath = "C:/Users/helmsli/Documents/db";
+		File file = ZipUtils.zip(targetPath,null);
 		System.out.println(file);
 		// ZipUtil.unzip("D:\\zipTest\\OnlineHall_V40.01.01.02_patch01_20170508_wch.zip");
 	}
@@ -49,7 +51,7 @@ public class ZipUtils
 	 * @param filePath
 	 *            待压缩的文件路径
 	 * @return 压缩后的文件
-	 */
+	 
 	public static File zip(String filePath)
 	{
 		File target = null;
@@ -83,6 +85,50 @@ public class ZipUtils
 		}
 		return target;
 	}
+	*/
+	
+	
+	public static File zip(String filePath,String destFile)
+	{
+		File target = null;
+		File source = new File(filePath);
+		if (source.exists())
+		{
+			// 压缩文件名=源文件名.zip
+			String zipName=source.getName() + ".zip";
+			if(!StringUtils.isBlank(destFile))
+			{
+				 zipName = destFile + ".zip";	
+			}
+			
+			
+			
+			target = new File(source.getParent(), zipName);
+			if (target.exists())
+			{
+				target.delete(); // 删除旧的文件
+			}
+			FileOutputStream fos = null;
+			ZipOutputStream zos = null;
+			try
+			{
+				fos = new FileOutputStream(target);
+				zos = new ZipOutputStream(new BufferedOutputStream(fos));
+				// 添加对应的文件Entry
+				addEntry("/", source, zos);
+			}
+			catch (IOException e)
+			{
+				throw new RuntimeException(e);
+			}
+			finally
+			{
+				closeQuietly(zos, fos);
+			}
+		}
+		return target;
+	}
+	
 	
 	/**
 	 * 解压文件

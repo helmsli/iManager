@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.xinwei.process.constant.ApprovedConstants;
+import com.xinwei.process.constant.ChangeConstants;
 import com.xinwei.process.constant.DepartmentLeaderPublishConstants;
 import com.xinwei.process.constant.ProjectConstants;
 import com.xinwei.process.entity.ApprovalResult;
@@ -24,6 +26,7 @@ import com.xinwei.process.entity.DepartleaderPublish;
 import com.xinwei.process.entity.PublishOptimize;
 import com.xinwei.process.service.DataPermissionService;
 import com.xinwei.process.service.DepartleaderPublishService;
+import com.xinwei.security.MessageCode;
 import com.xinwei.security.entity.User;
 import com.xinwei.security.vo.ResultVO;
 import com.xinwei.util.JsonUtil;
@@ -123,7 +126,50 @@ public class DepartleaderPublishController extends BaseController {
 		logger.debug("departleaderPublish --> result: " + result.toString());
 		return result.toString();
 	}
+    
+	
+	/**
+	 * 部门经理发布
+	 * 
+	 * @param
+	 * @return
+	 */
+	@RequestMapping(value = "/createDistrict", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String bumenjlfbDistrict(DepartleaderPublish departleaderPublish) {
+		logger.debug("departleaderPublish start....:" + departleaderPublish.toString());
+		ResultVO<Object> result = new ResultVO<>();
+		try {
+			// 获取当前登录用户信息
+			User currentUser = getCurrentUser();
+			// 判断如果用户不为空
+			if (null != currentUser) {
+				// 当前用户ID
+				String userId = currentUser.getId().toString();
+				// 设置发布创建用户
+				departleaderPublish.setCreatePerson(userId);
+				// 保存发布信息
+				// 如果定向项目创建初期需要第三方评估进行相关优化
+								Long departleaderPublishId = departleaderPublishServiceImpl.save(departleaderPublish);
 
+				// 给客户端响应
+				result.setOthers("departleaderPublishId", departleaderPublishId);
+				logger.debug("bumenjlfb -->departleaderPublishId:  " + departleaderPublishId);
+			} else {
+				// 给客户端响应
+				result.setResult(ResultVO.USERNULL);
+			}
+		} catch (Exception e) {
+			logger.debug(e.getMessage());
+			e.printStackTrace();
+			// 给客户端响应
+			result.setResult(ResultVO.EXCEPTION);
+		}
+		logger.debug("departleaderPublish --> result: " + result.toString());
+		return result.toString();
+	}
+
+	
+	
 	/**
 	 * 项目优惠信息
 	 * @param departleaderPublish
@@ -226,6 +272,90 @@ public class DepartleaderPublishController extends BaseController {
 		return result.toString();
 	}
 
+	/**
+	 * 根据操作员地区查询发布信息，按照时间倒序排序
+	 * @return
+	 */
+	@RequestMapping(value = "/listByDistrict", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String getListByDistrict(Long categoryId) {
+		ResultVO<DepartleaderPublish> result = new ResultVO<>();
+		try {
+			
+			// 获取当前登录用户信息
+			User currentUser = getCurrentUser();
+			// 判断如果用户不为空
+			if (null != currentUser) {
+
+				// 获取当前用户ID
+				Long userId = currentUser.getId();
+				logger.debug("Current User's ID is : " + userId);
+				Map<String, Object> queryMap = new HashMap<String, Object>();
+				queryMap.put("categoryId", categoryId.toString());
+				int isRoleManager = 0;
+				List<Long> roles = currentUser.getRoleIds();
+				if (roles.size() > 0) {
+					
+					for (Long rolesid : roles) {
+						if(roleId_departLeader==rolesid||roleId_committee==rolesid)
+						{
+							isRoleManager=1;
+							
+						}
+						if(roleId_threeLevelsLeader==rolesid)
+						{
+							//
+							isRoleManager=2;
+							break;
+						}
+					}
+
+				}
+				
+				if(isRoleManager>0)
+				{
+					//获取当前用户的所在地区
+					String district = currentUser.getAddress();
+					if(isRoleManager==2)
+					{
+						district=ApprovedConstants.ApplicationDistrict.district_ding;
+					}
+					
+					if(!ChangeConstants.isAllDistrict(district))
+					{
+						queryMap.put("data1", district);				
+						
+					}
+					result.setOthers(ChangeConstants.Application_Owner,"0");
+				}
+				//get crete by myself
+				else
+				{
+					String district = currentUser.getAddress();
+					queryMap.put("data1", district);				
+					result.setOthers(ChangeConstants.Application_Owner,"1");
+				
+				}
+				
+
+				
+				Page<DepartleaderPublish> page = departleaderPublishServiceImpl.selectByDistrict(currentUser, queryMap);
+				result.setPage(page);
+				List<DepartleaderPublish> publishList = page.getList();
+				result.setLists(publishList);
+
+			} else {
+				logger.debug("Current user's infomation is null");
+				// 给客户端响应
+				result.setResult(MessageCode.SESSION_TIMEOUT);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result.setResult(result.EXCEPTION);
+		}
+		return result.toString();
+	}
+	
 	/**
 	 * 分页查看所有发布列表
 	 * 

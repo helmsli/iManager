@@ -46,8 +46,9 @@ App.controller('myDataController', ['$scope', function($scope) {
 	$scope.initDepartmentOptimize=function(pageNum){
 		var myParm=parseQueryString();//所有的参数
         var projectName=myParm.projectName; 
-	    var obj=null;
-	    obj = getMyProjectOptions(projectName,pageNum);
+        var obj={
+	    		  "request.categoryId":2
+	    };
 	    console.log("任务");
 	    console.log(obj);
 	    getDepartmentReleaseDataForShenBaoList("optimize",obj);
@@ -66,6 +67,44 @@ App.controller('myDataController', ['$scope', function($scope) {
 		url="departmentRelease_detail.html?projectName="+projectName+"&publishId="+publishId+"&seeState="+seeState+"&from="+from;
 		location.href=url;
 	}
+	$scope.willDelete=function(publishid){
+		   swal({
+		        title: "是否确认删除?",
+		        text: "你将删除该需求发布信息,是否继续删除?",
+		        type: "warning",
+		        showCancelButton: true,
+		        confirmButtonColor: "#DD6B55",
+		        confirmButtonText: "确认删除!",
+		        closeOnConfirm: false
+		    }, function () {
+		        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+		    });
+	}
+	
+	$scope.showdetailHref=function()
+	{
+		
+		location.href= "www.sina.com.cn";
+	}
+	
+	$scope.seePublisher=function(publishid,data){
+		$scope.showDetaildata = data;
+		try
+		{
+		var dataObject = JSON.parse(data.data4);
+		
+		$scope.showDetaildata.releaseUrl = dataObject.releaseUrl;
+		}
+		catch(e)
+		{
+			
+		}
+		$('#largeModal').modal();
+		
+		
+		
+	}
+
 	
 	 $scope.attachDownLoad=function(annexName){
 		 var url="/projectAnnex/fileDownLoad";

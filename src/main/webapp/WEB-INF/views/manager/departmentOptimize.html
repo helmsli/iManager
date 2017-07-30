@@ -4,6 +4,9 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+		 <meta http-equiv="Expires" content="-1">
+	    <meta http-equiv="Cache-Control" content="no-cache">
+	    <meta http-equiv="Pragma" content="no-cache">
 		<title>项目管理及信用系统</title>
 		
 		<!-- Plugin Css -->
@@ -31,7 +34,7 @@
 			<div id="page-wrapper" ng-controller="myDataController">
 				<div class="panel">
 					<div class="panel-heading">
-						<h2 class="panel-title">待优化的项目</h2>
+						<h2 class="panel-title">项目需求列表</h2>
 					</div>
 					<div class="panel-body min-height-550">
 						<div class="table-responsive">
@@ -49,7 +52,8 @@
 		                            	<td width="20%">{{data.createTime}}</td>
 	                           			<td width="14%">
 		                                	<a href="javascript:void(0);" class="p-r-10" ng-show="data.canDeclareFlag" ng-click="hrefProjectOptimize(data.publishId,'complete')">优化项目</a>                             	
-	                            	        <a href="javascript:void(0);" class="p-r-10" ng-show="!data.canDeclareFlag" ng-click="openSeeDepartLeaderRelease(data.publishId,'complete')">查看</a>
+	                            	        <a href="javascript:void(0);" class="p-r-10" ng-show="!data.canDeclareFlag" ng-click="seePublisher(data.publishId,data)">查看</a>
+	                            	        <a href="javascript:void(0);" class="p-r-10" ng-show="!data.canDeclareFlag" ng-click="willDelete(data.publishId);">删除</a>
 	                            		</td>
                						</tr>
 			                    </tbody>
@@ -85,6 +89,63 @@
 					</div>
 				</div>
 				<!-- / .panel -->
+				<!-- start model -->
+				 <div class="modal fade" id="largeModal" data-backdrop="static">
+				            <div class="modal-dialog">
+				                <div class="modal-content">
+				                    <div class="modal-header">
+				                        <h4 class="modal-title" id="largeModalLabel">项目需求</h4>
+				                    </div>
+				                    <div class="modal-body">
+				                    	<form>
+				                    	<div class="row clearfix p-b-15">
+			                    				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 align-right p-t-7">项目类型</div>
+			                    				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 p-l-0">
+			                    					<input type="text" class="form-control" ng-model="showDetaildata.serviceType" />
+			                    				</div>
+			                    			</div>
+				                    		<div class="row clearfix p-b-15">
+			                    				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 align-right p-t-7">项目主题</div>
+			                    				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 p-l-0">
+			                    					<input type="text" class="form-control" ng-model="showDetaildata.title" />
+			                    				</div>
+			                    			</div>
+			                    			<!-- /.row -->
+			                    			<div class="row clearfix p-b-15">
+			                    				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 align-right p-t-7">描述</div>
+			                    				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 p-l-0">
+			                    					<textarea class="form-control no-resize" rows="4" ng-model="showDetaildata.description"/></textarea>
+			                    				</div>
+			                    			</div>
+			                    			
+			                    			<div class="row clearfix p-b-15">
+			                    				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 align-right p-t-7">发布地区</div>
+			                    				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 p-l-0">
+			                    					<input type="text" class="form-control" ng-model="showDetaildata.data6" />
+			                    				</div>
+			                    			</div>
+			                    			
+			                    			<!-- /.row -->
+			                    			<div class="row clearfix">
+			                    				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 align-right">项目发布详情</div>
+			                    				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 p-l-0">
+			                    					<a ng-href="{{showDetaildata.releaseUrl}}"  >点击查看</a>
+			                    					
+			                    				</div>
+			                    			</div>
+			                    			<!-- /.row -->
+				                    	</form>
+				                    	<!-- / form -->
+				                    </div>
+				                    <div class="modal-footer align-center">
+				                        <button type="button" class="btn btn-primary waves-effect">申报项目</button>
+				                        <button type="button" class="btn btn-success waves-effect" data-dismiss="modal">关闭</button>
+				                    </div>
+				                </div>
+				            </div>
+				        </div>
+						<!-- /.modal -->
+						
 			</div>
 			<!-- / #page-wrapper -->
 		</div>

@@ -40,6 +40,10 @@ public interface DepartleaderPublishService {
 	 */
 	Page<DepartleaderPublish> getListByConditions(User user, Map<String, Object> queryMap);
 
+	
+	Page<DepartleaderPublish> selectByDistrict(User user, Map<String, Object> queryMap);
+	
+	
 	/**
 	 * 根据种类Id分页获取指定给三级部门经理的发布列表
 	 */

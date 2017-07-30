@@ -194,7 +194,22 @@
   </select>
   
  
-  
+  <select id="countServicePerson"  resultMap="BaseResultMap">
+		select project_category,service_type,service_owner,task_id,data1,count(*) as project_id,sum(convert(IFNULL(process_instance_id,0),signed)) as process_instance_id,sum(convert(IFNULL(data2,0),signed)) as data2 from tb_common_biz t
+		 WHERE (1=1)  and year(now())=year(create_time)
+			  <if test="projectCategory != null">
+			    and project_category  = #{projectCategory,jdbcType=VARCHAR}
+			  </if> 
+			  <if test="serviceType != null">
+			    AND  service_type = #{serviceType,jdbcType=VARCHAR} 
+			  </if>
+			  <if test="serviceOwner != null and serviceOwner !=''">
+			    AND  service_owner like CONCAT('%',#{serviceOwner},'%')
+			  </if>
+		 
+		group by project_category,service_type,service_owner,task_id,data1
+        order by task_id,service_owner
+    </select>
   
   
   <select id="selectMonthReportAndCheck" resultMap="BaseResultMap" >
@@ -213,7 +228,7 @@
     where 1= 1 <include refid="queryString" />
   </select>
   <select id="selectByCategoryTypePersonProjectName" resultMap="BaseResultMap" >
-    select data_id, project_category, project_id, project_name, service_type, create_person, create_person_name,create_time, 
+    select data_id, project_category, project_id, project_name, process_instance_id,service_type, create_person, create_person_name,create_time, 
     status,result,service_owner,update_person, update_time, result, data1, data2,data3, data4, data5, data6, 
     data7, data8, data9, data10
     from tb_common_biz
@@ -229,8 +244,11 @@
 	 	 <if test="serviceType != null and serviceType !=''">
 			 	and service_type = #{serviceType,jdbcType=VARCHAR}
 	 	 </if> 
-	 	 <if test="createPerson != null and createPerson !=''">
-			 	 and create_person = #{createPerson,jdbcType=VARCHAR}
+	 	 <if test="createPerson != null and createPerson !='' and userid!=null and userid!=''"  >
+			 	 and (create_person = #{createPerson,jdbcType=VARCHAR} or create_person = #{userid,jdbcType=VARCHAR})
+	 	 </if> 
+	 	  <if test="createPerson != null and createPerson !='' and (userid==null or userid=='')"  >
+			 	 and (create_person = #{createPerson,jdbcType=VARCHAR})
 	 	 </if> 
 	 	 <if test="projectName != null and projectName !=''">
 			 	and project_name like CONCAT('%',#{projectName},'%')
@@ -238,5 +256,9 @@
 	 	 <if test="serviceOwner != null and serviceOwner !=''">
 			 	and service_owner like CONCAT('%',#{serviceOwner},'%')
 	 	 </if>
+	 	 <if test="status != null and status !=''">
+			 	and status like CONCAT('%',#{status},'%')
+	 	 </if>
+	 	 
   	</sql>
 </mapper>

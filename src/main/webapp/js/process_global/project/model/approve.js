@@ -122,7 +122,12 @@ function submitApproval()
 }
 function initApproval()
 {
+	try
+	{
 	initFileStateListener(approvalRefreshUi);
+	}
+	catch(e)
+	{}
 }
 //只允许输入数字
 function digitInputInt(el, e) {  

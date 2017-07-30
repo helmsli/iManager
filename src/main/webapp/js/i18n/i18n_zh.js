@@ -1,27 +1,28 @@
 var i18n={
 		"Monthly_ProjectName_ISNULL":"项目名称为空",
+		"YueFen_ISNULL":"上传的的月报表表头中月份为空，请填写内容后重新上传",
 		"Monthly_ProjectCompany_ISNULL":"机构名称为空",
 		"Trainning_times_ISNULL":"培训次数为空",
-		"NotTrainning_times_ISNULL":"非培训的服务次数",
+		"NotTrainning_times_ISNULL":"非培训的服务次数为空,请填写内容后重新上传",
 		"Trainning_times_ISNULL":"培训次数为空",
 		"MainContent_ISNULL":"本月主要工作内容介绍为空",
-		
+		"ChuDianZongjie_ISNULL":"触点总结内容为空,请填写内容后重新上传",
+		"ZhiJieShouYIRenshu_ISNULL":"直接受益人数为空,请填写内容后重新上传",
+		"ZhiJieShouYIRenCi_ISNULL":"直接受益人次为空,请填写内容后重新上传",
+		"JianJieShouYIRenshu_ISNULL":"间接受益人数为空,请填写内容后重新上传",
+		"JianJieShouYIRenCi_ISNULL":"间接受益人次为空,请填写内容后重新上传",
+		"XiangMuBianGeng_ISNULL":"项目变更情况为空,请填写内容后重新上传",
+		"MeiTiBaoDiaoCiShu_ISNULL":"媒体报道次数为空,请填写内容后重新上传",
+		"MeiTiBaoDaoLianjie_ISNULL":"媒体报道链接为空,请填写内容后重新上传",
+		"GaiJinJiHua_ISNULL":"改进计划为空,请填写内容后重新上传",
+		"XiaYueZhongDaJihua_ISNULL":"下月重大活动计划 为空,请填写内容后重新上传",
 		/*
 		 * 
-		 * "-1000":"Monthly_ProjectName_ISNULL",
-		"-1001":"Monthly_ProjectCompany_ISNULL",
-		"-1002":"Trainning_times_ISNULL",
-		"-1003":"NotTrainning_times_ISNULL",
-	    "-1004":"MainContent_ISNULL",
-	    "-1005":"ChuDianZongjie_ISNULL",
+		
 	    
-	    "-1006":"ZhiJieShouYIRenshu_ISNULL",
-	    "-1007":"ZhiJieShouYIRenCi_ISNULL",
-	    "-1008":"JianJieShouYIRenshu_ISNULL",
-	    "-1009":"JianJieShouYIRenCi_ISNULL",
+	   
 	    	
-	    "-1010":"XiangMuBianGeng_ISNULL",
-	    "-1011":"MeiTiBaoDiaoCiShu_ISNULL",
+	 
 	    
 	    "-1012":"MeiTiBaoDaoLianjie_ISNULL",
 	    "-1013":"GaiJinJiHua_ISNULL",

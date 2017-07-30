@@ -155,6 +155,8 @@ App.controller('myDataController', ['$scope', function($scope) {
 		//console.log("ddddddddd");
 		//console.log(JSON.stringify(monthlyReportFile));
 		//alert(JSON.stringify(monthlyReportFile));
+		try
+		{
 		if(monthlyReportFile!="")
 		{
 			var scopeParent=getAngularScope("myDataController");
@@ -166,6 +168,13 @@ App.controller('myDataController', ['$scope', function($scope) {
 			   alert("没有相关文件下载，用户没有上传相关文件.");	
 			
 		}
+		}
+		catch(e)
+		{
+			   alert("没有相关文件下载，用户没有上传相关文件.");	
+				
+		}
+		
 		
 	}
 	/***
@@ -244,7 +253,7 @@ function callbackQueryApplicationList(data){
 		 for(var i in dataLists)
 		{
 			 try{
-				 dataLists[i].apply_type="服务项目";
+				 dataLists[i].apply_type="申请项目";
 				 if(dataLists[i].taskId=="wei")
 				 {
 					 dataLists[i].apply_type="微创投项目";

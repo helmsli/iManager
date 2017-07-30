@@ -188,7 +188,19 @@ public class CommonBizServiceImpl implements CommonBizService {
 		return page;
 	}
 	
+	@Override
+	public Page<CommonBiz> selectQueryBizNoPage(User user, Map<String, Object> map) {
+		Page<CommonBiz> page = new Page<CommonBiz>(commonBizDao.countByCategoryTypePersonProjectName(map));
+		map.put("startRow", 0);
+		map.put("pageSize", 100000);
+		page.setList(commonBizDao.selectByCategoryTypePersonProjectName(map));
+		return page;
+	}
 	
+	@Override
+	public List<CommonBiz> countServicePerson(User user, Map<String, Object> map) {
+		return this.commonBizDao.countServicePerson(map);
+	}
 	
 	
 }

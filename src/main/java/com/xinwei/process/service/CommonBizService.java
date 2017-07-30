@@ -108,5 +108,10 @@ public interface CommonBizService {
 			Map<String, Object> map);
 	
 	public Page<CommonBiz> selectQueryBizPage(User user, Map<String, Object> map);
+	
+	public Page<CommonBiz> selectQueryBizNoPage(User user, Map<String, Object> map);
 
+	
+	
+	public List<CommonBiz> countServicePerson(User user, Map<String, Object> map);
 }

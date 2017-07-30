@@ -20,6 +20,7 @@ import com.xinwei.process.dao.DataPermissionMapper;
 import com.xinwei.process.dao.DepartleaderPublishMapper;
 import com.xinwei.process.dao.PublishApplyPersonMapper;
 import com.xinwei.process.entity.AssignPerson;
+import com.xinwei.process.entity.CommonBiz;
 import com.xinwei.process.entity.DataCreateInfo;
 import com.xinwei.process.entity.DataInfo;
 import com.xinwei.process.entity.DataPermission;
@@ -76,9 +77,9 @@ public class DepartleaderPublishServiceImpl implements
 		//保存到数据库
 		departleaderPublishDao.insert(departleaderPublish);
 		// 保存该发布的创建信息
-		saveDataCreateInfo(departleaderPublish);
+		//saveDataCreateInfo(departleaderPublish);
 		//保存该发布的数据可见权限信息
-		saveDataPermission(departleaderPublish);
+		//saveDataPermission(departleaderPublish);
 		//savePublishApplyPerson(departleaderPublish);
 		return publishSeqCode;
 	}
@@ -386,6 +387,16 @@ public class DepartleaderPublishServiceImpl implements
 		dataPermission.setExtData1(dataPermission.PRIVILEGE_canReadWrite);
 		DataPermissionDao.updateToApplication(dataPermission);
 		return departleaderPublish.getPublishId();
+	}
+
+	@Override
+	public Page<DepartleaderPublish> selectByDistrict(User user, Map<String, Object> queryMap) {
+		// TODO Auto-generated method stub
+		Page<DepartleaderPublish> page = new Page<DepartleaderPublish>(departleaderPublishDao.countByDistrict(queryMap));
+		queryMap.put("startRow", page.getStartRow());
+		queryMap.put("pageSize", page.getPageSize());	
+		page.setList(departleaderPublishDao.selectByDistrict(queryMap));
+		return page;
 	}
 	
 }

@@ -186,4 +186,23 @@
         </otherwise>
     </choose>
   </select>
+  <select id="countByDistrict" resultType="java.lang.Long" >
+    select count(1)
+    from tb_departleader_publish
+    where 1= 1 <include refid="queryString1" />
+  </select>
+  <select id="selectByDistrict" resultMap="BaseResultMap" >
+    select publish_id, title, category_id, service_type,create_time,description, create_person,data1, data2, data3, data4, data5, data6, data7, 
+    data8, data9, data10
+    from tb_departleader_publish
+    where 1= 1 <include refid="queryString1" />
+    order by create_time desc
+    limit #{startRow},#{pageSize}
+  </select>
+  <sql id="queryString1">
+   	     <if test="data1 != null and data1 !=''">
+			 	and data1 = #{data1,jdbcType=VARCHAR}  
+	 	 </if> 	 	
+	 	 
+  	</sql>
 </mapper>

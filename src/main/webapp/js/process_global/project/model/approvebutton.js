@@ -42,7 +42,12 @@ function submitApproval()
 }
 function initApproval()
 {
+	try
+	{
 	initFileStateListener(approvalRefreshUi);
+	}
+	catch(e)
+	{}
 }
 
 initApproval();

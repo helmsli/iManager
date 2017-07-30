@@ -1,0 +1,94 @@
+<meta charset="UTF-8">
+
+<!-- / .col-12 -->
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"  id="decisionCommittee">
+	<div class="row p-t-5 p-b-5 clearfix">
+	<div  ng-show="suggestion.commentsFlag">
+    	<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left">{{suggestion.title}}：</div>
+    	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 p-l-5">
+    	    <div class="form-group" >
+    	   		 <div class="form-line">
+                    <label  >{{commonbiz.approveResult}}</label>
+                    
+                 </div>
+    	    </div>
+      		<!-- div class="form-group" ng-if="suggestion.radioFlag">
+				<div class="form-line">
+					<div class="radio">
+	              		<div class="radio-inline">
+	              			<input name="group1" readonly="true" type="radio" class="with-gap radio-col-blue" value="4" id="radio_1" ng-model="suggestion.result"/>
+	                  		<label for="radio_1">同意</label>
+	              		</div>
+	             		<div class="radio-inline">
+	             			<input name="group1" type="radio" readonly="true" class="with-gap radio-col-blue" value="1"  id="radio_2" ng-model="suggestion.result"/>
+	                 		<label for="radio_2">驳回</label>
+	             		</div>
+	             		<div class="radio-inline" ng-show="suggestion.radioRefuseFlag">
+	             			<input name="group1" readonly="true" type="radio" class="with-gap radio-col-blue" value="2"  id="radio_3" ng-model="suggestion.result"/>
+	                 		<label for="radio_3">拒绝</label>
+	             		</div>
+	               </div>
+				</div>
+			</div-->
+  			<div class="form-group m-b-0" style="padding-bottom:10px;" ng-show="commonbiz.isShowResult">
+            	<div class="form-line">
+                     <textarea rows="4" id="caucus" class="form-control no-resize" placeholder="" readonly="true" ng-model="commonbiz.result"></textarea>
+                 </div>
+            </div>
+    	</div>
+    	</div>
+    	
+    	        <!--  指定监测时间开始-->
+        <div class="row clearfix">
+        	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-show="setCycleTime">
+	        	<div class="row clearfix">
+	        		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 p-r-0 form-control-label"><label style="margin-right:0;">指定监测周期：</label></div>
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 p-l-15">
+						<div class="row clearfix">
+							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 p-r-5">
+								<input id="setTime" type="text" class="form-control" ng-model="setCycleTimeObj.cycle">
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 p-l-5">
+								<select class="form-control show-tick" ng-model="setCycleTimeObj.unit">
+								<option>天</option>
+								<option>月</option>
+								<option>年</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+        	</div>
+        	<!-- end file -->
+        	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        		<div class="row clearfix p-t-10">
+	        		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 p-r-0 form-control-label"><label style="margin-right:0;">{{suggestion.attachTitle}}：</label></div>
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 p-l-15">
+						<div class="form-group">
+			               <div class="form-line">
+			                   <div class="file-group">
+								<input type="text" name="fileName" id="submitMaterialMetaphaseInput" readonly="true" class="form-control" placeholder="">
+								<input   type="button" value="下载审批附件" class="btn btn-primary" id="btn_downloadApprove" onclick="downloadApproveAttatch();">
+								
+							</div>
+			               </div>
+			           </div>
+					</div>
+				</div>
+        	</div>
+        	<!-- end file -->
+        </div>
+  </div>
+  <div class="p-t-15 align-center  col-lg-10 col-md-10 col-sm-10 col-xs-10">
+	   <button type="button" class="btn btn-success waves-effect m-r-5"  id="btn_childsubmit" onclick="openSubmitConclude()">提交</button>
+	   <button type="button" class="btn btn-primary waves-effect m-l-5" ng-click="cancelMyapplySeeWin();">关闭</button> 
+	   <!-- committeeSuggestionDate();managerSuggestionDate() -->
+	   <!-- 操作按钮结束 -->
+  </div>
+</div>
+
+<script>
+//g_state由系统定义，确定办理的步骤
+var scope=getAngularScope("projectModel");
+globalRegisterHtml(scope.gloablParm.state);
+</script>

@@ -5,6 +5,8 @@
 var monthlyFileName="monthlyReport";
 var monthlyFileAttatchment="monthlyAttatchment";
 function uploadMonthlyReport(id){
+	console.log("************************");
+	console.log(id);
 	document.getElementById("btn_subMonthlyReport").disabled=true;
 	var scope=getAngularScope("projectManagerModel");
 	uploadFile.ajaxFileUpload({
@@ -25,11 +27,14 @@ function uploadMonthlyReport(id){
 	    	scope.$applyAsync(scope.projectAnnexs);
 	    	preViewMonthlyReport();
 	    	
+	    	document.getElementById("uploadMonthlyReportFile").value="";
 	    	//$('#btn_subMonthlyReport').removeAttr("disabled");
 	    },
 	    error: function (data, status, e)//服务器响应失败处理函数  
 	    {
-	        location.reload();
+	    	document.getElementById("fileMonthlyReport").value="";
+	    	document.getElementById("uploadMonthlyReportFile").value="";
+	    	scope.showMonthlyDetail = false;
 	    }
 	});
 }
@@ -55,14 +60,21 @@ function uploadMonthlyAttatchment(id){
 	    	console.log(JSON.stringify(data.responseInfo.projectAnnexs));
 	    	scope.$applyAsync(scope.projectAnnexs);
 	    	document.getElementById("btn_subMonthlyReport").disabled=false;
+	    	document.getElementById("uploadFile").value="";
 	    },
 	    error: function (data, status, e)//服务器响应失败处理函数  
 	    {
-	    	location.reload();
+	    	document.getElementById("fileName").value="";
+	    	document.getElementById("uploadFile").value="";
 	    }
 	});
 }
 
+
+function cancelMonthlyReport()
+{
+	window.history.go(-1);
+}
 
 /**
  * 提交月度报告
@@ -103,8 +115,12 @@ function submitMonthlyReport()
 		console.log("&&&&&&&&&&&&&&&&&&&&");
 		console.log(data);
 		if(data.result == 0){	
+			//alert("abac");
+			//window.history.go(-1);
+			var url = getBasePath()+ "/views/camtalk/dataMonitorByCommittee.html?projectName=camtalk&serviceType=submitMonthlyReport";
+			//alert(url);
+			window.location.href = url;
 			
-			window.history.go(-1);
 		}
 		else
 		{
@@ -154,6 +170,7 @@ function preViewMonthlyReport()
 	{
 		
 		monthlyReport= JSON.stringify(scope.fileUpload[monthlyFileName]);
+		console.log(monthlyReport);
 	}
 	var obj={	   
 			"request.projectCategory":categoryId,
@@ -162,7 +179,7 @@ function preViewMonthlyReport()
 			
 			
 	};
-	//console.log("发送给后台的obj");
+	console.log("发送给后台的obj");
 	console.log(JSON.stringify(obj));
 	submitMonthlyToServer("/task/preViewMonthlyReport",obj,function(data){
 		if(data.result == 0){	
@@ -207,6 +224,7 @@ function preViewMonthlyReport()
 					 scope.$apply(function() {  
 				            //wrapped this within $apply  
 						 scope.commonBiz = commonBiz;   
+						 scope.showMonthlyDetail = true;
 				           // console.log('message:' + $scope.message);  
 				          });  
 					 
@@ -219,12 +237,14 @@ function preViewMonthlyReport()
 			}
 			catch(err)
 			{
-				
+				//alert("aaaa");
 			}
 				 
 		}
 		else
 			{
+			 
+			
 				try
 				{
 					console.log(JSON.stringify(data));
@@ -245,6 +265,18 @@ function preViewMonthlyReport()
 	    		{
 	    			alert("请检查文件内容是否合法或者部分内容是否没有填写");
 	    		}
+	    		
+	    		document.getElementById("fileMonthlyReport").value="";
+	    		
+	    		setTimeout(function() {
+					 var scope=getAngularScope("projectManagerModel");
+					 scope.$apply(function() {  
+						 scope.showMonthlyDetail = false;
+				          });  
+					 
+					    
+				     }, 50);
+				
 			}
     });		
 }

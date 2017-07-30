@@ -5,3 +5,9 @@ insert into tb_project_annex(annex_id,annex_name,original_filename,type_id,path,
 insert into tb_project_annex(annex_id,annex_name,original_filename,type_id,path,user_id,upload_time) values(1003,'canlian_application_wei.docx','社区助残公益微创投项目申报书2018.docx',1,'canlian_application_wei.docx','7',NOW());
 
 
+alter table tb_company modify certificate_id bigint(20)  NULL;
+
+
+--update 20170717
+--更新菜单
+update security_menu set  action = '/views/camtalk/concludeManage.html?projectName=camtalk',priority=60 where name='MENU_CAMTALK_COMPLETED';

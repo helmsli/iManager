@@ -13,7 +13,7 @@ applicationvalidOptions = [{
 					"validateRule":{"require":true}
 				},{
 					"id":"amount",
-					"validateRule":{"isPositNumber":true,"require":true}
+					"validateRule":{"require":true}
 				},{
 					"id":"serviceAmount",
 					"validateRule":{"isPositNumber":true,"require":true}
@@ -77,9 +77,10 @@ App.controller('application_public', function($scope){
     $scope.saveApplication = function ()
     {
     	//alert("save application");
+    	var parm = parseQueryString();
     	
     	
-		//信息表单校验
+    	//信息表单校验
 		var subFlag=$scope.formValid.beforeSubmit();
 		if(!subFlag )
 		{
@@ -87,12 +88,11 @@ App.controller('application_public', function($scope){
 		}
 		
 		
-    	var parm = parseQueryString();
     	//类型名;coomarts,cootalk,lottery
     	var projectName=parm.projectName;
     	var categoryId="canlian";
-    	
     	//申报书
+        
     	var fileApplication="";
     	if($scope.fileUpload[Application_file_apply])
     	{
@@ -139,6 +139,22 @@ App.controller('application_public', function($scope){
     			"request.taskId":"shen",
     			
     	};
+    	try
+    	{
+	    	var dataid = parm.dataId;
+	    	if(typeof(dataid)=="undefined"){
+	    		dataid="0";
+	    	}
+	    	
+	    	if(dataid!="0")
+	    	{
+	    		obj.dataId=dataid;
+	    	}
+    	}
+    	catch(e)
+    	{
+    		
+    	}
     	//console.log("发送给后台的obj");
     	console.log(JSON.stringify(obj));
     	submitApplication("/task/submitApplication",obj,function(data){
@@ -281,8 +297,8 @@ function checkNum(obj) {
     }
     if (obj != null) {
         //检查小数点后是否对于两位
-        if (obj.value.toString().split(".").length > 1 && obj.value.toString().split(".")[1].length > 2) {
-            alert("小数点后多于两位！");
+        if (obj.value.toString().split(".").length > 1 && obj.value.toString().split(".")[1].length > 4) {
+            alert("小数点后多于四位！");
             obj.value = "";
         }
     }
@@ -325,11 +341,22 @@ function uploadApplication(id){
 	    	
 	    	 scope.formValid.beforeSubmit('text'+id);
 	    	$('#btn_application').removeAttr("disabled");
+	    	document.getElementById(id).value="";
+	    	 
 	    },
 	    error: function (data, status, e)//服务器响应失败处理函数  
 	    {
 	        alert("文件上传失败,请重新填写");
-	    	location.reload();
+	    	//location.reload();
+	        
+	        try{
+	           var textid = "text" +id;
+	           document.getElementById(textid).value="";
+	           document.getElementById(id).value="";
+	        }
+	        catch(e)
+	        {}
+	        
 	    	
 	    }
 	});

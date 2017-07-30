@@ -60,6 +60,7 @@ function initMainControll()
 	var parm = parseQueryString();
 	var scope=getAngularScope("projectModel");
 	var state=scope.gloablParm.state;
+	console.log(state);
 	var templatePath=getApproveFilePath(state);
 	console.log(templatePath);
 	initScriptFile(state);
@@ -295,6 +296,8 @@ function parseCommonBizAttach(commonBiz)
 {
 	
 	var scope=getAngularScope("projectModel");
+	
+	
 	var state=scope.gloablParm.state;
 	var stateName=getStateName(state);
 	//console.log(state);

@@ -75,6 +75,16 @@ var CONFIG_PATH=
 		    "STEP_pm_tijiaofujian_PATH": "userTemplate/approveTemplate/submitAttachment.html?projectName=coomarts",
 		    "STEP_apply_PATH": "userTemplate/approveTemplate/applyChildApprove.html?projectName=coomarts",
 		    "STEP_apply_PATH": "userTemplate/approveTemplate/applyChildApprove.html?projectName=coomarts",
+		    
+		    "STEP_0_PATH": "userTemplate/approveTemplate/applyChildApprove.html?projectName=coomarts",
+			   
+		    "STEP_canlian_255_PATH": "userTemplate/approveTemplate/applyConclude.html?projectName=coomarts",
+		    "STEP_canlian_25501_PATH": "userTemplate/approveTemplate/applyConcludeApprove.html?projectName=coomarts",
+		    "STEP_canlian_25502_PATH": "userTemplate/approveTemplate/concludeApproveResult.html?projectName=coomarts",  
+		    "STEP_canlian_25503_PATH": "userTemplate/approveTemplate/concludeApproveResult.html?projectName=coomarts",  
+		    			    
+		    
+		    
 		    "STEP_applyModify_PATH": "userTemplate/approveTemplate/applyChildApproveResult.html?projectName=coomarts"  
 		};
 
@@ -131,7 +141,14 @@ var SCRIPTFile={
 	    "STEP_pm_jinzhidiaocha_PATH": "/js/process_global/project/model/jzdc.js",
 	    "STEP_pm_tijiaofujian_PATH": "/js/process_global/project/model/submitAttachment.js",
          "STEP_apply_PATH":"/js/process_global/project/model/applyChildApprove.js",
-         "STEP_applyModify_PATH":"/js/process_global/project/model/applyChildApproveResult.js"
+         "STEP_0_PATH":"/js/process_global/project/model/applyChildApprove.js",
+         
+         "STEP_canlian_255_PATH": "/js/process_global/project/model/applyConclude.js",
+         "STEP_canlian_25501_PATH": "/js/process_global/project/model/applyConcludeApprove.js",  
+         "STEP_canlian_25502_PATH":"/js/process_global/project/model/concludeApproveResult.js",
+         "STEP_canlian_25503_PATH":"/js/process_global/project/model/concludeApproveResult.js",
+                 
+        	 "STEP_applyModify_PATH":"/js/process_global/project/model/applyChildApproveResult.js"
 };
 
 	var APPROVE_TITLE={

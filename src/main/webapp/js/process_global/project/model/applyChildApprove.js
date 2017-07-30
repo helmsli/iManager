@@ -17,7 +17,7 @@ function approvalRefreshUi()
 	//var title = APPROVE_TITLE[scope.gloablParm.state];
 	scope.suggestion={
 		title:"审批",
-		result:4,
+		result:255,
 		comment:"",
 		attachTitle:"附件",
 		setCycleTime:false,
@@ -75,9 +75,12 @@ function uploadButtonSubmit(id){
 	    	scope.projectAnnexs=data.responseInfo.projectAnnexs;
 	    	//console.log(JSON.stringify(data.responseInfo.projectAnnexs));
 	    	scope.$applyAsync(scope.projectAnnexs);
+	    	  
+	    	document.getElementById("submitMaterialMetaphase").value="";
 	    },
 	    error: function (data, status, e)//服务器响应失败处理函数  
 	    {
+	    	document.getElementById("submitMaterialMetaphase").value="";
 	        alert(e);
 	    }
 	});
@@ -135,7 +138,12 @@ function ajaxApprove(obj,callBack){
 
 function initApproval()
 {
+	try
+	{
 	initFileStateListener(approvalRefreshUi);
+	}
+	catch(e)
+	{}
 }
 //只允许输入数字
 function digitInputInt(el, e) {  

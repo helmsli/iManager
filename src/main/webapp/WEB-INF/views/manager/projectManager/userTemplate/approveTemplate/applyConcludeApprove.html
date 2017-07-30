@@ -1,0 +1,116 @@
+<meta charset="UTF-8">
+
+<!-- / .col-12 -->
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"  id="decisionCommittee" >
+	<div class="row p-t-5 p-b-5 clearfix" >
+	
+	            <div class="row clearfix">
+	        		 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left">申报单位:</div>
+    	
+	        		 
+			        <div class="col-lg-5 col-md-8 col-sm-10 col-xs-10">
+			            <div class="form-group">
+			                <div class="form-line">
+			                	<input type="text"  maxlength="20"  class="form-control" ng-model="commonbiz.data3" name="application.companyName" id="companyName"   />
+			                </div>
+			            </div>
+			        </div>
+				</div>
+				
+				<div class="row clearfix">
+	        		  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left">项目名称:</div>
+    	
+	        		
+			        <div class="col-lg-5 col-md-8 col-sm-10 col-xs-10">
+			            <div class="form-group">
+			                <div class="form-line">
+			                	<input type="text"  maxlength="20"  class="form-control" ng-model="commonbiz.projectName" name="application.companyName" id="companyName"   />
+			                </div>
+			            </div>
+			        </div>
+				</div>
+			
+	
+	<div  ng-show="suggestion.commentsFlag">
+    	<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 p-r-5 align-right xs-aling-left">{{suggestion.title}}：</div>
+    	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 p-l-5">
+      		<div class="form-group" ng-if="suggestion.radioFlag">
+				<div class="form-line">
+					<div class="radio">
+	              		<div class="radio-inline">
+	              			<input name="group1" type="radio" class="with-gap radio-col-blue" value="255255" id="radio_1" ng-model="suggestion.result"/>
+	                  		<label for="radio_1">同意</label>
+	              		</div>
+	             		<div class="radio-inline">
+	             			<input name="group1" type="radio" class="with-gap radio-col-blue" value="25502"  id="radio_2" ng-model="suggestion.result"/>
+	                 		<label for="radio_2">驳回修改</label>
+	             		</div>
+	             		<div class="radio-inline" ng-show="suggestion.radioRefuseFlag">
+	             			<input name="group1" type="radio" class="with-gap radio-col-blue" value="25503"  id="radio_3" ng-model="suggestion.result"/>
+	                 		<label for="radio_3">拒绝</label>
+	             		</div>
+	               </div>
+				</div>
+			</div>
+  			<div class="form-group m-b-0" style="padding-bottom:10px;">
+            	<div class="form-line">
+                     <textarea rows="4" id="caucus" class="form-control no-resize" placeholder="请输入您的评审意见..." ng-model="suggestion.comment"></textarea>
+                 </div>
+            </div>
+    	</div>
+    	</div>
+    	
+    	        <!--  指定监测时间开始-->
+        <div class="row clearfix">
+        	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-show="setCycleTime">
+	        	<div class="row clearfix">
+	        		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 p-r-0 form-control-label"><label style="margin-right:0;">指定监测周期：</label></div>
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 p-l-15">
+						<div class="row clearfix">
+							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 p-r-5">
+								<input id="setTime" type="text" class="form-control" ng-model="setCycleTimeObj.cycle">
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 p-l-5">
+								<select class="form-control show-tick" ng-model="setCycleTimeObj.unit">
+								<option>天</option>
+								<option>月</option>
+								<option>年</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+        	</div>
+        	<!-- end file -->
+        	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        		<div class="row clearfix p-t-10">
+	        		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 p-r-0 form-control-label"><label style="margin-right:0;">{{suggestion.attachTitle}}：</label></div>
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 p-l-15">
+						<div class="form-group">
+			               <div class="form-line">
+			                   <div class="file-group">
+								<input type="text" name="fileName" id="submitMaterialMetaphaseInput" class="form-control" placeholder="选择文件...">
+								<input type="button" value="选择文件" class="btn btn-primary">
+								<input type="file" name="file" id="submitMaterialMetaphase" onchange="document.getElementById('submitMaterialMetaphaseInput').value=this.value; uploadButtonSubmit('submitMaterialMetaphase',this);">
+							</div>
+			               </div>
+			           </div>
+					</div>
+				</div>
+        	</div>
+        	<!-- end file -->
+        </div>
+  </div>
+  <div class="p-t-15 align-center col-lg-8 col-md-8 col-sm-10 col-xs-10">
+	   <button type="button" class="btn btn-success waves-effect m-r-5"  onclick="submitApproval()">提交</button>
+	   <button type="button" class="btn btn-primary waves-effect m-l-5" ng-click="cancelMyapplySeeWin();">关闭</button> 
+	   <!-- committeeSuggestionDate();managerSuggestionDate() -->
+	   <!-- 操作按钮结束 -->
+  </div>
+</div>
+
+<script>
+//g_state由系统定义，确定办理的步骤
+var scope=getAngularScope("projectModel");
+globalRegisterHtml(scope.gloablParm.state);
+</script>

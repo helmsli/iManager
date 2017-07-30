@@ -116,7 +116,18 @@ function initTableEvent()
 {
 	$("table td[contenteditable='true']").attr("contenteditable","false");
 }	
-
+function modifyMonthlyReport()
+{
+	
+	var parm=parseQueryString();
+	var projectName =parm.projectName||""; 
+	//var state="B";
+	//如果state状态中含有b，那么证明是变更的审批，则会跳到变更的办理审批中去。
+	
+	url="createMonthlyReport.html?projectName="+projectName+"&projectId="+"222"+"&taskId="+"333"+"&from="+from; 
+	
+	location.href=url;
+}
 //
 
 

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.xinwei.security.MessageCode;
 import com.xinwei.util.page.Page;
 
 public class ResultVO<T> implements Serializable {
@@ -20,7 +21,7 @@ public class ResultVO<T> implements Serializable {
 	public final static String SUCCESS = "0";//成功
 	public final static String FAILURE = "1";//失败
 	public final static String EXCEPTION = "-1";//服务器内部异常
-	public final static String USERNULL= "2";//登录用户信息为空
+	public final static String USERNULL= MessageCode.SESSION_TIMEOUT;//登录用户信息为空
 	public final static String NOAUTHORITY="3";//没有权限
 	// 返回状态码
 	private String result = SUCCESS;

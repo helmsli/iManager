@@ -103,6 +103,12 @@ public interface DepartleaderPublishMapper {
 	 */
 	Long countApplyListByUserAndCategoryId(Map<String, Object> map);
 
+	
+	Long countByDistrict(Map<String, Object> map);
+	
+	
+	List<DepartleaderPublish> selectByDistrict(Map<String, Object> map);
+	
 	/**
 	 * 根据项目种类和用户分页查询可申报列表
 	 * @param queryMap

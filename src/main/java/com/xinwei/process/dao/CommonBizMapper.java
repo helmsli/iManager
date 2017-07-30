@@ -101,6 +101,14 @@ public interface CommonBizMapper {
 	 */
 	List<CommonBiz> selectMonthReportAndCheck(Map<String, Object> map);
 	
+	
+	/**
+	 * 查询各个项目的的总服务人数
+	 * @param map
+	 * @return
+	 */
+	List<CommonBiz> countServicePerson(Map<String, Object> map);
+	
 	/**
 	 * 根据项目类别、业务类型、创建人和项目名称（支持模糊查询）进行统计
 	 * @param map

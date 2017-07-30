@@ -19,7 +19,23 @@ App.controller('editAuthority', function($scope){
             };
     	getMenuFunctionsChecked(obj,function(data){
             if(data.result==0){
-                $scope.permissionTree = data.responseInfo.menuFunctions;          
+            	var tempPermissionTree = [];
+            	 
+            	for(var i =0 ;i<data.responseInfo.menuFunctions.length;i++)
+            	{
+            		for(var j=0;j<G_NAV_TYPE.length;j++)
+            		{
+            		   if(data.responseInfo.menuFunctions[i].description==G_NAV_TYPE[j])
+            		   {
+            			   tempPermissionTree.push(data.responseInfo.menuFunctions[i]);
+            			   break;
+            		   }
+            		}
+            	}
+            	
+                $scope.permissionTree = tempPermissionTree;          
+                console.log("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}");
+                console.log($scope.permissionTree);
                 $scope.$applyAsync($scope.permissionTree);
             }
         });
