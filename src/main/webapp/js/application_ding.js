@@ -8,7 +8,14 @@ var applicationvalidOptions= [];
 applicationvalidOptions = [{
 					"id":"companyName",
 					"validateRule":{"require":true}	
-				},{
+				}
+				,{
+					"id":"companyRegisterAddress",
+					"isOnChange":false,
+					"validateRule":{"require":true}
+				
+				}
+				,{
 					"id":"projectName",
 					"validateRule":{"require":true}
 				},{
@@ -36,7 +43,10 @@ applicationvalidOptions = [{
 					"validateRule":{"require":true}
 				
 				}
-				
+				,{
+					"id":"textfileCompanyId",
+					"validateRule":{"require":true}
+				}
 				
 				];
  
@@ -64,7 +74,10 @@ App.controller('application_public', function($scope){
     }
     catch (e) 
     {}
-    
+    $scope.gotoLogin = function ()
+    {
+    	location.href=getBasePath()+'/login/tologin';
+    }
     
     $scope.saveApplication = function ()
     {
@@ -104,16 +117,17 @@ App.controller('application_public', function($scope){
     	var alldata={"pName":$scope.application.projectName,
     			     "personName":$scope.application.contactName,
     			     "person":$scope.application.contactTel,
-    			     "address":"科室",
-    			     "addressCode":"keshi",
-    			     "serviceAddress":"科室",
-    			     "serviceAddressCode":"keshi",
+    			     "address":$scope.application.companyRegisterAddress,
+    			     "addressCode":$scope.application.companyRegisterAddressCode,
+    			     "serviceAddress":$scope.application.companyRegisterAddress,
+    			     "serviceAddressCode":$scope.application.companyRegisterAddressCode,
     			     "amount":$scope.application.amount,
     			    "cname":$scope.application.companyName,
-    			    "cType":"others",
+    			    "cType":$scope.application.comType,
     			    "email":$scope.application.contactEmail,
     			    "serviceAmount":$scope.application.serviceAmount
     			    };
+    	//alert(JSON.stringify(alldata));
     	var obj={	   
     			"request.projectCategory":categoryId,
     			"request.projectId":0,    	
@@ -193,7 +207,7 @@ App.controller('application_public', function($scope){
     $scope.selectProjectTypeDistrict =function(code,name)
 	{
 		
-		
+    	
 		setTimeout(function () {
 			 $scope.$apply(function() {
 			$scope.application.registerAddress=name;
@@ -211,7 +225,7 @@ App.controller('application_public', function($scope){
     $scope.selectCompanyDistrict =function(code,name)
 	{
 		
-		
+    	alert("abc");
 		setTimeout(function () {
 			 $scope.$apply(function() {
 			$scope.application.companyRegisterAddress=name;
@@ -255,10 +269,15 @@ App.controller('application_public', function($scope){
 	  					$scope.application.amount=commonbiz.data2;
 	  					$scope.application.companyName=commonbiz.data3;
 	  					$scope.application.serviceAmount=commonbiz.processInstanceId;
+	  					
 	  			        try{
 	  					   var allData = JSON.parse(commonbiz.data5);
 	  					
 	  			          $scope.application.contactEmail=allData.email;
+	  			          $scope.application.companyRegisterAddress=allData.address;
+	  			          $scope.application.companyRegisterAddressCode = allData.addressCode;
+	  			          $scope.application.comType=allData.cType;
+	  			       
 	  			        }
 	  			        catch(e)
 	  			        {
@@ -321,6 +340,7 @@ function uploadApplication(id){
 	    //async:true,
 	    success: function (data)
 	    {
+	    	
 	    	var scope=getAngularScope("application_public");
 	    	data=JSON.parse(data);
 	    	if(!scope.fileUpload)

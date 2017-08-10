@@ -29,6 +29,44 @@ App.controller('myDataController', ['$scope', function($scope) {
 	    getCountServicePerson(obj);
 	}
 	
+	
+	$scope.clickTr=function(data)
+	{
+		  //alert("aaaaa:"+JSON.stringify(data));
+		  var url="";
+		  var parm=parseQueryString();
+		  var projectName =parm.projectName||""; 
+		  var myDate = new Date();
+		  var nowMillSeconds = myDate.getTime(); 
+		  var keshi = "";
+		  var condition = {
+				  "ptype":data.taskId,
+				  "region":data.serviceOwner,
+				  "keshi":keshi,				  
+		  };
+		  
+		  
+		  
+		  if(data.taskId=="ding")
+		   {
+			  condition["keshi"]=data.data1;
+			 // alert(JSON.stringify(condition));
+			  localStorage.setItem("pcond",JSON.stringify(condition));
+			  
+			  url="newApply.html?projectName="+projectName+"&pcond=" +  nowMillSeconds +"&from="+from;;
+			  
+		  }
+		  else
+		  {
+			  localStorage.setItem("pcond",JSON.stringify(condition));
+			  
+			  url="newApply.html?projectName="+projectName+"&pcond=" +  nowMillSeconds +"&from="+from;;
+			    
+		  }
+		 // alert(url);
+		  location.href=url;
+	}
+	
 	$scope.exportApplyDetail=function()
 	{
 		satarAjax();
@@ -299,4 +337,5 @@ function satarAjax() {
     			});
 		    });
 		}
+	
  */

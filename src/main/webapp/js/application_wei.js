@@ -67,7 +67,10 @@ App.controller('application_public', function($scope){
     }
     catch (e) 
     {}
-    
+    $scope.gotoLogin = function ()
+    {
+    	location.href=getBasePath()+'/login/tologin';
+    }
     
     $scope.saveApplication = function ()
     {

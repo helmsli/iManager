@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.xinwei.process.dao.DataCreateInfoMapper;
 import com.xinwei.process.dao.DataPermissionMapper;
@@ -225,7 +226,10 @@ public class DepartleaderPublishServiceImpl implements
 	 * 保存权限信息
 	 */
 	private void saveDataPermission(DepartleaderPublish publish) {
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder()
+				.serializeNulls()//序列化null
+				.setDateFormat("yyyy-MM-dd HH:mm:ss")// 设置日期时间格式
+				.create();
 		logger.debug("data1: "+ publish.getData1());
 		//获取指定人员列表
 		List<AssignPerson> assignList = gson.fromJson(publish.getData1(), new TypeToken<List<AssignPerson>>() {}.getType());
@@ -347,7 +351,10 @@ public class DepartleaderPublishServiceImpl implements
 	 * 保存发布、申报人信息
 	 */
 	private void savePublishApplyPerson(DepartleaderPublish publish) {
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder()
+				.serializeNulls()//序列化null
+				.setDateFormat("yyyy-MM-dd HH:mm:ss")// 设置日期时间格式
+				.create();
 		logger.debug("data1: "+ publish.getData1());
 		//获取指定人员列表
 		List<AssignPerson> assignList = gson.fromJson(publish.getData1(), new TypeToken<List<AssignPerson>>() {}.getType());

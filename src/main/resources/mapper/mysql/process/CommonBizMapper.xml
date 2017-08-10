@@ -228,7 +228,7 @@
     where 1= 1 <include refid="queryString" />
   </select>
   <select id="selectByCategoryTypePersonProjectName" resultMap="BaseResultMap" >
-    select data_id, project_category, project_id, project_name, process_instance_id,service_type, create_person, create_person_name,create_time, 
+    select data_id, project_category, project_id, project_name, process_instance_id,task_id,service_type, create_person, create_person_name,create_time, 
     status,result,service_owner,update_person, update_time, result, data1, data2,data3, data4, data5, data6, 
     data7, data8, data9, data10
     from tb_common_biz
@@ -251,7 +251,7 @@
 			 	 and (create_person = #{createPerson,jdbcType=VARCHAR})
 	 	 </if> 
 	 	 <if test="projectName != null and projectName !=''">
-			 	and project_name like CONCAT('%',#{projectName},'%')
+			 	and (project_name =#{projectName,jdbcType=VARCHAR})
 	 	 </if> 
 	 	 <if test="serviceOwner != null and serviceOwner !=''">
 			 	and service_owner like CONCAT('%',#{serviceOwner},'%')
@@ -259,6 +259,15 @@
 	 	 <if test="status != null and status !=''">
 			 	and status like CONCAT('%',#{status},'%')
 	 	 </if>
+	 	 <if test="data1 != null and data1 !=''">
+			 	and data1 =#{data1,jdbcType=VARCHAR}
+	 	 </if>
+	 	 <if test="taskId != null and taskId !=''">
+			 	and task_id =#{taskId,jdbcType=VARCHAR}
+	 	 </if>
+	 	 
+	 	 
+	 	 
 	 	 
   	</sql>
 </mapper>

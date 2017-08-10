@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>ckeckAll</title>
+	</head>
+	<body>
+		<table>
+		    <tbody class="dataList">
+		    	<tr>
+		    		<td>
+		    			<span class="checkbox-inline">
+		             		<input type="checkbox" name="listChe" value="1" class="filled-in chk-col-blue" id="che_1" />
+		             		<label for="che_1">1</label>
+		            	</span>
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td>
+		    			<span class="checkbox-inline">
+		             		<input type="checkbox" name="listChe" value="2" class="filled-in chk-col-blue" id="che_2" />
+		             		<label for="che_2">2</label>
+		            	</span>
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td>
+		    			<span class="checkbox-inline">
+		             		<input type="checkbox" name="listChe" value="3" class="filled-in chk-col-blue" id="che_3" />
+		             		<label for="che_3">3</label>
+		            	</span>
+		    		</td>
+		    	</tr>
+		    </tbody>
+		    <tfoot>
+		    	<tr>
+		    		<td>
+		    			<span class="checkbox-inline" style="padding-left:8px;">
+				  			<input type="checkbox" class="filled-in chk-col-blue" id="che_all_bottom" onClick="setCheAll(this);">
+				   			<label for="che_all_bottom">全选</label>
+				  		</span>
+				  		<span style="display:inline-block;padding-left:10px;cursor:pointer;" onClick="deleteCheAll();">批量删除</span>
+		    		</td>
+		    	</tr>
+		    	
+		    </tfoot>
+		</table>
+	</body>
+	<script src="checkAll.js" ></script>
+	<script>
+		//全选
+		function setCheAll(obj){
+			var checkBoxApi = new CheckBoxApi("listChe");
+			var checkAllFlag = obj.checked;
+			checkBoxApi.setAllChecked(checkAllFlag);
+			console.log(checkAllFlag);
+		}
+		
+		//删除
+		function deleteCheAll()
+		{
+			var _id = document.getElementById("che_all_bottom");
+			var checkBoxApi = new CheckBoxApi("listChe");
+			var myData = checkBoxApi.getCheckAllValue();
+			var mydataCheckAll = myData.checkedAll;
+			console.log(mydataCheckAll);
+			if(mydataCheckAll.length > 0)
+			{
+				var r = confirm("确认删除吗？");
+				if(r == true){
+					console.log("删除成功!");
+					_id.checked = false;
+					checkBoxApi.resetCheckbox();
+				}else{
+					console.log("取消删除!");
+					_id.checked = false;
+					checkBoxApi.resetCheckbox();
+				}
+			}else{
+				console.log("请选择要删除的文件！");
+				alert("请选择要删除的文件！");
+			}
+		}
+	</script>
+</html>

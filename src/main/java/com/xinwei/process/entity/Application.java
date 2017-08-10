@@ -20,6 +20,10 @@ public class Application {
 	//注册地址
 	private String address;
 	private String addressCode;
+	
+	private String serviceAddress;
+	private String serviceAddressCode;
+	
 	//申报金额
 	private String amount;
 	//公司名称
@@ -27,7 +31,26 @@ public class Application {
 	//公司类型
 	private String cType;
 	private String email;
+	private String serviceAmount;
 	
+	public String getServiceAddress() {
+		return serviceAddress;
+	}
+	public void setServiceAddress(String serviceAddress) {
+		this.serviceAddress = serviceAddress;
+	}
+	public String getServiceAddressCode() {
+		return serviceAddressCode;
+	}
+	public void setServiceAddressCode(String serviceAddressCode) {
+		this.serviceAddressCode = serviceAddressCode;
+	}
+	public String getServiceAmount() {
+		return serviceAmount;
+	}
+	public void setServiceAmount(String serviceAmount) {
+		this.serviceAmount = serviceAmount;
+	}
 	public String getAddressCode() {
 		return addressCode;
 	}
@@ -85,8 +108,11 @@ public class Application {
 	@Override
 	public String toString() {
 		return "Application [pName=" + pName + ", personName=" + personName + ", person=" + person + ", address="
-				+ address + ", amount=" + amount + ", cname=" + cname + ", cType=" + cType + ", email=" + email + "]";
+				+ address + ", addressCode=" + addressCode + ", serviceAddress=" + serviceAddress
+				+ ", serviceAddressCode=" + serviceAddressCode + ", amount=" + amount + ", cname=" + cname + ", cType="
+				+ cType + ", email=" + email + ", serviceAmount=" + serviceAmount + "]";
 	}
+	
 	
 	
 }

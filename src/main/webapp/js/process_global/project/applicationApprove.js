@@ -107,6 +107,7 @@ function initTemplatePath(filePath)
  * */
 function getPageScriptFilePath(state) {
 	var FileName="STEP_"+state+"_PATH";
+	//alert(FileName);
 	return SCRIPTFile[FileName];
 }
 

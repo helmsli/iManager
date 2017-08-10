@@ -370,7 +370,7 @@ public class ProjectAnnexController extends BaseController{
 	
 	@RequestMapping(value="/downLoadExport",produces = "text/html;charset=UTF-8")   
 	public void downLoadExport(HttpServletRequest request, HttpServletResponse response,String fileName,String localFile,String type) {  
-		logger.debug("fileDownLoad --> annexName: " + fileName + type);
+		logger.debug("fileDownLoad --> annexName: " + fileName + localFile);
 		FileInputStream fis = null;
 	    BufferedInputStream bis = null;
 	    OutputStream os = null;
@@ -378,15 +378,23 @@ public class ProjectAnnexController extends BaseController{
 	    try{
 	    	if(StringUtil.isNotEmpty(fileName)){
 	    		//浏览器下载后的文件名
-	    		if(StringUtils.isEmpty(localFile))
-	    		{
-	    			localFile=fileName;
-	    		}
+	    		
 	    		path = request.getSession().getServletContext().getRealPath(uploadPath);   
 	    		
 	    		if(type.compareToIgnoreCase("applyExport")==0)
 	    		{
+	    			if(StringUtils.isEmpty(localFile))
+		    		{
+		    			localFile="申报信息汇总.zip";
+		    		}
 	    			path= request.getSession().getServletContext().getRealPath(ApplicationExportExcel.getInstance().getApplicationTempPath());
+	    		}
+	    		else
+	    		{
+	    			if(StringUtils.isEmpty(localFile))
+		    		{
+		    			localFile=fileName;
+		    		}
 	    		}
 		    	
 		    	 

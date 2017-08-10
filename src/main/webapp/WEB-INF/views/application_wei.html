@@ -425,14 +425,19 @@
 									</div>
 									<div class="modal-body">
 												<div class="table-responsive m-b-0">
-												 <label class="form-label" style="text-algin:left;">成功提交项目申请资料.</br></label>			
-									        		
+												 <p> 恭喜您成功提交项目申请资料.如果您是首次申报，您已经自动注册为会员用户。请记住您的用户信息.您可以登录系统查询申报详情。</p>	
+									        	 <p>  用户名:{{application.contactTel}} </p>
+									        	 <p>  密码:{{application.contactEmail}}</p>
+									        	
 									        	</div>
 			
 									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-primary " data-dismiss="modal" style="background-color: #1f91f3;">取消
+										<button type="button" class="btn btn-primary "  ng-click="gotoLogin();" style="background-color: #1f91f3;">登录系统
 										</button>
+										<button type="button" class="btn btn-primary " data-dismiss="modal" style="background-color: #1f91f3;">确定
+										</button>
+										
 										<button type="button" class="btn btn-primary" style="display:none;">
 											提交更改
 										</button>

@@ -67,7 +67,7 @@
 		<script src="../js/formValidata/formValid.js" type="text/javascript"></script>
 		<!--Pages JS--->
 		<script src="../js/fileupload/fileupload.js" type="text/javascript"></script>
-		<script src="../js/application_ding.js" type="text/javascript"></script>
+		<script src="../js/application_ding.js?ver=1.1" type="text/javascript"></script>
         
 		<style type="text/css">
            .firstname-col{
@@ -148,6 +148,51 @@
 									        </div>
 									    </div>
 									    
+										
+									    
+									    
+										<div class="row clearfix">
+									        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 p-r-0 form-control-label  r-chk-rad">
+									            <label for="rolelist"><span style="color:#ff0000;">*</span>单位类型：</label>
+									        </div>
+									        <div class="col-lg-5 col-md-8 col-sm-10 col-xs-10">
+									            <div class="form-group">
+									                <div class="form-line">
+									                	<div class="radio">
+									                		<div class="radio-inline">
+									                			<input class="with-gap radio-col-blue"  name="radio0" id="companyType_0" ng-model="application.comType" ng-init="" value="she" type="radio"  checked="true">
+									                        	<label for="companyType_0">社会团体</label>
+									                		</div>
+									                		<div class="radio-inline">
+									                			<input class="with-gap radio-col-blue" name="radio1" id="companyType_1" ng-model="application.comType" value="minfei" type="radio">
+									                        	<label for="companyType_1">民办非企业单位</label>
+									                		</div>
+									                		<div class="radio-inline">
+									                			<input class="with-gap radio-col-blue" name="radio2" id="companyType_2" ng-model="application.comType" value="jijin" type="radio">
+									                        	<label for="companyType_2">基金会</label>
+									                		</div>
+									                		<div class="radio-inline">
+									                			<input class="with-gap radio-col-blue" name="radio" id="companyType_3" ng-model="application.comType" value="others" type="radio">
+									                        	<label for="companyType_3">其他</label>
+									                		</div>
+									                    </div>
+									                </div>
+									            </div>
+									        </div>
+									    </div>
+										<div class="row clearfix">
+									        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 p-r-0 form-control-label r-chk-rad">
+									            <label for="firtname"><span style="color:#ff0000;">*</span>注册或备案地址：</label>
+									        </div>
+											<div class="col-lg-5 col-md-8 col-sm-10 col-xs-10" >						
+									             <div class="form-group">
+									                  <div class="form-line">
+									                      <input type="text" class="form-control"  maxlength="120" ng-model="application.companyRegisterAddress" name="application.companyRegisterAddress" id="companyRegisterAddress" data-error="请选择注册或者备案地" data-tip="请选择注册或者备案地" onFocus="$('#modelForRegisterAddress').modal();"/>
+									                 </div>
+									             </div>
+											</div>
+										</div>
+										
 										<div class="row clearfix">
 									        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 p-r-0 form-control-label  r-chk-rad">
 									            <label for="rolelist"><span style="color:#ff0000;">*</span>科室名称：</label>
@@ -160,7 +205,7 @@
 									            </div>
 									        </div>
 									    </div>
-										
+									    
 										<div class="row clearfix">
 									        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 p-r-0 form-control-label  r-chk-rad">
 									            <label for="rolelist"><span style="color:#ff0000;">*</span>项目名称：</label>
@@ -270,7 +315,24 @@
 			                               
 			                            </div>
 			                            
-			                            
+			                            <div class="row clearfix">
+			                                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 form-control-label"><label>资质证明:</label></div>
+			                                <div class="col-lg-5 col-md-8 col-sm-10 col-xs-10">
+			                                     <label class="form-label" style="text-algin:left;">资质证明材料至少包括(请压缩后上传)：</br>附有年检结论的登记证书副本和税务登记证书/或三证合一的法人登记证书；</br>税务登记证书</label>			
+			                                    <div class="form-group"">
+			                                        <div class="form-line">
+			                                        	<div class="file-group">
+			               									<input type="text" name="fileName" id="textfileCompanyId" class="form-control" placeholder="选择要上传的资质证明文件..." />
+			                   								<input type="button" value="选择文件" class="btn btn-primary"/>
+			                   								<input type="file" name="filefield" accept=".zip,.rar" id="fileCompanyId" onchange="document.getElementById('textfileCompanyId').value=this.value;uploadApplication('fileCompanyId',this)" />
+			                   							  
+			                   							</div>
+			                   							
+			                                        </div>
+			                                    </div>
+			                                </div>
+			                                
+			                            </div>
 			                            
 									</form>									
 								</div>
@@ -393,14 +455,19 @@
 									</div>
 									<div class="modal-body">
 												<div class="table-responsive m-b-0">
-												 <label class="form-label" style="text-algin:left;">成功提交项目申请资料.</br></label>			
-									        		
+												 <p> 恭喜您成功提交项目申请资料.如果您是首次申报，您已经自动注册为会员用户。请记住您的用户信息.您可以登录系统查询申报详情。</p>	
+									        	 <p>  用户名:{{application.contactTel}} </p>
+									        	 <p>  密码:{{application.contactEmail}}</p>
+									        	
 									        	</div>
 			
 									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-primary " data-dismiss="modal" style="background-color: #1f91f3;">取消
+										<button type="button" class="btn btn-primary "  ng-click="gotoLogin();" style="background-color: #1f91f3;">登录系统
 										</button>
+										<button type="button" class="btn btn-primary " data-dismiss="modal" style="background-color: #1f91f3;">确定
+										</button>
+										
 										<button type="button" class="btn btn-primary" style="display:none;">
 											提交更改
 										</button>

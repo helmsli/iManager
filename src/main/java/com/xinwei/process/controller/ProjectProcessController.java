@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import tk.mybatis.mapper.util.StringUtil;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -40,6 +41,7 @@ import com.xinwei.excel.ExcelType;
 import com.xinwei.process.constant.ApprovedConstants;
 import com.xinwei.process.constant.ChangeConstants;
 import com.xinwei.process.constant.ProjectConstants;
+import com.xinwei.process.dao.CommonBizMapper;
 import com.xinwei.process.dao.DataPermissionMapper;
 import com.xinwei.process.entity.Application;
 import com.xinwei.process.entity.ApprovalResult;
@@ -138,7 +140,10 @@ public class ProjectProcessController extends BaseController{
 
 	@Value("${uploadPath}")
 	private String uploadPath; 
-	private Gson gson = new Gson();
+	private Gson gson = new GsonBuilder()
+			.serializeNulls()//序列化null
+			.setDateFormat("yyyy-MM-dd HH:mm:ss")// 设置日期时间格式
+			.create();
 	/**
 	 * 获取某个用户的所有待办任务列表
 	 * @param userId
@@ -636,18 +641,39 @@ public class ProjectProcessController extends BaseController{
 				String userId = currentUser.getId().toString();
 				logger.debug("currentUser's userid is : " + userId);
 				//根据项目名称获取项目的信息
-				List<Project> projectS = this.projectService.selectByProjectName(commonBiz.getProjectName());
-				Project project = null;
-				if (projectS.size()>0) {
-					 project = projectS.get(0);
+				CommonBiz project = null;
+				if(!StringUtils.isEmpty(monthlyReportContent.get(0).getName().trim()))
+				{
+					try {
+						Map<String, Object> queryMap = new HashMap<String, Object>();
+						queryMap.put("projectName", monthlyReportContent.get(0).getName().trim());
+						queryMap.put("serviceType","application");
+						
+						CommonBizMapper commonBizMapper = CommonBizServiceImpl.getCommonBizMapper();
+						queryMap.put("startRow", 0);
+						queryMap.put("pageSize", 2);
+						List<CommonBiz> lists=commonBizMapper.selectByCategoryTypePersonProjectName(queryMap);
+						
+						project = lists.get(0);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				if (project!=null) {
+					 
 					logger.debug(project.toString());	
 					//设置项目信息
 							// 设置项目ID
 					commonBiz.setProjectId(project.getProjectId());
-							// 设置项目类别
-					commonBiz.setProjectCategory(project.getCategoryId().toString());
+					
 							// 设置项目名称
 					commonBiz.setProjectName(project.getProjectName().trim());
+					
+					commonBiz.setTaskId(project.getTaskId());
+					commonBiz.setData4(project.getData1());
+					commonBiz.setData5(project.getServiceOwner());
+					
 				}
 				else
 				{
@@ -726,35 +752,15 @@ public class ProjectProcessController extends BaseController{
 				dataPermission.setPermissionId(currentUser.getId().toString());
 				//排序
 				dataPermission.setExtData2(sortKey.toString());
-				if (projectS.size()>0)
-				{
-					dataPermission.setExtData3(project.getProjectId().toString());
-				}
+				
 				this.DataPermissionDao.insert(dataPermission);
 				
 				
 				
 				//设置第三方权限
-				if (projectS.size()>0) 
+				if (false) 
 				{
-					List<DataPermission> threeDataPermissions = getCommitteeByPublisheid(project.getCategoryId(),project.getPublishId());
-					if(threeDataPermissions.size()<=0)
-					{
-						//项目不存在
-						result.setResult(ProjectConstants.PROJECT_ERROR.Project_committee_NotExist.toString());
-						return result.toString();
- 
-					}
-					for(DataPermission dataPermissionThree:threeDataPermissions)
-					{
-						dataPermissionThree.setDataId(dataId);
-						dataPermissionThree.setDataType(DataPermission.DATATYPE_MonthlyReport);
-						dataPermissionThree.setPrivilegeThrreeEval();			
-						dataPermission.setExtData3(project.getProjectId().toString());
-						dataPermission.setExtData2(sortKey.toString());
-						DataPermissionDao.insert(dataPermission);
-						
-					}
+					
 				}
 				//设置所有第三方的权限
 				else
@@ -764,11 +770,7 @@ public class ProjectProcessController extends BaseController{
 					dataPermission.setCategoryId(Long.parseLong(commonBiz.getProjectCategory()));
 					dataPermission.setPermissionType(DataPermission.PERMISSIONTYPE_ROLE);
 					dataPermission.setPermissionId(this.roleId_committee.toString());
-					dataPermission.setExtData2(sortKey.toString());
-					if (projectS.size()>0)
-					{
-						dataPermission.setExtData3(project.getProjectId().toString());
-					}
+					dataPermission.setExtData2(sortKey.toString());					
 					DataPermissionDao.insert(dataPermission);
 						
 				}
@@ -779,10 +781,7 @@ public class ProjectProcessController extends BaseController{
 				dataPermission.setPermissionType(DataPermission.PERMISSIONTYPE_ROLE);
 				dataPermission.setPermissionId(this.roleId_departLeader.toString());
 				dataPermission.setExtData2(sortKey.toString());
-				if (projectS.size()>0)
-				{
-					dataPermission.setExtData3(project.getProjectId().toString());
-				}
+				
 				DataPermissionDao.insert(dataPermission);
 				result.setResult(ResultVO.SUCCESS);
 
@@ -1108,7 +1107,10 @@ public class ProjectProcessController extends BaseController{
 	//设置决策委员会人员
 	private void setCommittee(Map<String, Object> variables,
 			String strAssignList) {
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder()
+				.serializeNulls()//序列化null
+				.setDateFormat("yyyy-MM-dd HH:mm:ss")// 设置日期时间格式
+				.create();
 		//获取指定人员列表
 		List<AssignPerson> assignList = gson.fromJson(strAssignList, new TypeToken<List<AssignPerson>>() {}.getType());
 		if (null != assignList && !assignList.isEmpty()) {

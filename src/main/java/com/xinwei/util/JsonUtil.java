@@ -76,6 +76,12 @@ public class JsonUtil{
 		return json;
 	}
 	
+	public static Gson getGson(){
+		Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new MyDateDeserializer())
+                .create();
+		return gson;
+	}
+	
 	/**
 	 * 将json字符串反序列化为对象,不区分注解
 	 * @param jsonStr

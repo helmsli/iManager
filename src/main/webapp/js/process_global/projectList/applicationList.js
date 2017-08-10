@@ -5,6 +5,13 @@ var STATUS_APPLY="0";
 var STATUS_NEED_CHANGE="1";
 var STATUS_REJECTED = "2";
 var STATUS_AGREED = "255";
+//提交结项材料
+
+var STATUS_apply_end = "25501";
+//以结项
+var STATUS_finished_end="255255";
+
+
 function isOwner()
 { 
 	return owner=="1";
@@ -13,10 +20,12 @@ function isOwner()
 App.controller('myDataController', ['$scope', function($scope) {
 	//表格标题
 	$scope.titleList = [
+	        "",
 	        "项目分类",            
 			"项目名称",
 			"申报单位",
-			"地区/科室",
+			"科室",
+			"地区",
 			"金额",
 			"联系人",
 			"申报时间",
@@ -66,8 +75,33 @@ App.controller('myDataController', ['$scope', function($scope) {
 		}
 		
 	}
+	$scope.setCheAll = function(){
+		var checkBoxApi = new CheckBoxApi("listChe");
+		var checkAllFlag = $("#che_all_bottom").prop("checked");
+		checkBoxApi.setAllChecked(checkAllFlag);
+		var checkedLen=checkBoxApi.getCheckAllValue().checkedAll.length;
+		console.log(checkedLen);
+	}
+	$scope.selectChe = function(obj){
+		var checkedFlag=obj.currentTarget.checked;
+		var checkBoxApi = new CheckBoxApi("listChe");
+		var totalCheckbox=checkBoxApi.checkBox.length;
+		var checkedLen=checkBoxApi.getCheckAllValue().checkedAll.length;
+		console.log(checkedLen);
+		$("#che_all_bottom").prop("checked",(totalCheckbox==checkedLen));
+	}
+	
 	$scope.showOwner=function(status,data){
+		
 		data.isManager=true;
+		 var isStart255 = status.indexOf("255");
+		 if(isStart255==0)
+		  {
+				data.isManager=false;
+		  }
+		 
+		 
+		
 		if(isOwner())
 		{
 			if(status==STATUS_NEED_CHANGE)
@@ -84,7 +118,7 @@ App.controller('myDataController', ['$scope', function($scope) {
 		}
 		else
 		{
-			if(status==STATUS_NEED_CHANGE)
+			if(status==STATUS_NEED_CHANGE||STATUS_REJECTED==status)
 			{
 				data.isManager=false;
 			}
@@ -124,20 +158,89 @@ App.controller('myDataController', ['$scope', function($scope) {
 		
 		document.getElementById("searchButton").disabled=true;
 		var myParm=parseQueryString();//所有的参数
+		var pcond = myParm.pcond;
+		var querCondition = {};
+		if(typeof(pcond)=="undefined")
+        {
+			//localStorage.removeItem("pcond");
+			querCondition={};
+        	
+        }
+		else
+		{
+			querCondition = localStorage.getItem("pcond");
+			querCondition=JSON.parse(querCondition)||{};
+		}
+		
+		
 		var serviceType=$scope.serviceType;
         var projectName=myParm.projectName; 
+        var projectRegion = querCondition["region"];
+        if(typeof(projectRegion)=="undefined")
+        {
+        	
+        	projectRegion="";
+        	
+        }
+        var projectType = querCondition["pType"];
+        if(typeof(projectType)=="undefined")
+        {
+        	
+        	projectType="";
+        	
+        }
+        var keshi   = querCondition["keshi"];
+        if(typeof(keshi)=="undefined")
+        {
+        	
+        	keshi="";
+        	
+        }
+        //alert(keshi);
         var pageNum = pageNum||1;
     	var  pageSize = 10;
         var categoryId =$scope.getCategorySearchId(projectName);
         var obj={
         		"request.serviceType": serviceType,	
         		"request.categoryId": categoryId,
+        		"request.region":projectRegion,
+        		"request.pType":projectType,
+        		"request.keshi":keshi,
         		"page.pageNum": pageNum,
         		"page.pageSize": pageSize
         }
         console.log(JSON.stringify(obj));
         queryApplicationList(obj,callbackQueryApplicationList);
+        //将全选按钮设置为非全选
+        $("#che_all_bottom").prop("checked",false);
+        
+        
 	}
+	$scope.downloadApplication = function()
+	{
+		
+		
+		var checkBoxApi = new CheckBoxApi("listChe");
+		var totalCheckbox=checkBoxApi.checkBox.length;
+		var allList = checkBoxApi.getCheckAllValue();
+		var checkedLen=allList.checkedAll.length;
+		console.log(checkedLen);
+		$("#che_all_bottom").prop("checked",(totalCheckbox==checkedLen));
+		console.log("*******************:allchecked" + checkedLen +":alllist" + totalCheckbox);
+		if(checkedLen>0)
+		{
+			getAppExportByIds(allList.checkedAll);
+		}
+		else
+		{
+			getAppExportAll();	
+		}
+		
+		satarAjax();
+		
+	}
+	
+	
 	$scope.openCreateMonthlyReport = function()
 	{
 		var parm=parseQueryString();
@@ -253,21 +356,50 @@ function callbackQueryApplicationList(data){
 		 for(var i in dataLists)
 		{
 			 try{
+				//解析详细信息
+				 try{
+					 if(dataLists[i].data5!="")
+					 {
+							 dataLists[i].detail =   JSON.parse(dataLists[i].data5);
+					 }
+				 }
+				 catch(e)
+				 {
+					 
+				 }
+				 
+				// alert(dataLists[i].taskId);
+				 
 				 dataLists[i].apply_type="申请项目";
-				 if(dataLists[i].taskId=="wei")
+				 dataLists[i].keshi="无";
+				 dataLists[i].district=dataLists[i].data1;
+				 
+				 if(dataLists[i].taskId == "wei")
 				 {
 					 dataLists[i].apply_type="微创投项目";
 				 }
-				 else if(dataLists[i].taskId=="ding")
+				 else if(dataLists[i].taskId == "ding")
 				 {
+					// alert("abd");
 					 dataLists[i].apply_type="定向项目";
+					 try{
+						 dataLists[i].keshi=dataLists[i].data1;
+						 dataLists[i].district=dataLists[i].detail.address;
+						 if(dataLists[i].district==undefined||dataLists[i].district==""||"科室"==dataLists[i].district)
+						 {
+							 dataLists[i].district="无";
+					     }
+						 
+					 }
+					 catch(e)
+					 {
+						 
+					 }
 				 }
 				 
-				 //解析详细信息
-				 if(dataLists[i].data5!="")
-				 {
-						 dataLists[i].detail =   JSON.parse(dataLists[i].data5);
-				 }
+				 
+				 
+				 dataLists[i].showContactInfo = dataLists[i].createPersonName + "(" +  dataLists[i].createPerson+  ")";
 				 //申报书附件
 				 if(dataLists[i].data6!="")
 				{
@@ -299,7 +431,24 @@ function callbackQueryApplicationList(data){
 				 }
 				 else
 				 {
-					 dataLists[i].statusName="等待审批";
+					 var fdStart = dataLists[i].status.indexOf("255255");
+					 var isStart255 = dataLists[i].status.indexOf("255");
+					 if(fdStart==0)
+					 {
+						 dataLists[i].statusName="项目已经结项";
+					 }
+					 else if(isStart255==0)
+					 {
+						 dataLists[i].statusName="结项中";
+					 }
+					 else
+					{
+						 dataLists[i].statusName="等待审批";	 
+					 }
+						 
+					 
+					 
+					 
 				 }
 				 
 				  
@@ -324,4 +473,121 @@ function callbackQueryApplicationList(data){
 	}else{
 		$("#tabNoData").removeClass("hide");
 	}	
+}
+function satarAjax() {
+    
+	var myRow='<div class="md-preloader pl-size-md">'
+		+'<svg viewbox="0 0 75 75"><circle cx="37.5" cy="37.5" r="33.5" class="pl-red" stroke-width="4" /></svg>'
+		+'</div>'
+		+'<p>Please wait...</p>';
+	swal({
+		title: " ",
+		text: myRow,
+		html:true,
+		timer: 8000,
+        showConfirmButton: false
+	});
+	
+	
+
+}
+function getAppExportAll()
+{
+	
+	var myParm=parseQueryString();//所有的参数
+    var projectName=myParm.projectName; 
+    var obj={
+    		"request.serviceType": "application",	
+    		"request.categoryId": "canlian"        		
+    }
+   
+   
+    console.log(obj);
+    
+    
+	var options ={
+	        "url":"/commonbiz/getApplication/downloadApp",
+	        "data": obj,
+	        callBack: function(data) {
+	        	callbackExportApply(data);
+	        	
+	        	//sweetAlert.close();
+	        	
+	        },
+	        errCallBack:function(e)
+	        {
+	            console.log("服务器异常");
+	            //sweetAlert.close();
+	            location.reload();
+	        }
+	    };
+	 requestAjax(options);
+}
+function getAppExportByIds(ids)
+{
+	/**
+	 * 
+	 */
+	var idsString = "";
+	for(var i=0;i<ids.length;i++){
+		 if(i>0)
+		 {
+			 idsString = idsString + "," + ids[i];
+	     }
+		 else
+		{
+			 idsString = idsString + ids[i];
+		}
+	}
+	
+	var myParm=parseQueryString();//所有的参数
+    var projectName=myParm.projectName; 
+    var obj={
+    		"request.serviceType": "application",	
+    		"request.categoryId": "canlian",   
+    		"request.selectedIds":idsString
+    }
+   
+   
+    console.log(obj);
+    
+	var options ={
+	        "url":"/commonbiz/getApplication/downloadSelected",
+	        "data": obj,
+	        callBack: function(data) {
+	        	callbackExportApply(data);
+	        	
+	        	//sweetAlert.close();
+	        	
+	        },
+	        errCallBack:function(e)
+	        {
+	            console.log("服务器异常");
+	            location.reload();
+	            //sweetAlert.close();
+	        }
+	    };
+	 requestAjax(options);
+}
+
+function callbackExportApply(data)
+{
+	console.log(data);
+	var scope=getAngularScope("myDataController");
+	//分页
+	if(data.result == 0){
+		
+		var file=data.responseInfo.exportApplicationFile;
+		var type="applyExport";
+		//alert("click");
+		 var url="/projectAnnex/downLoadExport";
+	     url= getBasePath()+url;
+	     url=url+"?request.fileName="+file + "&type=applyExport";
+	     console.log(url);
+	     location.href =url;
+	}
+	else
+	{
+		
+	}
 }

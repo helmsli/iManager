@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -36,6 +37,7 @@ import com.xinwei.process.entity.Application;
 import com.xinwei.process.entity.CommonBiz;
 import com.xinwei.process.entity.ProjectAnnex;
 import com.xinwei.util.ExceptionApp;
+import com.xinwei.util.JsonUtil;
 import com.xinwei.util.date.DateUtil;
 
 public class ApplicationExportExcel {
@@ -50,7 +52,7 @@ public class ApplicationExportExcel {
 	{
 		return applicationExportExcel;
 	}
-    protected String applicationExportPath="";	
+    protected String applicationExportPath="files";	
     
     protected String applicationTempPath="tempAppExport";	
     
@@ -77,7 +79,10 @@ public class ApplicationExportExcel {
 		this.uploadDir = uploadDir;
 	}
 	protected String defaultAppTemplateFile="excel-template.xlsx";	
-	private Gson gson = new Gson();
+	private Gson gson = new GsonBuilder()
+			.serializeNulls()//序列化null
+			.setDateFormat("yyyy-MM-dd HH:mm:ss")// 设置日期时间格式
+			.create();
 	private int  fileIndex=0;
 	
 	
@@ -105,13 +110,22 @@ public class ApplicationExportExcel {
 				fileIndex=0;
 			}
 		}
-	    return applicationExportPath+ DateUtil.DateToString(new Date(),"YYYY-MM-dd-") + String.valueOf(localFileIndex);
+	    return "total-"+ DateUtil.DateToString(new Date(),"YYYY-MM-dd-") + String.valueOf(localFileIndex);
 		
 	}
 	
 	
 	protected boolean insertCommonBizToExcel(CommonBiz commonBiz,Workbook workbook,Row row,String path)
 	{
+		
+		Application application=null;
+		try {
+			application = gson.fromJson(commonBiz.getData5(), Application.class);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		CreationHelper createHelper = workbook.getCreationHelper();
 		Cell cell;
 		
@@ -121,11 +135,21 @@ public class ApplicationExportExcel {
 		
 		cell=row.createCell((short) columnIndex++);
 		cell.setCellStyle(cellStyle);
+		
+		String keshi="无";
+		String district=commonBiz.getData1();
+		 
+		 
 		//项目类型
 		 if(StringUtils.equalsIgnoreCase(commonBiz.getTaskId(), ApprovedConstants.Application_type.APP_DING))
 		 {
 			 cell.setCellValue("定向项目");
-			 
+			 keshi=commonBiz.getData1();
+			 district=application.getAddress();
+			 if(StringUtils.isEmpty(district)||district.compareTo("科室")==0)
+			 {
+				 district="无";
+		     }
 		 }
 		 else if(StringUtils.equalsIgnoreCase(commonBiz.getTaskId(), ApprovedConstants.Application_type.APP_WEI))
 		 {
@@ -145,10 +169,17 @@ public class ApplicationExportExcel {
 		cell.setCellStyle(cellStyle);
 		cell.setCellValue(commonBiz.getData3());
 		
-		//地区科室
+		//科室
 		cell=row.createCell((short) columnIndex++);
 		cell.setCellStyle(cellStyle);
-		cell.setCellValue(commonBiz.getData1());
+		cell.setCellValue(keshi);
+		
+		//地区
+				cell=row.createCell((short) columnIndex++);
+				cell.setCellStyle(cellStyle);
+				cell.setCellValue(district);
+				
+		
 		//金额
 		cell=row.createCell((short) columnIndex++);
 		cell.setCellValue(commonBiz.getData2());
@@ -167,9 +198,9 @@ public class ApplicationExportExcel {
 		//申报人邮箱
 		cell=row.createCell((short) columnIndex++);
 		cell.setCellStyle(cellStyle);
-		Application application=null;
+	
+		
 		try {
-			application = gson.fromJson(commonBiz.getData5(), Application.class);
 			//logger.debug(application.toString());
 			cell.setCellValue(application.getEmail());
 		} catch (Exception e) {
@@ -230,6 +261,7 @@ public class ApplicationExportExcel {
 			 while(it.hasNext()){
 			 JsonElement e = (JsonElement)it.next();
 			 //JsonElement转换为JavaBean对象
+			
 			 projectAnnex = gson.fromJson(e, ProjectAnnex.class);
 			 
 			 }
@@ -238,7 +270,7 @@ public class ApplicationExportExcel {
 			 
 			 //构造申报书的文件名称
 			 String lastPrefx = getFilelastPrefx(projectAnnex.getOriginalFilename());
-			 String destFile =  commonBiz.getData3()+"_0_"+row.getRowNum() + "." + lastPrefx;
+			 String destFile =  commonBiz.getData3()+"_"+(row.getRowNum()+1) + "_0." + lastPrefx;
 			 copyFile(uploadDir + File.separator+projectAnnex.getAnnexName(),path+File.separator +applicationExportPath+ File.separator +destFile);
 			Hyperlink link = createHelper.createHyperlink(Hyperlink.LINK_FILE);
 			link.setAddress( applicationExportPath+ "/" +destFile);
@@ -286,7 +318,7 @@ public class ApplicationExportExcel {
 				
 				Hyperlink link = createHelper.createHyperlink(Hyperlink.LINK_FILE);
 				 String lastPrefx = getFilelastPrefx(projectAnnex.getOriginalFilename());
-				 String destFile =  commonBiz.getData3()+"_1_"+row.getRowNum() + "." + lastPrefx;
+				 String destFile =  commonBiz.getData3()+"_"+(row.getRowNum()+1) + "_1." + lastPrefx;
 				copyFile(uploadDir + File.separator+projectAnnex.getAnnexName(),path+File.separator +applicationExportPath+ File.separator +destFile);
 					
 
@@ -320,7 +352,7 @@ public class ApplicationExportExcel {
 	{
 		String templateFilePath = templatePath;
 		String srcFilePath = destPath;		
-		String indexFileName = File.separator+"申报项目汇总.xlsx";
+		String indexFileName = File.separator+"申报项目列表.xlsx";
 		//创建临时目录
 		logger.debug(destPath + ":(((((((((:" + templatePath);
 		 try {

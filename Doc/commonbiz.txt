@@ -13,7 +13,7 @@ updatePerson:更新人
 updateTime：更新时间
 ext_activiti_info：办理人：
 
-data1 == 注册地/科室名称
+data1 == 注册地/科室名称(申请项目：实际是项目类型：服务地址  定向项目是填写的科室名称  微项目填写的是注册地址)
 data2 = 申请金额
 data3 = 单位名称
 data4 = 单位type
@@ -26,6 +26,22 @@ process_instance_id=预计服务人数
 taskId(apply_type)=项目分类 :shen/ding/wei
 
 serviceOwner==服务地区
+
+
+--月报表
+projectID:项目ID
+setProjectCategory：项目类别  coomarts:1  camtalk:2   lottery:3
+setProjectName：月报表填写的项目名称
+setExtActivitiInfo:月报表填写的机构名称
+data1:月报表文件
+data2:照片和其他附件
+data3:从报表中解析出来的呢日哦那个
+data4 =来源于项目信息。(=项目的Data1)
+data5 =来源于项目信息。(=项目的ServiceOwner)
+
+
+setExtStatus：月份
+setServiceOwner：创建者ID
 
 
 

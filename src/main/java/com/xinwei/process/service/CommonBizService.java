@@ -3,6 +3,7 @@ package com.xinwei.process.service;
 import java.util.List;
 import java.util.Map;
 
+import com.xinwei.process.dao.CommonBizMapper;
 import com.xinwei.process.entity.CommonBiz;
 import com.xinwei.security.entity.User;
 import com.xinwei.util.page.Page;
@@ -17,6 +18,10 @@ public interface CommonBizService {
 	 * @return
 	 */
 	List<CommonBiz> selectMonthlyReportWithResult(CommonBiz commonBiz);
+	
+	
+	CommonBizMapper getCommonBizMapper();
+	
 	
 	/**
 	 * 获取所有

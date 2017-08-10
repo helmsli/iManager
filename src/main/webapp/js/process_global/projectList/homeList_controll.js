@@ -138,6 +138,8 @@ function getAllProjectDataListCall(data){
 			scope.lotteryDataList=lotteryDataList;
 			
 		var messageNotifyList = data.responseInfo.lists;
+		//暂时屏蔽掉数据
+		messageNotifyList=[];
 		scope.initMessageNotifyList=messageNotifyList;
 		scope.messageNotifyList = [];
 		for(var i =0;i<messageNotifyList.length;i++)
@@ -282,6 +284,8 @@ function getMyTaskDataListCall(data){
 	if(data.result == 0){
 		var taskTopList=[];
 		var taskDataList = data.responseInfo.taskList;
+		//暂时屏蔽掉数据
+		taskDataList=[];
 		scope.$apply(function () {
 			scope.taskTopList=setTopData(taskDataList,taskTopList);
 		      });

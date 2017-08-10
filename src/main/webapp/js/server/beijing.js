@@ -16,7 +16,7 @@ var beijing_diqu=[{name:"北京市东城区",code:"dongcheng"},
  {name:"北京市平谷区",code:"pinggu"},
  {name:"北京市延庆区",code:"yanqing"},
  {name:"北京市密云区",code:"miyun"},
- {name:"北京市",code:"beijing"},
+ {name:"北京市",code:"beijing"}
  
  ];
 
@@ -37,6 +37,5 @@ var XiangMu_diqu=[{name:"市级项目",code:"beijing"},
                   {name:"北京市平谷区项目",code:"pinggu"},
                   {name:"北京市延庆区项目",code:"yanqing"},
                   {name:"北京市密云区项目",code:"miyun"},
-                  
-                  
+                  {name:"燕山地区项目",code:"yanshan"}                                  
                   ];

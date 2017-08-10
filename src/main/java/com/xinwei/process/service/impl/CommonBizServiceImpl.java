@@ -201,6 +201,12 @@ public class CommonBizServiceImpl implements CommonBizService {
 	public List<CommonBiz> countServicePerson(User user, Map<String, Object> map) {
 		return this.commonBizDao.countServicePerson(map);
 	}
+
+	@Override
+	public CommonBizMapper getCommonBizMapper() {
+		// TODO Auto-generated method stub
+		return commonBizDao;
+	}
 	
 	
 }

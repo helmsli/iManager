@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.xinwei.process.constant.ApprovedConstants;
 import com.xinwei.process.constant.ChangeConstants;
@@ -38,6 +39,7 @@ import com.xinwei.process.service.impl.ApplicationExportExcel;
 import com.xinwei.security.entity.Role;
 import com.xinwei.security.entity.User;
 import com.xinwei.security.vo.ResultVO;
+import com.xinwei.util.JsonUtil;
 import com.xinwei.util.date.DateUtil;
 import com.xinwei.util.excel.POIExcel;
 import com.xinwei.util.page.Page;
@@ -64,7 +66,10 @@ public class CommonBizController extends BaseController {
 	@Value("${roleId_committee}")
 	private Long roleId_committee;// 决策委员会组ID
 	
-	private Gson gson = new Gson();
+	private Gson gson = new GsonBuilder()
+			.serializeNulls()//序列化null
+			.setDateFormat("yyyy-MM-dd HH:mm:ss")// 设置日期时间格式
+			.create();
 	@RequestMapping(value = "/reloadCommonBizCache", method = {
 			RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody String reloadCommonBizCache() {
@@ -349,12 +354,12 @@ public class CommonBizController extends BaseController {
 				if (roles.size() > 0) {
 					
 					for (Long rolesid : roles) {
-						if(roleId_departLeader==rolesid||roleId_committee==rolesid)
+						if(roleId_departLeader.longValue()==rolesid.longValue()||roleId_committee.longValue()==rolesid.longValue())
 						{
 							isRoleManager=1;
 							
 						}
-						if(roleId_threeLevelsLeader==rolesid)
+						if(roleId_threeLevelsLeader.longValue()==rolesid.longValue())
 						{
 							//
 							isRoleManager=2;
@@ -401,7 +406,7 @@ public class CommonBizController extends BaseController {
 	
 	@RequestMapping(value = "/getApplication/listByDistrict", method = { RequestMethod.GET,
 			RequestMethod.POST })
-	public @ResponseBody String getApplicationListByDistrict(String categoryId,String serviceType,String status) {
+	public @ResponseBody String getApplicationListByDistrict(String categoryId,String serviceType,String status,String region,String pType,String keshi) {
 		ResultVO<CommonBiz> result = new ResultVO<>();
 		try {
 			//获取当前登录用户信息		
@@ -417,8 +422,15 @@ public class CommonBizController extends BaseController {
 				if(!StringUtils.isBlank(status))
 				{
 					queryMap.put("status", status);	
+				}				
+				if(!StringUtils.isBlank(pType))
+				{
+					queryMap.put("taskId", pType);
 				}
-				
+				if(!StringUtils.isBlank(keshi))
+				{
+					queryMap.put("data1", keshi);
+				}
 				//queryMap.put("permissionType", DataPermission.PERMISSIONTYPE_USER);				
 				//queryMap.put("permissionId", currentUser.getId().toString());				
 				
@@ -431,12 +443,12 @@ public class CommonBizController extends BaseController {
 				if (roles.size() > 0) {
 					
 					for (Long rolesid : roles) {
-						if(roleId_departLeader==rolesid||roleId_committee==rolesid)
+						if(roleId_departLeader.longValue()==rolesid.longValue()||roleId_committee.longValue()==rolesid.longValue())
 						{
 							isRoleManager=1;
 							
 						}
-						if(roleId_threeLevelsLeader==rolesid)
+						if(roleId_threeLevelsLeader.longValue()==rolesid.longValue())
 						{
 							//
 							isRoleManager=2;
@@ -459,6 +471,14 @@ public class CommonBizController extends BaseController {
 					{
 						queryMap.put("serviceOwner", district);				
 						
+					}
+					else
+					{
+						//如果按照地区查询，放入地区信息
+						if(!StringUtils.isBlank(region))
+						{
+							queryMap.put("serviceOwner", region);
+						}
 					}
 					result.setOthers(ChangeConstants.Application_Owner,"0");
 				}
@@ -541,12 +561,12 @@ public class CommonBizController extends BaseController {
 				if (roles.size() > 0) {
 					
 					for (Long rolesid : roles) {
-						if(roleId_departLeader==rolesid||roleId_committee==rolesid)
+						if(roleId_departLeader.longValue()==rolesid.longValue()||roleId_committee.longValue()==rolesid.longValue())
 						{
 							isRoleManager=1;
 							
 						}
-						if(roleId_threeLevelsLeader==rolesid)
+						if(roleId_threeLevelsLeader.longValue()==rolesid.longValue())
 						{
 							//
 							isRoleManager=2;
@@ -585,7 +605,7 @@ public class CommonBizController extends BaseController {
 				Page<CommonBiz> page = service.selectQueryBizNoPage(currentUser,
 						queryMap);
 				result.setPage(page);
-				result.setLists(page.getList());
+				//result.setLists(page.getList());
 				
 				
 				//获取模版文件目录
@@ -600,6 +620,9 @@ public class CommonBizController extends BaseController {
 				String zipDestFile = ApplicationExportExcel.getInstance().createApplicationReport(page.getList(),destPath, templateFile);
 				result.setOthers("exportApplicationFile", zipDestFile);
 				
+				
+				
+				
 			}else{
 				logger.debug("Current user's infomation is null");
 				// 给客户端响应
@@ -612,6 +635,77 @@ public class CommonBizController extends BaseController {
 		return result.toString();
 	}
 
+	/**
+	 * 第三方下载申报数据
+	 * @param categoryId
+	 * @param serviceType
+	 * @param status
+	 * @return
+	 */
+	@RequestMapping(value = "/getApplication/downloadSelected", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public @ResponseBody String downloadAppBySelected(HttpServletRequest request,String categoryId,String serviceType,String selectedIds) {
+		ResultVO<CommonBiz> result = new ResultVO<>();
+		try {
+			if(StringUtils.isBlank(categoryId))
+			{
+				categoryId = "canlian";	
+			}
+			if(StringUtils.isBlank(serviceType))
+			{
+				serviceType="application";
+			}
+			
+			
+			
+			//获取当前登录用户信息		
+			User currentUser = getCurrentUser();
+			//判断如果用户不为空
+			if (null != currentUser) {
+				
+				
+				
+				Long userId = currentUser.getId();
+				logger.debug("Current User's ID is : " + userId);
+				Map<String, Object> queryMap = new HashMap<String, Object>();
+				queryMap.put("projectCategory", categoryId);
+				queryMap.put("serviceType", serviceType);
+								
+				
+				//根据当前用户信息分页获取数据监测
+				String [] ids = StringUtils.split(selectedIds,",");
+				
+				List<String> idList = java.util.Arrays.asList(ids);
+				List<CommonBiz> resultBizs = service.getCommonBizMapper().selectByIdList(idList);
+				
+				//result.setLists(page.getList());				
+				
+				//获取模版文件目录
+				String templateFile = request.getSession().getServletContext()
+						.getRealPath(uploadPath)+File.separator +ApplicationExportExcel.getInstance().getDefaultAppTemplateFile();
+				//设置上传目录，用于获取申报书等
+				ApplicationExportExcel.getInstance().setUploadDir(request.getSession().getServletContext()
+						.getRealPath(uploadPath));
+				String tempRelativeFile = ApplicationExportExcel.getInstance().getTempRelativeFilePath();
+				String destPath = request.getSession().getServletContext()
+						.getRealPath(ApplicationExportExcel.getInstance().getApplicationTempPath())+ File.separator+tempRelativeFile;
+				String zipDestFile = ApplicationExportExcel.getInstance().createApplicationReport(resultBizs,destPath, templateFile);
+				result.setOthers("exportApplicationFile", zipDestFile);
+				
+				
+				
+				
+			}else{
+				logger.debug("Current user's infomation is null");
+				// 给客户端响应
+				result.setResult(ResultVO.USERNULL);
+			}
+		} catch (Exception e) {
+			result.setResult(ResultVO.EXCEPTION);
+			e.printStackTrace();
+		}
+		return result.toString();
+	}
 	
 	
 	// 根据项目类别和业务类型以及当前用户角色信息查询
